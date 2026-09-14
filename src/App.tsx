@@ -8,34 +8,45 @@ import { QuestionScene } from './components/scenes/QuestionScene';
 import { PromiseScene } from './components/scenes/PromiseScene';
 import { Scene5Remember } from './components/scenes/Scene5Remember';
 import { Scene7Finale } from './components/scenes/Scene7Finale';
+import { SceneHub } from './components/scenes/SceneHub';
+import { SceneCountdown } from './components/scenes/SceneCountdown';
+
+type SceneState = 
+  | 'lockscreen' 
+  | 'loading' 
+  | 'question1' 
+  | 'hub' 
+  | 'confession_prompt' 
+  | 'promise1' 
+  | 'remember' 
+  | 'promise2' 
+  | 'countdown' 
+  | 'finale';
 
 export default function App() {
-  const [scene, setScene] = useState(0); // Start at lockscreen (0)
-
-  const nextScene = () => setScene(s => s + 1);
-  const restart = () => setScene(0); // Restart back to lockscreen
+  const [scene, setScene] = useState<SceneState>('lockscreen');
 
   return (
     <div className="w-full h-[100dvh] relative overflow-hidden bg-blush">
       <FloatingHearts />
       
       <AnimatePresence mode="wait">
-        {scene === 0 && (
+        {scene === 'lockscreen' && (
           <PageWrapper key="scene0">
-            <Scene0Lockscreen onNext={nextScene} />
+            <Scene0Lockscreen onNext={() => setScene('loading')} />
           </PageWrapper>
         )}
 
-        {scene === 1 && (
+        {scene === 'loading' && (
           <PageWrapper key="scene1">
-            <Scene1Loading onNext={nextScene} />
+            <Scene1Loading onNext={() => setScene('question1')} />
           </PageWrapper>
         )}
         
-        {scene === 2 && (
+        {scene === 'question1' && (
           <PageWrapper key="scene2">
             <QuestionScene 
-              onNext={nextScene}
+              onNext={() => setScene('hub')}
               title="Hi Shajer 👋"
               subtitle="I have something to ask you..."
               question="Do you like me?"
@@ -43,20 +54,35 @@ export default function App() {
           </PageWrapper>
         )}
 
-        {scene === 3 && (
+        {scene === 'hub' && (
+          <PageWrapper key="scene-hub">
+            <SceneHub 
+              onConfession={() => setScene('confession_prompt')}
+              onCountdown={() => setScene('countdown')}
+            />
+          </PageWrapper>
+        )}
+
+        {scene === 'countdown' && (
+          <PageWrapper key="scene-countdown">
+            <SceneCountdown onNext={() => setScene('finale')} />
+          </PageWrapper>
+        )}
+
+        {scene === 'confession_prompt' && (
           <PageWrapper key="scene3">
             <QuestionScene 
-              onNext={nextScene}
+              onNext={() => setScene('promise1')}
               subtitle="Before I say something else..."
               question="Would you like to hear my confession?"
             />
           </PageWrapper>
         )}
 
-        {scene === 4 && (
+        {scene === 'promise1' && (
           <PageWrapper key="scene4">
             <PromiseScene 
-              onNext={nextScene}
+              onNext={() => setScene('remember')}
               title="My Promise to You"
               timestamp="I said at 8 Sept 2026, 00:00"
               lines={[
@@ -71,16 +97,16 @@ export default function App() {
           </PageWrapper>
         )}
 
-        {scene === 5 && (
+        {scene === 'remember' && (
           <PageWrapper key="scene5">
-            <Scene5Remember onNext={nextScene} />
+            <Scene5Remember onNext={() => setScene('promise2')} />
           </PageWrapper>
         )}
 
-        {scene === 6 && (
+        {scene === 'promise2' && (
           <PageWrapper key="scene6">
             <PromiseScene 
-              onNext={nextScene}
+              onNext={() => setScene('finale')}
               title="Your Promise to Me"
               timestamp="She said on 7 Sept 2026, 17:00"
               lines={[
@@ -94,9 +120,9 @@ export default function App() {
           </PageWrapper>
         )}
 
-        {scene === 7 && (
+        {scene === 'finale' && (
           <PageWrapper key="scene7">
-            <Scene7Finale onRestart={restart} />
+            <Scene7Finale onRestart={() => setScene('lockscreen')} />
           </PageWrapper>
         )}
       </AnimatePresence>
