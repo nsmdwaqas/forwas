@@ -108,7 +108,7 @@ export function QuestionScene({ onNext, title, subtitle, question }: SceneProps)
             }}
             transition={{ repeat: Infinity, duration: 3 }}
           >
-            Yes <Heart className="w-5 h-5 text-gold-light drop-shadow-[0_0_8px_rgba(201,166,107,0.8)]" fill="currentColor" />
+            Yes <Heart className="w-5 h-5 text-gold-light drop-shadow-[0_0_8px_rgba(232,180,200,0.8)]" fill="currentColor" />
           </motion.button>
 
           <motion.button

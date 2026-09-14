@@ -61,7 +61,7 @@ export function Scene0Lockscreen({ onNext }: SceneProps) {
       >
         <motion.div 
           className="mb-4 text-white/80"
-          animate={success ? { scale: 1.2, color: "#D4AF37", filter: "drop-shadow(0 0 10px rgba(212, 175, 55, 0.8))" } : {}}
+          animate={success ? { scale: 1.2, color: "#E8B4C8", filter: "drop-shadow(0 0 10px rgba(232, 180, 200, 0.8))" } : {}}
           transition={{ duration: 0.5 }}
         >
           <Lock className="w-8 h-8" />
@@ -97,7 +97,7 @@ export function Scene0Lockscreen({ onNext }: SceneProps) {
                 error 
                   ? 'bg-[#993556] border-[#993556] shadow-[0_0_15px_rgba(153,53,86,0.8)]' // Red error state
                   : success
-                    ? 'bg-gold-light border-gold-light shadow-[0_0_15px_rgba(201,166,107,0.8)]' // Gold success state
+                    ? 'bg-gold-light border-gold-light shadow-[0_0_15px_rgba(232,180,200,0.8)]' // Gold success state
                     : index < pin.length 
                       ? 'bg-white border-white shadow-[0_0_10px_rgba(255,255,255,0.8)]' // Filled state
                       : 'bg-white/10 border-white/40' // Empty state

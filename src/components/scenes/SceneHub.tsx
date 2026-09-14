@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { motion, useAnimation } from 'motion/react';
-import { Heart, Clock, Lock } from 'lucide-react';
+import { Heart, Clock, Lock, Infinity as InfinityIcon } from 'lucide-react';
 
 interface SceneHubProps {
   onConfession: () => void;
   onCountdown: () => void;
+  onForever: () => void;
 }
 
-export function SceneHub({ onConfession, onCountdown }: SceneHubProps) {
+export function SceneHub({ onConfession, onCountdown, onForever }: SceneHubProps) {
   const [lockedShake, setLockedShake] = useState(false);
   const controls = useAnimation();
 
@@ -60,7 +61,7 @@ export function SceneHub({ onConfession, onCountdown }: SceneHubProps) {
             whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
           >
             <span>The Confession</span>
-            <Heart className="w-5 h-5 text-gold-light group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(201,166,107,0.8)]" fill="currentColor" />
+            <Heart className="w-5 h-5 text-gold-light group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(232,180,200,0.8)]" fill="currentColor" />
           </motion.button>
         </motion.div>
 
@@ -87,6 +88,25 @@ export function SceneHub({ onConfession, onCountdown }: SceneHubProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 1 }}
+        >
+          <motion.button
+            onClick={() => {
+              hapticTap();
+              onForever();
+            }}
+            className="w-full px-6 py-4 glass-button text-white rounded-2xl font-medium text-lg transition-all flex items-center justify-between group"
+            whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+            whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+          >
+            <span>The Forever</span>
+            <InfinityIcon className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+          </motion.button>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1, duration: 1 }}
         >
           <motion.button
             onClick={handleLockedTap}
