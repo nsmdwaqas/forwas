@@ -11,6 +11,7 @@ import { Scene7Finale } from './components/scenes/Scene7Finale';
 import { SceneHub } from './components/scenes/SceneHub';
 import { SceneCountdown } from './components/scenes/SceneCountdown';
 import { SceneForever } from './components/scenes/SceneForever';
+import { SceneLetter } from './components/scenes/SceneLetter';
 
 type SceneState = 
   | 'lockscreen' 
@@ -23,6 +24,7 @@ type SceneState =
   | 'promise2' 
   | 'countdown' 
   | 'forever'
+  | 'letter'
   | 'finale';
 
 export default function App() {
@@ -62,6 +64,7 @@ export default function App() {
               onConfession={() => setScene('confession_prompt')}
               onCountdown={() => setScene('countdown')}
               onForever={() => setScene('forever')}
+              onLetter={() => setScene('letter')}
             />
           </PageWrapper>
         )}
@@ -75,6 +78,12 @@ export default function App() {
         {scene === 'forever' && (
           <PageWrapper key="scene-forever">
             <SceneForever onNext={() => setScene('finale')} />
+          </PageWrapper>
+        )}
+        
+        {scene === 'letter' && (
+          <PageWrapper key="scene-letter">
+            <SceneLetter onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 
