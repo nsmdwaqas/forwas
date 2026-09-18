@@ -82,7 +82,7 @@ export function Scene0Lockscreen({ onNext }: SceneProps) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 1 }}
         >
-          Enter my birthday to open (DDMM)
+          
         </motion.p>
 
         {/* PIN Indicators */}
