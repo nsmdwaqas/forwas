@@ -17,7 +17,7 @@ const timelineData: TimelineEvent[] = [
   {
     date: "19 Aug | Wed | Afternoon",
     title: "The Invitation That Almost Wasn't",
-    description: "Your family's invitation reached mine that afternoon. A few hours later, we said yes to visiting you — a small window that changed everything."
+    description: "My family's invitation reached our that afternoon. A few hours later, they said yes to visiting you — a small window that changed everything."
   },
   {
     date: "20 Aug | Thu | 6:00 PM",
@@ -37,12 +37,12 @@ const timelineData: TimelineEvent[] = [
   {
     date: "29 Aug | Sat",
     title: "The Decision Before the Knowing",
-    description: "We got engaged. Before we'd even spoken, I decided to hold your hand forever — like the boy in your favorite movie."
+    description: "We got engaged. Before we'd even spoken, I decided to hold your hand forever — like the boy in your favorite movie Saiyara."
   },
   {
     date: "31 Aug | 5:19 PM",
     title: "Walaikum Asalam",
-    description: "Our first words. I said Assalamu alaikum. You said Walaikum asalam. Then you vanished mid-chat."
+    description: "Our first words. I said Assalamu alaikum. You said Walaikum asalam. Then you vanished in 3-4 message"
   },
   {
     date: "1 Sept | 12:15 PM",
@@ -85,7 +85,7 @@ const timelineData: TimelineEvent[] = [
     description: "You said it first this time — that you missed me. I read it more times than I'll admit."
   },
   {
-    date: "22 Sept | Today",
+    date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",
     isToday: true
