@@ -100,42 +100,47 @@ const SignatureBlock = ({ title, role }: { title: string; role: 'me' | 'you' }) 
   };
 
   return (
-    <div className="bg-white/10 border border-white/20 rounded-xl p-6 text-left mb-6 relative overflow-hidden group">
+    <div className="bg-white/10 border border-white/20 rounded-xl p-4 sm:p-6 text-left mb-4 sm:mb-6 relative overflow-hidden group">
       <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-      <h3 className="text-xl md:text-2xl font-heading text-white mb-6 drop-shadow-md font-semibold">{title}:</h3>
+      <h3 className="text-lg sm:text-xl md:text-2xl font-heading text-white mb-3 sm:mb-6 drop-shadow-md font-semibold">{title}:</h3>
       
-      <div className="space-y-6">
-      
-       {signed ? (
-  <div className="text-left">
-    <p className="font-heading text-white text-lg md:text-xl italic leading-relaxed drop-shadow-sm">
-      "{momentText}"
-    </p>
-    <div className="flex items-center justify-between mt-3 text-white/60 text-sm font-sans">
-      <span className="italic">— {fixedName}</span>
-      <span>{timestamp}</span>
-    </div>
-  </div>
-) : (
-  <div className="flex flex-col sm:flex-row sm:items-end gap-2">
-    <span className="font-heading text-white/90 whitespace-nowrap text-lg">
-      The moment {role === 'me' ? 'I' : 'you'} knew:
-    </span>
-    <input 
-      type="text" 
-      value={momentText}
-      onChange={(e) => setMomentText(e.target.value)}
-      className="bg-transparent border-b border-white/60 focus:border-white outline-none text-white font-sans w-full py-1 px-2 transition-colors flex-1"
-      placeholder=""
-    />
-  </div>
-)}
+      <div className="space-y-4 sm:space-y-6">
+        {signed ? (
+          <div className="text-left">
+            <p className="font-heading text-white text-base sm:text-lg md:text-xl italic leading-relaxed drop-shadow-sm">
+              "{momentText}"
+            </p>
+            <div className="flex items-center justify-between mt-3 text-white/60 text-xs sm:text-sm font-sans">
+              <span className="italic">— {fixedName}</span>
+              <span>{timestamp}</span>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2">
+            <label className="font-heading text-white/90 text-base sm:text-lg">
+              The moment {role === 'me' ? 'I' : 'you'} knew:
+            </label>
+            <input 
+              type="text" 
+              value={momentText}
+              onChange={(e) => setMomentText(e.target.value)}
+              onFocus={(e) => {
+                setTimeout(() => {
+                  e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+              }}
+              className="bg-white/5 border-b-2 border-white/60 focus:border-white outline-none text-white font-sans w-full py-2 px-3 rounded-t transition-colors text-base placeholder:text-white/40"
+              placeholder="Write your moment here..."
+            />
+          </div>
+        )}
+
         {!signed && (
-          <div className="mt-8 flex justify-end">
+          <div className="mt-4 sm:mt-6 flex justify-end">
             <button 
               onClick={handleSign}
               disabled={isSubmitting}
-              className="px-8 py-2 glass-button text-white rounded-lg font-medium text-sm transition-all disabled:opacity-50 hover:shadow-[0_0_15px_rgba(255,255,255,0.4)]"
+              className="px-6 sm:px-8 py-2.5 glass-button text-white rounded-lg font-medium text-sm transition-all disabled:opacity-50 hover:shadow-[0_0_15px_rgba(255,255,255,0.4)] min-h-[44px]"
             >
               {isSubmitting ? 'Signing...' : 'Sign'}
             </button>
@@ -154,9 +159,9 @@ export function SceneLovenama({ onNext }: SceneLovenamaProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-3xl mx-auto text-center px-4 md:px-8 py-6 h-full">
+    <div className="flex flex-col items-center justify-start md:justify-center w-full max-w-3xl mx-auto text-center px-2 sm:px-4 md:px-8 py-2 sm:py-4 md:py-6 min-h-full my-auto">
       <motion.div 
-        className="glass-panel w-full p-6 md:p-12 relative flex flex-col h-full max-h-[85vh]"
+        className="glass-panel w-full p-4 sm:p-6 md:p-12 relative flex flex-col h-[82vh] max-h-[82vh] min-h-[380px] sm:min-h-[500px]"
         whileHover={{ rotateX: 1, rotateY: -1 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
@@ -164,29 +169,28 @@ export function SceneLovenama({ onNext }: SceneLovenamaProps) {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="flex flex-col items-center shrink-0 mb-6"
+          className="flex flex-col items-center shrink-0 mb-3 sm:mb-6"
         >
-          <Feather className="w-8 h-8 text-gold-light mb-4 drop-shadow-[0_0_8px_rgba(232,180,200,0.6)]" />
-          <h1 className="text-3xl md:text-4xl font-heading text-white text-shadow-elegant shimmer-text tracking-[0.2em] uppercase">
+          <Feather className="w-6 h-6 sm:w-8 sm:h-8 text-gold-light mb-2 sm:mb-4 drop-shadow-[0_0_8px_rgba(232,180,200,0.6)]" />
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading text-white text-shadow-elegant shimmer-text tracking-[0.2em] uppercase">
             The LOVENAMA
           </h1>
         </motion.div>
 
         <div 
-          className="flex-1 overflow-y-auto px-2 md:px-6 custom-scrollbar scroll-smooth"
-          style={{ WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 2%, black 98%, transparent)' }}
+          className="flex-1 min-h-[160px] overflow-y-auto px-2 sm:px-4 md:px-6 custom-scrollbar scroll-smooth"
         >
-          <div className="py-4 max-w-2xl mx-auto space-y-6">
-            <motion.p className="font-heading text-xl md:text-2xl text-white/90 leading-relaxed italic text-left" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+          <div className="py-2 sm:py-4 max-w-2xl mx-auto space-y-4 sm:space-y-6">
+            <motion.p className="font-heading text-lg sm:text-xl md:text-2xl text-white/90 leading-relaxed italic text-left" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
               This page isn't for today.
             </motion.p>
-            <motion.p className="font-sans text-base md:text-lg text-white/80 leading-relaxed text-left" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
+            <motion.p className="font-sans text-sm sm:text-base md:text-lg text-white/80 leading-relaxed text-left" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
               It's for the day you know. Not think, not guess — just know, quietly, without doubt, that you're in love. Whenever that day comes, you open this page and you sign it. Nothing more needed. Just one line about the moment it happened.
             </motion.p>
-            <motion.p className="font-sans text-base md:text-lg text-white/80 leading-relaxed text-left" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>
+            <motion.p className="font-sans text-sm sm:text-base md:text-lg text-white/80 leading-relaxed text-left" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>
               I'll do the same on my end. Neither of us is signing this now. No rushing it, no forcing it, no one going first just to prove something. It stays blank until it's real — for both of us.
             </motion.p>
-            <motion.p className="font-sans text-base md:text-lg text-white leading-relaxed text-left font-medium mb-10 drop-shadow-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}>
+            <motion.p className="font-sans text-sm sm:text-base md:text-lg text-white leading-relaxed text-left font-medium mb-6 sm:mb-10 drop-shadow-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}>
               There's no deadline on this page. It doesn't matter who signs first, or when. It only matters that whenever it happens, it's true.
             </motion.p>
 
@@ -201,7 +205,7 @@ export function SceneLovenama({ onNext }: SceneLovenamaProps) {
         </div>
 
         <motion.div
-          className="shrink-0 mt-6 pt-4"
+          className="shrink-0 mt-3 sm:mt-6 pt-2 sm:pt-4"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 1 }}
@@ -211,11 +215,11 @@ export function SceneLovenama({ onNext }: SceneLovenamaProps) {
               hapticTap();
               onNext();
             }}
-            className="px-6 py-3 md:px-8 md:py-4 glass-button text-white rounded-full font-medium text-base md:text-lg transition-all inline-flex items-center gap-2"
+            className="px-6 py-2.5 sm:px-8 sm:py-4 glass-button text-white rounded-full font-medium text-sm sm:text-base md:text-lg transition-all inline-flex items-center gap-2 min-h-[44px]"
             whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
             whileTap={{ scale: 0.9, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
           >
-            Continue to Promise <ArrowRight className="w-5 h-5" />
+            Continue to Promise <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.button>
         </motion.div>
       </motion.div>

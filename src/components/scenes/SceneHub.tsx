@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { motion, useAnimation } from 'motion/react';
-import { Heart, Clock, Lock, Infinity as InfinityIcon, PenTool, Feather } from 'lucide-react';
+import { Heart, Clock, Lock, Infinity as InfinityIcon, PenTool, Feather, Sparkles } from 'lucide-react';
 
 interface SceneHubProps {
   onConfession: () => void;
   onCountdown: () => void;
   onForever: () => void;
   onLetter: () => void;
+  onTimeline: () => void;
   onLovenama: () => void;
 }
 
-export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onLovenama }: SceneHubProps) {
+export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onTimeline, onLovenama }: SceneHubProps) {
   const [lockedShake, setLockedShake] = useState(false);
   const controls = useAnimation();
 
@@ -33,14 +34,14 @@ export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onLov
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto text-center px-4">
+    <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto text-center px-4 my-auto">
       <motion.div 
-        className="glass-panel w-full p-8 md:p-12 relative overflow-hidden flex flex-col gap-4 md:gap-5"
+        className="glass-panel w-full p-6 sm:p-8 md:p-10 relative overflow-y-auto max-h-[88vh] flex flex-col gap-3 sm:gap-4 custom-scrollbar"
         whileHover={{ rotateX: 2, rotateY: -2 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
         <motion.h1 
-          className="text-3xl md:text-4xl font-heading mb-2 text-white text-shadow-elegant shimmer-text"
+          className="text-2xl sm:text-3xl md:text-4xl font-heading mb-1 sm:mb-2 text-white text-shadow-elegant shimmer-text shrink-0"
           initial={{ opacity: 0, y: -20, filter: 'blur(5px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 1.2, ease: "easeOut" }}
@@ -58,7 +59,7 @@ export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onLov
               hapticTap();
               onConfession();
             }}
-            className="w-full px-6 py-4 glass-button text-white rounded-2xl font-medium text-lg transition-all flex items-center justify-between group"
+            className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
             whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
             whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
           >
@@ -77,7 +78,7 @@ export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onLov
               hapticTap();
               onCountdown();
             }}
-            className="w-full px-6 py-4 glass-button text-white rounded-2xl font-medium text-lg transition-all flex items-center justify-between group"
+            className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
             whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
             whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
           >
@@ -96,7 +97,7 @@ export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onLov
               hapticTap();
               onForever();
             }}
-            className="w-full px-6 py-4 glass-button text-white rounded-2xl font-medium text-lg transition-all flex items-center justify-between group"
+            className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
             whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
             whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
           >
@@ -108,14 +109,14 @@ export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onLov
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1, duration: 1 }}
+          transition={{ delay: 1.05, duration: 1 }}
         >
           <motion.button
             onClick={() => {
               hapticTap();
               onLetter();
             }}
-            className="w-full px-6 py-4 glass-button text-white rounded-2xl font-medium text-lg transition-all flex items-center justify-between group"
+            className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
             whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
             whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
           >
@@ -127,14 +128,38 @@ export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onLov
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 1 }}
+          transition={{ delay: 1.15, duration: 1 }}
+        >
+          <motion.button
+            onClick={() => {
+              hapticTap();
+              onTimeline();
+            }}
+            className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+            whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+            whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+          >
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              <span>The Timeline</span>
+              <span className="whitespace-nowrap text-[10px] sm:text-[11px] font-sans tracking-widest uppercase px-2 py-0.5 rounded-full bg-gold-light/20 border border-gold-light/60 text-gold-light font-semibold shadow-[0_0_12px_rgba(232,180,200,0.5)] backdrop-blur-sm animate-pulse">
+                New ✨
+              </span>
+            </div>
+            <Sparkles className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+          </motion.button>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.25, duration: 1 }}
         >
           <motion.button
             onClick={() => {
               hapticTap();
               onLovenama();
             }}
-            className="w-full px-6 py-4 glass-button text-white rounded-2xl font-medium text-lg transition-all flex items-center justify-between group"
+            className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
             whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
             whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
           >
@@ -146,12 +171,12 @@ export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onLov
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.3, duration: 1 }}
+          transition={{ delay: 1.35, duration: 1 }}
         >
           <motion.button
             onClick={handleLockedTap}
             animate={controls}
-            className={`w-full px-6 py-4 bg-white/5 border border-white/10 text-white/50 rounded-2xl font-medium text-lg transition-all flex items-center justify-between ${lockedShake ? 'bg-white/10 text-white/80' : ''}`}
+            className={`w-full px-5 py-3.5 sm:px-6 sm:py-4 bg-white/5 border border-white/10 text-white/50 rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between min-h-[44px] ${lockedShake ? 'bg-white/10 text-white/80' : ''}`}
             whileTap={{ scale: 0.98 }}
           >
             <span>Locked Chapter</span>

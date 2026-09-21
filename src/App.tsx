@@ -13,6 +13,7 @@ import { SceneCountdown } from './components/scenes/SceneCountdown';
 import { SceneForever } from './components/scenes/SceneForever';
 import { SceneLetter } from './components/scenes/SceneLetter';
 import { SceneLovenama } from './components/scenes/SceneLovenama';
+import { SceneTimeline } from './components/scenes/SceneTimeline';
 
 type SceneState = 
   | 'lockscreen' 
@@ -27,6 +28,7 @@ type SceneState =
   | 'forever'
   | 'letter'
   | 'lovenama'
+  | 'timeline'
   | 'finale';
 
 export default function App() {
@@ -67,6 +69,7 @@ export default function App() {
               onCountdown={() => setScene('countdown')}
               onForever={() => setScene('forever')}
               onLetter={() => setScene('letter')}
+              onTimeline={() => setScene('timeline')}
               onLovenama={() => setScene('lovenama')}
             />
           </PageWrapper>
@@ -87,6 +90,12 @@ export default function App() {
         {scene === 'letter' && (
           <PageWrapper key="scene-letter">
             <SceneLetter onNext={() => setScene('finale')} />
+          </PageWrapper>
+        )}
+
+        {scene === 'timeline' && (
+          <PageWrapper key="scene-timeline">
+            <SceneTimeline onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 
