@@ -139,12 +139,7 @@ export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onTim
             whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
             whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
           >
-            <div className="flex items-center gap-2 sm:gap-2.5">
-              <span>The Timeline</span>
-              <span className="whitespace-nowrap text-[10px] sm:text-[11px] font-sans tracking-widest uppercase px-2 py-0.5 rounded-full bg-gold-light/20 border border-gold-light/60 text-gold-light font-semibold shadow-[0_0_12px_rgba(232,180,200,0.5)] backdrop-blur-sm animate-pulse">
-                New ✨
-              </span>
-            </div>
+            <span>The Timeline</span>
             <Sparkles className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
           </motion.button>
         </motion.div>
