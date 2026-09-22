@@ -20,7 +20,7 @@ export const PageWrapper: React.FC<{ children: React.ReactNode; className?: stri
     exit="out"
     variants={pageVariants}
     transition={pageTransition}
-    className={`relative z-10 w-full h-full flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 overflow-y-auto ${className}`}
+    className={`relative z-10 w-full h-full flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 overflow-y-auto custom-scrollbar ${className}`}
   >
     {children}
   </motion.div>

@@ -105,23 +105,6 @@ export function SceneLetter({ onNext }: SceneLetterProps) {
           </motion.button>
         </motion.div>
       </motion.div>
-
-      <style>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(232, 180, 200, 0.3);
-          border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(232, 180, 200, 0.5);
-        }
-      `}</style>
     </div>
   );
 }

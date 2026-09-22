@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, useAnimation } from 'motion/react';
-import { Heart, Clock, Lock, Infinity as InfinityIcon, PenTool, Feather, Sparkles } from 'lucide-react';
+import { Heart, Clock, Lock, Infinity as InfinityIcon, PenTool, Feather, Sparkles, MessageCircleHeart } from 'lucide-react';
 
 interface SceneHubProps {
   onConfession: () => void;
@@ -8,10 +8,11 @@ interface SceneHubProps {
   onForever: () => void;
   onLetter: () => void;
   onTimeline: () => void;
+  onMessage: () => void;
   onLovenama: () => void;
 }
 
-export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onTimeline, onLovenama }: SceneHubProps) {
+export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onTimeline, onMessage, onLovenama }: SceneHubProps) {
   const [lockedShake, setLockedShake] = useState(false);
   const controls = useAnimation();
 
@@ -141,6 +142,25 @@ export function SceneHub({ onConfession, onCountdown, onForever, onLetter, onTim
           >
             <span>The Timeline</span>
             <Sparkles className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+          </motion.button>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 1 }}
+        >
+          <motion.button
+            onClick={() => {
+              hapticTap();
+              onMessage();
+            }}
+            className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+            whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+            whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+          >
+            <span>The Message</span>
+            <MessageCircleHeart className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
           </motion.button>
         </motion.div>
 
