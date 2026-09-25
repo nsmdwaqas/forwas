@@ -323,7 +323,7 @@ export function SceneLovenama({ onNext }: SceneLovenamaProps) {
         >
           <div className="py-2 sm:py-4 max-w-2xl mx-auto space-y-4 sm:space-y-6">
             <motion.p className="font-heading text-lg sm:text-xl md:text-2xl text-white/90 leading-relaxed italic text-left" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
-              This page isn't for today.
+              This page is the moment of love.
             </motion.p>
             <motion.p className="font-sans text-sm sm:text-base md:text-lg text-white/80 leading-relaxed text-left" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
               It's for the day you know. Not think, not guess — just know, quietly, without doubt, that you're in love. Whenever that day comes, you open this page and you sign it. Nothing more needed. Just one line about the moment it happened.
