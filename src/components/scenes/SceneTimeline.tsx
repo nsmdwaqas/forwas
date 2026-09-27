@@ -85,6 +85,16 @@ const timelineData: TimelineEvent[] = [
     description: "You said it first this time — that you missed me. I read it more times than I'll admit."
   },
   {
+    date: "23 Sept | 03:07 PM",
+    title: "Till Infinity (His Confession)",
+    description: "At 03:07 PM, Waqas gave his unconditional vow: \"I LOVE YOU.. no matter what.. fovervee and ever and ever till infinity.. Inshallah.. that will be my dua..\""
+  },
+  {
+    date: "27 Sept | 12:51 PM",
+    title: "Jaan Bhi Lagadun (Her Confession)",
+    description: "At 12:51 PM, Shajer gave her whole soul: \"I LOVE YOU SOOOOOO DAMMNNN MUCH....... 🖤❤💞ki mein apni jaan bhi lagadun aap pe.....\""
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",

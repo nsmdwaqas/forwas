@@ -17,6 +17,7 @@ import { SceneTimeline } from './components/scenes/SceneTimeline';
 import { SceneMessage } from './components/scenes/SceneMessage';
 import { SceneAnswers } from './components/scenes/SceneAnswers';
 import { SceneVoices } from './components/scenes/SceneVoices';
+import { SceneProposal } from './components/scenes/SceneProposal';
 
 type SceneState = 
   | 'lockscreen' 
@@ -32,6 +33,7 @@ type SceneState =
   | 'letter'
   | 'timeline'
   | 'message'
+  | 'proposal'
   | 'answers'
   | 'voices'
   | 'lovenama'
@@ -77,6 +79,7 @@ export default function App() {
               onLetter={() => setScene('letter')}
               onTimeline={() => setScene('timeline')}
               onMessage={() => setScene('message')}
+              onProposal={() => setScene('proposal')}
               onAnswers={() => setScene('answers')}
               onVoices={() => setScene('voices')}
               onLovenama={() => setScene('lovenama')}
@@ -111,6 +114,12 @@ export default function App() {
         {scene === 'message' && (
           <PageWrapper key="scene-message">
             <SceneMessage onNext={() => setScene('finale')} />
+          </PageWrapper>
+        )}
+
+        {scene === 'proposal' && (
+          <PageWrapper key="scene-proposal">
+            <SceneProposal onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 
