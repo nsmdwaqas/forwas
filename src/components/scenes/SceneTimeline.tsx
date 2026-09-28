@@ -95,6 +95,11 @@ const timelineData: TimelineEvent[] = [
     description: "At 12:51 PM, Shajer gave her whole soul: \"I LOVE YOU SOOOOOO DAMMNNN MUCH....... 🖤❤💞ki mein apni jaan bhi lagadun aap pe.....\""
   },
   {
+    date: "28 Sept | 01:11 PM",
+    title: "The Song (His Voice)",
+    description: "At 01:11 PM on Monday, Waqas sang his favorite song for the first time for Shajer — celebrating 1 month after engagement."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",
