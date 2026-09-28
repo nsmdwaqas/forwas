@@ -73,7 +73,10 @@ export function SceneProposal({ onNext }: SceneProposalProps) {
         </motion.div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 min-h-[200px] overflow-y-auto px-1 sm:px-4 custom-scrollbar scroll-smooth flex flex-col items-center gap-4 sm:gap-6 py-2">
+        <div 
+          className="flex-1 min-h-[200px] overflow-y-auto px-1 sm:px-4 custom-scrollbar scroll-smooth flex flex-col items-center gap-4 sm:gap-6 py-2 touch-pan-y overscroll-contain"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
           
           {/* Poetic Prelude Card */}
           <motion.div

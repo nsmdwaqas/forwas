@@ -190,7 +190,10 @@ export function SceneVoices({ onNext }: SceneVoicesProps) {
         </motion.div>
 
         {/* Scrollable Container with Unified Custom Scrollbar */}
-        <div className="flex-1 overflow-y-auto px-1 sm:px-3 custom-scrollbar scroll-smooth flex flex-col gap-4 sm:gap-5 py-1">
+        <div 
+          className="flex-1 min-h-0 overflow-y-auto px-1 sm:px-3 custom-scrollbar scroll-smooth flex flex-col gap-4 sm:gap-5 py-1 touch-pan-y overscroll-contain"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
           
           {/* Poetic Context Intro Card */}
           <motion.div

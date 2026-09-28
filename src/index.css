@@ -16,8 +16,8 @@
     color: white;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow: hidden; /* Prevent scrolling for the full-screen experience */
-    touch-action: none; /* Prevent pull-to-refresh on mobile */
+    overflow: hidden; /* Prevent body scrolling */
+    overscroll-behavior: none; /* Prevent pull-to-refresh on mobile */
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -67,6 +67,12 @@
 }
 
 /* Consistent Theme Scrollbar matching The Timeline throughout the journey */
+.custom-scrollbar {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
 .custom-scrollbar,
 * {
   scrollbar-width: thin;
