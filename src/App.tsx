@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'motion/react';
 import { FloatingHearts } from './components/Background';
 import { PageWrapper } from './components/PageWrapper';
@@ -21,6 +21,7 @@ import { SceneProposal } from './components/scenes/SceneProposal';
 import { SceneOneMonth } from './components/scenes/SceneOneMonth';
 import { SceneSong } from './components/scenes/SceneSong';
 import { SceneCall } from './components/scenes/SceneCall';
+import { trackChapterVisit } from './lib/tracker';
 
 type SceneState = 
   | 'lockscreen' 
@@ -47,6 +48,40 @@ type SceneState =
 
 export default function App() {
   const [scene, setScene] = useState<SceneState>('lockscreen');
+  const visitedConfessionRef = useRef(false);
+
+  // Silent chapter visit tracking in Supabase WSStats (no UI display)
+  useEffect(() => {
+    const sceneToChapterMap: Partial<Record<SceneState, string>> = {
+      question1: 'LikeMe',
+      timeline: 'Timeline',
+      message: 'Message',
+      voices: 'Voices',
+      call: 'Call',
+      letter: 'Letter',
+      answers: 'Answers',
+      forever: 'Forever',
+      countdown: 'BigDay',
+      proposal: 'Proposal',
+      song: 'Song',
+      lovenama: 'Lovenama'
+    };
+
+    if (scene === 'confession_prompt') {
+      visitedConfessionRef.current = true;
+      trackChapterVisit('Confession');
+    } else if (scene === 'promise1') {
+      if (!visitedConfessionRef.current) {
+        trackChapterVisit('Confession');
+      }
+    } else {
+      visitedConfessionRef.current = false;
+      const chapter = sceneToChapterMap[scene];
+      if (chapter) {
+        trackChapterVisit(chapter);
+      }
+    }
+  }, [scene]);
 
   return (
     <div className="w-full h-[100dvh] relative overflow-hidden bg-blush">
