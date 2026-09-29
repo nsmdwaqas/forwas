@@ -11,7 +11,8 @@ import {
   MessageSquareQuote, 
   AudioLines, 
   HeartHandshake, 
-  Music 
+  Music,
+  PhoneCall
 } from 'lucide-react';
 
 interface SceneHubProps {
@@ -25,6 +26,7 @@ interface SceneHubProps {
   onAnswers: () => void;
   onVoices: () => void;
   onSong: () => void;
+  onCall: () => void;
   onLovenama: () => void;
   onOneMonth?: () => void;
 }
@@ -39,6 +41,7 @@ export function SceneHub({
   onAnswers, 
   onVoices, 
   onSong, 
+  onCall,
   onLovenama 
 }: SceneHubProps) {
   const [lockedShake, setLockedShake] = useState(false);
@@ -258,6 +261,26 @@ export function SceneHub({
           >
             <span>The Song</span>
             <Music className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+          </motion.button>
+        </motion.div>
+
+        {/* The Call */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.29, duration: 1 }}
+        >
+          <motion.button
+            onClick={() => {
+              hapticTap();
+              onCall();
+            }}
+            className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+            whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+            whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+          >
+            <span>The Call</span>
+            <PhoneCall className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
           </motion.button>
         </motion.div>
 

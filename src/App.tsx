@@ -20,6 +20,7 @@ import { SceneVoices } from './components/scenes/SceneVoices';
 import { SceneProposal } from './components/scenes/SceneProposal';
 import { SceneOneMonth } from './components/scenes/SceneOneMonth';
 import { SceneSong } from './components/scenes/SceneSong';
+import { SceneCall } from './components/scenes/SceneCall';
 
 type SceneState = 
   | 'lockscreen' 
@@ -37,6 +38,7 @@ type SceneState =
   | 'message'
   | 'proposal'
   | 'song'
+  | 'call'
   | 'one_month'
   | 'answers'
   | 'voices'
@@ -85,6 +87,7 @@ export default function App() {
               onMessage={() => setScene('message')}
               onProposal={() => setScene('proposal')}
               onSong={() => setScene('song')}
+              onCall={() => setScene('call')}
               onOneMonth={() => setScene('one_month')}
               onAnswers={() => setScene('answers')}
               onVoices={() => setScene('voices')}
@@ -132,6 +135,12 @@ export default function App() {
         {scene === 'song' && (
           <PageWrapper key="scene-song">
             <SceneSong onNext={() => setScene('finale')} />
+          </PageWrapper>
+        )}
+
+        {scene === 'call' && (
+          <PageWrapper key="scene-call">
+            <SceneCall onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 

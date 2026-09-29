@@ -95,6 +95,11 @@ const timelineData: TimelineEvent[] = [
     description: "At 12:51 PM, Shajer gave her whole soul: \"I LOVE YOU SOOOOOO DAMMNNN MUCH....... 🖤❤💞ki mein apni jaan bhi lagadun aap pe.....\""
   },
   {
+    date: "28 Sept | 05:01 AM",
+    title: "The Call (For Fajr)",
+    description: "At 5:01 AM on Monday, Shajer called his phone for the very first time — ringing three times just to wake him up for Fajr prayer."
+  },
+  {
     date: "28 Sept | 01:11 PM",
     title: "The Song (His Voice)",
     description: "At 01:11 PM on Monday, Waqas sang his favorite song for the first time for Shajer — celebrating 1 month after engagement."
