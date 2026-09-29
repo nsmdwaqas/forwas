@@ -12,7 +12,8 @@ import {
   AudioLines, 
   HeartHandshake, 
   Music,
-  PhoneCall
+  PhoneCall,
+  CalendarHeart
 } from 'lucide-react';
 
 interface SceneHubProps {
@@ -33,6 +34,7 @@ interface SceneHubProps {
 
 export function SceneHub({ 
   onConfession, 
+  onCountdown,
   onForever, 
   onLetter, 
   onTimeline, 
@@ -301,6 +303,28 @@ export function SceneHub({
           >
             <span className="tracking-[0.15em] uppercase text-sm md:text-base">The LOVENAMA</span>
             <Feather className="w-5 h-5 text-white/90 group-hover:-rotate-12 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+          </motion.button>
+        </motion.div>
+
+        {/* The Big Day */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.34, duration: 1 }}
+        >
+          <motion.button
+            onClick={() => {
+              hapticTap();
+              if (onCountdown) {
+                onCountdown();
+              }
+            }}
+            className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+            whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+            whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+          >
+            <span>The Big Day</span>
+            <CalendarHeart className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
           </motion.button>
         </motion.div>
 

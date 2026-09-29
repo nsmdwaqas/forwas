@@ -57,8 +57,8 @@ export function SceneCountdown({ onNext }: SceneCountdownProps) {
     }
   };
 
-  // Circular progress variables
-  const size = 260;
+  // Circular progress variables (responsive on mobile)
+  const size = 250;
   const strokeWidth = 3;
   const center = size / 2;
   const radius = center - strokeWidth * 2;
@@ -71,14 +71,14 @@ export function SceneCountdown({ onNext }: SceneCountdownProps) {
   const dotY = center + radius * Math.sin(angle);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-lg mx-auto text-center px-4">
+    <div className="flex flex-col items-center justify-center w-full max-w-lg mx-auto text-center px-3 sm:px-4 py-2 sm:py-4 h-full my-auto">
       <motion.div 
-        className="glass-panel w-full p-6 md:p-10 relative overflow-hidden flex flex-col items-center"
+        className="glass-panel w-full p-5 sm:p-7 md:p-10 relative overflow-y-auto max-h-[88vh] flex flex-col items-center custom-scrollbar touch-pan-y overscroll-contain"
         whileHover={{ rotateX: 2, rotateY: -2 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
         <motion.h1 
-          className="text-3xl md:text-4xl font-heading mb-6 text-white text-shadow-elegant shimmer-text"
+          className="text-2xl sm:text-3xl md:text-4xl font-heading mb-3 sm:mb-5 text-white text-shadow-elegant shimmer-text shrink-0"
           initial={{ opacity: 0, y: -20, filter: 'blur(5px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 1.2, ease: "easeOut" }}
