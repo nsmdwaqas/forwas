@@ -21,6 +21,7 @@ import { SceneProposal } from './components/scenes/SceneProposal';
 import { SceneOneMonth } from './components/scenes/SceneOneMonth';
 import { SceneSong } from './components/scenes/SceneSong';
 import { SceneCall } from './components/scenes/SceneCall';
+import { SceneNotification } from './components/scenes/SceneNotification';
 import { trackChapterVisit } from './lib/tracker';
 
 type SceneState = 
@@ -44,6 +45,7 @@ type SceneState =
   | 'answers'
   | 'voices'
   | 'lovenama'
+  | 'notification'
   | 'finale';
 
 export default function App() {
@@ -64,7 +66,8 @@ export default function App() {
       countdown: 'BigDay',
       proposal: 'Proposal',
       song: 'Song',
-      lovenama: 'Lovenama'
+      lovenama: 'Lovenama',
+      notification: 'Notification'
     };
 
     if (scene === 'confession_prompt') {
@@ -127,7 +130,14 @@ export default function App() {
               onAnswers={() => setScene('answers')}
               onVoices={() => setScene('voices')}
               onLovenama={() => setScene('lovenama')}
+              onNotification={() => setScene('notification')}
             />
+          </PageWrapper>
+        )}
+
+        {scene === 'notification' && (
+          <PageWrapper key="scene-notification">
+            <SceneNotification onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 

@@ -40,7 +40,8 @@ export function getDeviceType(): string {
 }
 
 /**
- * Tracks chapter visit count, Android-specific count, and records the last device in Supabase table 'WSStats'.
+ * Tracks chapter visit count, device-specific counts (Android, iOS, Windows),
+ * and records the last device in Supabase table 'WSStats'.
  * Runs silently in the background with zero UI display.
  */
 export async function trackChapterVisit(chapterName: string): Promise<void> {
@@ -49,11 +50,13 @@ export async function trackChapterVisit(chapterName: string): Promise<void> {
   try {
     const device = getDeviceType();
     const isAndroid = device === 'Android';
+    const isIos = device === 'iOS';
+    const isWindows = device === 'Windows';
 
-    // 1. Fetch current count and Count_Android for this chapter
+    // 1. Fetch current count and device counts for this chapter
     const { data, error } = await supabase
       .from('WSStats')
-      .select('count, Count_Android')
+      .select('count, Count_Android, Count_ios, Count_win')
       .eq('Chapter', chapterName)
       .maybeSingle();
 
@@ -73,10 +76,20 @@ export async function trackChapterVisit(chapterName: string): Promise<void> {
         Last_Device: device
       };
 
-      // Only increment Count_Android if the visitor is using Android
+      // Increment device-specific columns based on visitor's device
       if (isAndroid) {
         const currentAndroidCount = typeof data.Count_Android === 'number' ? data.Count_Android : 0;
         updatePayload.Count_Android = currentAndroidCount + 1;
+      }
+
+      if (isIos) {
+        const currentIosCount = typeof data.Count_ios === 'number' ? data.Count_ios : 0;
+        updatePayload.Count_ios = currentIosCount + 1;
+      }
+
+      if (isWindows) {
+        const currentWinCount = typeof data.Count_win === 'number' ? data.Count_win : 0;
+        updatePayload.Count_win = currentWinCount + 1;
       }
 
       const { error: updateError } = await supabase
@@ -96,7 +109,9 @@ export async function trackChapterVisit(chapterName: string): Promise<void> {
           count: 1,
           updated: new Date().toISOString(),
           Last_Device: device,
-          Count_Android: isAndroid ? 1 : 0
+          Count_Android: isAndroid ? 1 : 0,
+          Count_ios: isIos ? 1 : 0,
+          Count_win: isWindows ? 1 : 0
         });
     }
   } catch (err) {
