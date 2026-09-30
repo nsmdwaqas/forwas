@@ -40,7 +40,7 @@ export function getDeviceType(): string {
 }
 
 /**
- * Tracks chapter visit count and records the last device in Supabase table 'WSStats'.
+ * Tracks chapter visit count, Android-specific count, and records the last device in Supabase table 'WSStats'.
  * Runs silently in the background with zero UI display.
  */
 export async function trackChapterVisit(chapterName: string): Promise<void> {
@@ -48,11 +48,12 @@ export async function trackChapterVisit(chapterName: string): Promise<void> {
 
   try {
     const device = getDeviceType();
+    const isAndroid = device === 'Android';
 
-    // 1. Fetch current count for this chapter
+    // 1. Fetch current count and Count_Android for this chapter
     const { data, error } = await supabase
       .from('WSStats')
-      .select('count')
+      .select('count, Count_Android')
       .eq('Chapter', chapterName)
       .maybeSingle();
 
@@ -62,15 +63,25 @@ export async function trackChapterVisit(chapterName: string): Promise<void> {
     }
 
     if (data) {
-      // 2. Increment count by +1, update timestamp and Last_Device
-      const newCount = (typeof data.count === 'number' ? data.count : 0) + 1;
+      // 2. Increment total count by +1
+      const newTotalCount = (typeof data.count === 'number' ? data.count : 0) + 1;
+
+      // Prepare update payload
+      const updatePayload: Record<string, any> = {
+        count: newTotalCount,
+        updated: new Date().toISOString(),
+        Last_Device: device
+      };
+
+      // Only increment Count_Android if the visitor is using Android
+      if (isAndroid) {
+        const currentAndroidCount = typeof data.Count_Android === 'number' ? data.Count_Android : 0;
+        updatePayload.Count_Android = currentAndroidCount + 1;
+      }
+
       const { error: updateError } = await supabase
         .from('WSStats')
-        .update({
-          count: newCount,
-          updated: new Date().toISOString(),
-          Last_Device: device
-        })
+        .update(updatePayload)
         .eq('Chapter', chapterName);
 
       if (updateError) {
@@ -84,7 +95,8 @@ export async function trackChapterVisit(chapterName: string): Promise<void> {
           Chapter: chapterName,
           count: 1,
           updated: new Date().toISOString(),
-          Last_Device: device
+          Last_Device: device,
+          Count_Android: isAndroid ? 1 : 0
         });
     }
   } catch (err) {
