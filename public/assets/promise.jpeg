@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 810" width="100%" height="100%">
+  <defs>
+    <linearGradient id="purpleBubbleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8a3ffc" />
+      <stop offset="100%" stop-color="#6929c4" />
+    </linearGradient>
+
+    <linearGradient id="quoteBubbleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3d1b6b" />
+      <stop offset="100%" stop-color="#2e1452" />
+    </linearGradient>
+
+    <filter id="subtleShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <!-- AMOLED Dark Canvas -->
+  <rect width="680" height="810" fill="#0c0c0e" rx="32" />
+
+  <!-- Background subtle glow -->
+  <circle cx="480" cy="180" r="220" fill="#7022d4" opacity="0.12" filter="blur(60px)" />
+  <circle cx="200" cy="550" r="180" fill="#ff4081" opacity="0.08" filter="blur(60px)" />
+
+  <!-- Top Sent Message: Waqas's Promise -->
+  <g transform="translate(100, 36)" filter="url(#subtleShadow)">
+    <!-- Bubble Background -->
+    <path d="M 32 0 
+             L 520 0 
+             A 32 32 0 0 1 552 32 
+             L 552 248 
+             A 32 32 0 0 1 520 280 
+             L 32 280 
+             A 32 32 0 0 1 0 248 
+             L 0 32 
+             A 32 32 0 0 1 32 0 Z" 
+          fill="url(#purpleBubbleGrad)" />
+
+    <!-- Message Text Lines -->
+    <text font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, sans-serif" font-size="23" font-weight="400" fill="#ffffff" letter-spacing="-0.2">
+      <tspan x="26" y="44">i Choose you.. over everything.. ONLY</tspan>
+      <tspan x="26" y="80">YOU Hameshakeliye.. if life give me</tspan>
+      <tspan x="26" y="116">1000 more time to relive i will choose</tspan>
+      <tspan x="26" y="152">you and thats a </tspan>
+    </text>
+
+    <!-- White Search Highlight for "promise" -->
+    <g transform="translate(242, 128)">
+      <rect x="0" y="0" width="112" height="34" rx="4" fill="#ffffff" />
+      <text x="56" y="24" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" font-size="23" font-weight="600" fill="#111111">
+        promise
+      </text>
+    </g>
+
+    <!-- Remaining text on line 4 -->
+    <text x="362" y="152" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" font-size="23" font-weight="400" fill="#ffffff">
+      and i pray for
+    </text>
+
+    <!-- Line 5: it.. Inshallah.. + Emojis -->
+    <text x="26" y="190" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" font-size="23" font-weight="400" fill="#ffffff">
+      it.. Inshallah.. 
+      <tspan fill="#ff3b30">❤️</tspan>
+      <tspan fill="#ff69b4">💞</tspan>
+      <tspan fill="#ff77a9">💝</tspan>
+      <tspan fill="#ff85c0">💗</tspan>
+      <tspan fill="#ffa0d2">💓</tspan>
+      <tspan fill="#ffb6db">💕</tspan>
+      <tspan fill="#222222">🖤</tspan>
+      <tspan fill="#d470d4">💟</tspan>
+    </text>
+
+    <!-- Subtle sent time indicator -->
+    <text x="526" y="260" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="500" fill="rgba(255, 255, 255, 0.65)">
+      11:01 PM
+    </text>
+  </g>
+
+  <!-- Replied to you label -->
+  <text x="32" y="372" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="500" fill="#8e8e93">
+    Replied to you
+  </text>
+
+  <!-- Quoted Message Bubble (dark purple) -->
+  <g transform="translate(32, 396)" filter="url(#subtleShadow)">
+    <rect x="0" y="0" width="550" height="175" rx="26" fill="url(#quoteBubbleGrad)" stroke="rgba(138, 63, 252, 0.4)" stroke-width="1.2" />
+    
+    <text font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" font-size="21" font-weight="400" fill="#ded2f9" letter-spacing="-0.1">
+      <tspan x="24" y="38">i Choose you.. over everything.. ONLY YOU</tspan>
+      <tspan x="24" y="72">Hameshakeliye.. if life give me 1000 more</tspan>
+      <tspan x="24" y="106">time to relive i will choose you and... <tspan fill="rgba(255,255,255,0.7)" font-weight="500">more</tspan></tspan>
+    </text>
+  </g>
+
+  <!-- Shajer's Reply Bubble (Dark Gray) -->
+  <g transform="translate(16, 595)" filter="url(#subtleShadow)">
+    <rect x="0" y="0" width="540" height="135" rx="30" fill="#242529" stroke="rgba(255, 255, 255, 0.15)" stroke-width="1.2" />
+
+    <text font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" font-size="23" font-weight="400" fill="#ffffff" letter-spacing="-0.2">
+      <tspan x="24" y="52">so do i... inshallah... we will pray for the</tspan>
+      <tspan x="24" y="92">same <tspan fill="#ff3b30">❤️</tspan><tspan fill="#ff69b4">💞</tspan></tspan>
+    </text>
+  </g>
+</svg>
