@@ -17,7 +17,8 @@ import {
   BookOpen,
   ArrowLeft,
   BellRing,
-  ShieldCheck
+  ShieldCheck,
+  Video
 } from 'lucide-react';
 
 interface SceneHubProps {
@@ -36,6 +37,7 @@ interface SceneHubProps {
   onOneMonth?: () => void;
   onNotification?: () => void;
   onThePromise: () => void;
+  onFacetime: () => void;
 }
 
 type CategoryType = 'story' | 'words' | 'promises' | 'extras' | null;
@@ -54,7 +56,8 @@ export function SceneHub({
   onCall,
   onLovenama,
   onNotification,
-  onThePromise
+  onThePromise,
+  onFacetime
 }: SceneHubProps) {
   const [activeCategory, setActiveCategory] = useState<CategoryType>(null);
   const [lockedShake, setLockedShake] = useState(false);
@@ -325,6 +328,20 @@ export function SceneHub({
                     >
                       <span>The Call</span>
                       <PhoneCall className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+                    </motion.button>
+
+                    {/* The Facetime */}
+                    <motion.button
+                      onClick={() => {
+                        hapticTap();
+                        onFacetime();
+                      }}
+                      className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+                      whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+                      whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+                    >
+                      <span>The Facetime</span>
+                      <Video className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
                     </motion.button>
                   </>
                 )}

@@ -105,6 +105,16 @@ const timelineData: TimelineEvent[] = [
     description: "At 01:11 PM on Monday, Waqas sang his favorite song for the first time for Shajer — celebrating 1 month after engagement."
   },
   {
+    date: "30 Sept | 11:01 PM",
+    title: "The First Promise",
+    description: "At 11:01 PM, Waqas made his eternal promise: \"i Choose you.. over everything.. ONLY YOU Hameshakeliye.. if life give me 1000 more time to relive i will choose you.\" Shajer replied: \"so do i... inshallah...\""
+  },
+  {
+    date: "07 Oct | 10:58 PM",
+    title: "The First Facetime",
+    description: "Shajer made her first Facetime call. Waqas didn't answer or decline — \"mann nahi kar raha tha decline karne ka bina wajah\". When she playfully asked if he'd decline in future, it became their sweetest memory."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",

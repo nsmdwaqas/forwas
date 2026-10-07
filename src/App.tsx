@@ -23,6 +23,7 @@ import { SceneSong } from './components/scenes/SceneSong';
 import { SceneCall } from './components/scenes/SceneCall';
 import { SceneNotification } from './components/scenes/SceneNotification';
 import { SceneThePromise } from './components/scenes/SceneThePromise';
+import { SceneFacetime } from './components/scenes/SceneFacetime';
 import { trackChapterVisit } from './lib/tracker';
 
 type SceneState = 
@@ -37,6 +38,7 @@ type SceneState =
   | 'countdown' 
   | 'forever'
   | 'the_promise'
+  | 'facetime'
   | 'letter'
   | 'timeline'
   | 'message'
@@ -62,6 +64,7 @@ export default function App() {
       message: 'Message',
       voices: 'Voices',
       call: 'Call',
+      facetime: 'Facetime',
       letter: 'Letter',
       answers: 'Answers',
       forever: 'Forever',
@@ -135,7 +138,14 @@ export default function App() {
               onLovenama={() => setScene('lovenama')}
               onNotification={() => setScene('notification')}
               onThePromise={() => setScene('the_promise')}
+              onFacetime={() => setScene('facetime')}
             />
+          </PageWrapper>
+        )}
+
+        {scene === 'facetime' && (
+          <PageWrapper key="scene-facetime">
+            <SceneFacetime onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 
