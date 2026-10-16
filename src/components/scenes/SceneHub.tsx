@@ -18,7 +18,8 @@ import {
   ArrowLeft,
   BellRing,
   ShieldCheck,
-  Video
+  Video,
+  RotateCw
 } from 'lucide-react';
 
 interface SceneHubProps {
@@ -38,6 +39,7 @@ interface SceneHubProps {
   onNotification?: () => void;
   onThePromise: () => void;
   onFacetime: () => void;
+  onRecurrence: () => void;
 }
 
 type CategoryType = 'story' | 'words' | 'promises' | 'extras' | null;
@@ -57,7 +59,8 @@ export function SceneHub({
   onLovenama,
   onNotification,
   onThePromise,
-  onFacetime
+  onFacetime,
+  onRecurrence
 }: SceneHubProps) {
   const [activeCategory, setActiveCategory] = useState<CategoryType>(null);
   const [lockedShake, setLockedShake] = useState(false);
@@ -484,28 +487,22 @@ export function SceneHub({
                       <span>The Notification</span>
                       <BellRing className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
                     </motion.button>
+
+                    {/* The Recurrence */}
+                    <motion.button
+                      onClick={() => {
+                        hapticTap();
+                        onRecurrence();
+                      }}
+                      className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+                      whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+                      whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+                    >
+                      <span>The Recurrence</span>
+                      <RotateCw className="w-5 h-5 text-white/90 group-hover:rotate-180 transition-transform duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+                    </motion.button>
                   </>
                 )}
-
-                {/* Category Sub-window Locked Button */}
-                <motion.button
-                  onClick={handleLockedClick}
-                  animate={controls}
-                  className={`w-full px-5 py-3.5 sm:px-6 sm:py-4 rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between min-h-[44px] cursor-pointer ${
-                    lockedShake 
-                      ? 'bg-rose-500/20 border border-rose-400/80 text-rose-200 shadow-[0_0_20px_rgba(244,63,94,0.3)]' 
-                      : 'bg-white/5 border border-white/10 text-white/50 hover:bg-white/10 hover:text-white/80'
-                  }`}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span>Locked</span>
-                  <motion.div
-                    animate={lockedShake ? { rotate: [-15, 15, -10, 10, 0] } : {}}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <Lock className="w-5 h-5 text-white/60" />
-                  </motion.div>
-                </motion.button>
 
               </div>
             </motion.div>

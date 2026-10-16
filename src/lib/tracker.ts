@@ -54,13 +54,27 @@ export async function trackChapterVisit(chapterName: string): Promise<void> {
     const isWindows = device === 'Windows';
 
     // 1. Fetch current count and device counts for this chapter
-    const { data, error } = await supabase
+    let targetChapter = chapterName;
+    let { data, error } = await supabase
       .from('WSStats')
       .select('count, Count_Android, Count_ios, Count_win')
-      .eq('Chapter', chapterName)
+      .eq('Chapter', targetChapter)
       .maybeSingle();
 
-    if (error) {
+    if (!data && (chapterName === 'Recurrence' || chapterName === 'Recurrence ')) {
+      const altChapter = chapterName === 'Recurrence' ? 'Recurrence ' : 'Recurrence';
+      const altRes = await supabase
+        .from('WSStats')
+        .select('count, Count_Android, Count_ios, Count_win')
+        .eq('Chapter', altChapter)
+        .maybeSingle();
+      if (altRes.data) {
+        data = altRes.data;
+        targetChapter = altChapter;
+      }
+    }
+
+    if (error && !data) {
       console.warn(`[Tracker] Error fetching stats for ${chapterName}:`, error.message);
       return;
     }
@@ -95,7 +109,7 @@ export async function trackChapterVisit(chapterName: string): Promise<void> {
       const { error: updateError } = await supabase
         .from('WSStats')
         .update(updatePayload)
-        .eq('Chapter', chapterName);
+        .eq('Chapter', targetChapter);
 
       if (updateError) {
         console.warn(`[Tracker] Error updating stats for ${chapterName}:`, updateError.message);

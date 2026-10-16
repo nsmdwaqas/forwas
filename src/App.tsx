@@ -24,6 +24,7 @@ import { SceneCall } from './components/scenes/SceneCall';
 import { SceneNotification } from './components/scenes/SceneNotification';
 import { SceneThePromise } from './components/scenes/SceneThePromise';
 import { SceneFacetime } from './components/scenes/SceneFacetime';
+import { SceneRecurrence } from './components/scenes/SceneRecurrence';
 import { trackChapterVisit } from './lib/tracker';
 
 type SceneState = 
@@ -39,6 +40,7 @@ type SceneState =
   | 'forever'
   | 'the_promise'
   | 'facetime'
+  | 'recurrence'
   | 'letter'
   | 'timeline'
   | 'message'
@@ -69,6 +71,7 @@ export default function App() {
       answers: 'Answers',
       forever: 'Forever',
       the_promise: 'Promise',
+      recurrence: 'Recurrence',
       countdown: 'BigDay',
       proposal: 'Proposal',
       song: 'Song',
@@ -139,7 +142,14 @@ export default function App() {
               onNotification={() => setScene('notification')}
               onThePromise={() => setScene('the_promise')}
               onFacetime={() => setScene('facetime')}
+              onRecurrence={() => setScene('recurrence')}
             />
+          </PageWrapper>
+        )}
+
+        {scene === 'recurrence' && (
+          <PageWrapper key="scene-recurrence">
+            <SceneRecurrence onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 
