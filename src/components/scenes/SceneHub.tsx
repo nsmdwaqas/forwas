@@ -19,7 +19,8 @@ import {
   BellRing,
   ShieldCheck,
   Video,
-  RotateCw
+  RotateCw,
+  Compass
 } from 'lucide-react';
 
 interface SceneHubProps {
@@ -40,6 +41,7 @@ interface SceneHubProps {
   onThePromise: () => void;
   onFacetime: () => void;
   onRecurrence: () => void;
+  onApart: () => void;
 }
 
 type CategoryType = 'story' | 'words' | 'promises' | 'extras' | null;
@@ -60,7 +62,8 @@ export function SceneHub({
   onNotification,
   onThePromise,
   onFacetime,
-  onRecurrence
+  onRecurrence,
+  onApart
 }: SceneHubProps) {
   const [activeCategory, setActiveCategory] = useState<CategoryType>(null);
   const [lockedShake, setLockedShake] = useState(false);
@@ -345,6 +348,20 @@ export function SceneHub({
                     >
                       <span>The Facetime</span>
                       <Video className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+                    </motion.button>
+
+                    {/* The Apart */}
+                    <motion.button
+                      onClick={() => {
+                        hapticTap();
+                        onApart();
+                      }}
+                      className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+                      whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+                      whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+                    >
+                      <span>The Apart</span>
+                      <Compass className="w-5 h-5 text-white/90 group-hover:rotate-45 transition-transform duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
                     </motion.button>
                   </>
                 )}

@@ -115,6 +115,11 @@ const timelineData: TimelineEvent[] = [
     description: "Shajer made her first Facetime call. Waqas didn't answer or decline — \"mann nahi kar raha tha decline karne ka bina wajah\". When she playfully asked if he'd decline in future, it became their sweetest memory."
   },
   {
+    date: "19 Oct | 7:00 PM",
+    title: "The Apart (190 KM)",
+    description: "The first time 190 KM apart — from Ambur house to Chennai house till marriage. She cried as he left, maybe for the very first time. Past midnight, delayed by parking after driving, a quiet 'Good night' carried the heaviest love while she waited up."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",
