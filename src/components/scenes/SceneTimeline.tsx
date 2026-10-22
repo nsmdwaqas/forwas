@@ -120,6 +120,11 @@ const timelineData: TimelineEvent[] = [
     description: "The first time 190 KM apart — from Ambur house to Chennai house till marriage. She cried as he left, maybe for the very first time. Past midnight, delayed by parking after driving, a quiet 'Good night' carried the heaviest love while she waited up."
   },
   {
+    date: "21 Oct | 11:00 PM",
+    title: "The Ego (Our Sacred Pact)",
+    description: "At 11:00 PM, Shajer asked for a sacred promise: never to go to sleep with an argument, and never to stay angry without talking — in our story, ego will always bow down to love."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",

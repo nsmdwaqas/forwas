@@ -26,6 +26,7 @@ import { SceneThePromise } from './components/scenes/SceneThePromise';
 import { SceneFacetime } from './components/scenes/SceneFacetime';
 import { SceneRecurrence } from './components/scenes/SceneRecurrence';
 import { SceneApart } from './components/scenes/SceneApart';
+import { SceneEgo } from './components/scenes/SceneEgo';
 import { trackChapterVisit } from './lib/tracker';
 
 type SceneState = 
@@ -42,6 +43,7 @@ type SceneState =
   | 'the_promise'
   | 'facetime'
   | 'apart'
+  | 'ego'
   | 'recurrence'
   | 'letter'
   | 'timeline'
@@ -70,6 +72,7 @@ export default function App() {
       call: 'Call',
       facetime: 'Facetime',
       apart: 'Apart',
+      ego: 'Ego',
       letter: 'Letter',
       answers: 'Answers',
       forever: 'Forever',
@@ -147,7 +150,14 @@ export default function App() {
               onFacetime={() => setScene('facetime')}
               onRecurrence={() => setScene('recurrence')}
               onApart={() => setScene('apart')}
+              onEgo={() => setScene('ego')}
             />
+          </PageWrapper>
+        )}
+
+        {scene === 'ego' && (
+          <PageWrapper key="scene-ego">
+            <SceneEgo onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 
