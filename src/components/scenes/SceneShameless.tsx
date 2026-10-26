@@ -24,6 +24,7 @@ interface SceneShamelessProps {
 
 export function SceneShameless({ onNext }: SceneShamelessProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeVideoModal, setActiveVideoModal] = useState<{ src: string; caption: string } | null>(null);
   const [liked, setLiked] = useState(false);
   const [floatingHeart, setFloatingHeart] = useState<{ id: number; x: number; y: number } | null>(null);
 
@@ -114,6 +115,20 @@ export function SceneShameless({ onNext }: SceneShamelessProps) {
     }
   };
 
+  const handleOpenVideoModal = (src: string, caption: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    hapticTap('light');
+    if (video1Ref.current) {
+      video1Ref.current.pause();
+      setIsPlaying1(false);
+    }
+    if (video2Ref.current) {
+      video2Ref.current.pause();
+      setIsPlaying2(false);
+    }
+    setActiveVideoModal({ src, caption });
+  };
+
   return (
     <div className="flex flex-col items-center justify-start md:justify-center w-full max-w-3xl mx-auto text-center px-2 sm:px-4 md:px-8 py-2 sm:py-3 md:py-4 h-full my-auto">
       <div 
@@ -188,99 +203,165 @@ export function SceneShameless({ onNext }: SceneShamelessProps) {
                 The Kiss Reels We Sent Each Other
               </span>
               <span className="text-[11px] text-white/70 font-mono">
-                Tap video to play
+                Tap to play or enlarge
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
               {/* Video Reel 1 */}
               <div 
-                className="relative rounded-2xl overflow-hidden border border-white/25 bg-black/90 shadow-xl group aspect-[9/16] max-h-[300px] sm:max-h-[340px] flex items-center justify-center cursor-pointer"
-                onClick={togglePlay1}
+                className="relative rounded-2xl overflow-hidden border border-white/25 bg-black/90 shadow-xl group flex flex-col"
               >
-                <video
-                  ref={video1Ref}
-                  src={sh1Video}
-                  playsInline
-                  loop
-                  className="w-full h-full object-contain bg-black"
-                  onPlay={() => setIsPlaying1(true)}
-                  onPause={() => setIsPlaying1(false)}
-                />
-
-                {/* Play/Pause Overlay Icon */}
                 <div 
-                  className={`absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity duration-300 ${
-                    isPlaying1 ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'
-                  }`}
+                  className="relative aspect-[9/16] max-h-[290px] sm:max-h-[330px] flex items-center justify-center cursor-pointer overflow-hidden bg-black"
+                  onClick={togglePlay1}
                 >
-                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white shadow-lg">
-                    {isPlaying1 ? (
-                      <Pause className="w-6 h-6 fill-white" />
-                    ) : (
-                      <Play className="w-6 h-6 fill-white ml-0.5" />
-                    )}
+                  <video
+                    ref={video1Ref}
+                    src={sh1Video}
+                    playsInline
+                    loop
+                    className="w-full h-full object-contain bg-black"
+                    onPlay={() => setIsPlaying1(true)}
+                    onPause={() => setIsPlaying1(false)}
+                  />
+
+                  {/* Play/Pause Overlay Icon */}
+                  <div 
+                    className={`absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity duration-300 ${
+                      isPlaying1 ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'
+                    }`}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white shadow-lg">
+                      {isPlaying1 ? (
+                        <Pause className="w-6 h-6 fill-white" />
+                      ) : (
+                        <Play className="w-6 h-6 fill-white ml-0.5" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Top Badge & Action Controls */}
+                  <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
+                    <span className="px-2 py-0.5 rounded-full bg-black/75 backdrop-blur-md text-[10px] text-white font-medium border border-white/20">
+                      Reel 1 💋
+                    </span>
+                    <div className="flex items-center gap-1.5 pointer-events-auto">
+                      <button
+                        type="button"
+                        onClick={toggleMute1}
+                        className="p-1.5 rounded-full bg-black/75 hover:bg-black/95 text-white backdrop-blur-md transition-all border border-white/20 shadow cursor-pointer"
+                        aria-label="Toggle mute reel 1"
+                        title={isMuted1 ? "Unmute" : "Mute"}
+                      >
+                        {isMuted1 ? <VolumeX className="w-3.5 h-3.5 text-white/70" /> : <Volume2 className="w-3.5 h-3.5 text-white" />}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => handleOpenVideoModal(sh1Video, "Kiss Reel 1 💋 • 26 Oct 2026", e)}
+                        className="px-2 py-1 rounded-full bg-black/75 hover:bg-black/95 text-white backdrop-blur-md transition-all border border-white/20 flex items-center gap-1 shadow cursor-pointer text-[10px]"
+                        aria-label="Enlarge Reel 1"
+                        title="Enlarge Reel 1"
+                      >
+                        <Maximize2 className="w-3 h-3 text-gold-light" />
+                        <span>Enlarge</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                {/* Top Badge & Sound Toggle */}
-                <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
-                  <span className="px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-[10px] text-white font-medium border border-white/20">
-                    Reel 1 💋
+                {/* Footer Bar */}
+                <div className="px-3 py-1.5 bg-white/5 border-t border-white/10 flex items-center justify-between text-[11px] text-white/85">
+                  <span className="text-rose-300 font-semibold flex items-center gap-1">
+                    <Film className="w-3 h-3 text-rose-300" />
+                    Kiss Reel 1
                   </span>
                   <button
                     type="button"
-                    onClick={toggleMute1}
-                    className="pointer-events-auto p-1.5 rounded-full bg-black/70 hover:bg-black/90 text-white backdrop-blur-md transition-all border border-white/20"
-                    aria-label="Toggle mute reel 1"
+                    onClick={(e) => handleOpenVideoModal(sh1Video, "Kiss Reel 1 💋 • 26 Oct 2026", e)}
+                    className="text-gold-light text-[10px] flex items-center gap-1 hover:underline cursor-pointer bg-white/10 px-2 py-0.5 rounded-full border border-white/15"
                   >
-                    {isMuted1 ? <VolumeX className="w-3.5 h-3.5 text-white/70" /> : <Volume2 className="w-3.5 h-3.5 text-white" />}
+                    <Maximize2 className="w-3 h-3" />
+                    <span>Enlarge view</span>
                   </button>
                 </div>
               </div>
 
               {/* Video Reel 2 */}
               <div 
-                className="relative rounded-2xl overflow-hidden border border-white/25 bg-black/90 shadow-xl group aspect-[9/16] max-h-[300px] sm:max-h-[340px] flex items-center justify-center cursor-pointer"
-                onClick={togglePlay2}
+                className="relative rounded-2xl overflow-hidden border border-white/25 bg-black/90 shadow-xl group flex flex-col"
               >
-                <video
-                  ref={video2Ref}
-                  src={sh2Video}
-                  playsInline
-                  loop
-                  className="w-full h-full object-contain bg-black"
-                  onPlay={() => setIsPlaying2(true)}
-                  onPause={() => setIsPlaying2(false)}
-                />
-
-                {/* Play/Pause Overlay Icon */}
                 <div 
-                  className={`absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity duration-300 ${
-                    isPlaying2 ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'
-                  }`}
+                  className="relative aspect-[9/16] max-h-[290px] sm:max-h-[330px] flex items-center justify-center cursor-pointer overflow-hidden bg-black"
+                  onClick={togglePlay2}
                 >
-                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white shadow-lg">
-                    {isPlaying2 ? (
-                      <Pause className="w-6 h-6 fill-white" />
-                    ) : (
-                      <Play className="w-6 h-6 fill-white ml-0.5" />
-                    )}
+                  <video
+                    ref={video2Ref}
+                    src={sh2Video}
+                    playsInline
+                    loop
+                    className="w-full h-full object-contain bg-black"
+                    onPlay={() => setIsPlaying2(true)}
+                    onPause={() => setIsPlaying2(false)}
+                  />
+
+                  {/* Play/Pause Overlay Icon */}
+                  <div 
+                    className={`absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity duration-300 ${
+                      isPlaying2 ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'
+                    }`}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white shadow-lg">
+                      {isPlaying2 ? (
+                        <Pause className="w-6 h-6 fill-white" />
+                      ) : (
+                        <Play className="w-6 h-6 fill-white ml-0.5" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Top Badge & Action Controls */}
+                  <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
+                    <span className="px-2 py-0.5 rounded-full bg-black/75 backdrop-blur-md text-[10px] text-white font-medium border border-white/20">
+                      Reel 2 💋
+                    </span>
+                    <div className="flex items-center gap-1.5 pointer-events-auto">
+                      <button
+                        type="button"
+                        onClick={toggleMute2}
+                        className="p-1.5 rounded-full bg-black/75 hover:bg-black/95 text-white backdrop-blur-md transition-all border border-white/20 shadow cursor-pointer"
+                        aria-label="Toggle mute reel 2"
+                        title={isMuted2 ? "Unmute" : "Mute"}
+                      >
+                        {isMuted2 ? <VolumeX className="w-3.5 h-3.5 text-white/70" /> : <Volume2 className="w-3.5 h-3.5 text-white" />}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => handleOpenVideoModal(sh2Video, "Kiss Reel 2 💋 • 26 Oct 2026", e)}
+                        className="px-2 py-1 rounded-full bg-black/75 hover:bg-black/95 text-white backdrop-blur-md transition-all border border-white/20 flex items-center gap-1 shadow cursor-pointer text-[10px]"
+                        aria-label="Enlarge Reel 2"
+                        title="Enlarge Reel 2"
+                      >
+                        <Maximize2 className="w-3 h-3 text-gold-light" />
+                        <span>Enlarge</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                {/* Top Badge & Sound Toggle */}
-                <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
-                  <span className="px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-[10px] text-white font-medium border border-white/20">
-                    Reel 2 💋
+                {/* Footer Bar */}
+                <div className="px-3 py-1.5 bg-white/5 border-t border-white/10 flex items-center justify-between text-[11px] text-white/85">
+                  <span className="text-rose-300 font-semibold flex items-center gap-1">
+                    <Film className="w-3 h-3 text-rose-300" />
+                    Kiss Reel 2
                   </span>
                   <button
                     type="button"
-                    onClick={toggleMute2}
-                    className="pointer-events-auto p-1.5 rounded-full bg-black/70 hover:bg-black/90 text-white backdrop-blur-md transition-all border border-white/20"
-                    aria-label="Toggle mute reel 2"
+                    onClick={(e) => handleOpenVideoModal(sh2Video, "Kiss Reel 2 💋 • 26 Oct 2026", e)}
+                    className="text-gold-light text-[10px] flex items-center gap-1 hover:underline cursor-pointer bg-white/10 px-2 py-0.5 rounded-full border border-white/15"
                   >
-                    {isMuted2 ? <VolumeX className="w-3.5 h-3.5 text-white/70" /> : <Volume2 className="w-3.5 h-3.5 text-white" />}
+                    <Maximize2 className="w-3 h-3" />
+                    <span>Tap to enlarge</span>
                   </button>
                 </div>
               </div>
@@ -463,6 +544,63 @@ export function SceneShameless({ onNext }: SceneShamelessProps) {
                 </p>
                 <p className="text-white/70 text-[11px] mt-0.5 font-mono">
                   26 Oct 2026 • The Shameless
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Fullscreen Lightbox Modal for Video Reels */}
+      <AnimatePresence>
+        {activeVideoModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 touch-none"
+            onClick={() => {
+              hapticTap('light');
+              setActiveVideoModal(null);
+            }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => {
+                hapticTap('light');
+                setActiveVideoModal(null);
+              }}
+              className="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-white/20 text-white hover:bg-white/30 backdrop-blur-md transition-all cursor-pointer"
+              aria-label="Close video preview"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Modal Video Card */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="relative max-w-sm sm:max-w-md w-full max-h-[88vh] rounded-3xl overflow-hidden shadow-2xl border-2 border-white/25 bg-black flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-full flex-1 overflow-auto flex items-center justify-center p-2 bg-black">
+                <video 
+                  src={activeVideoModal.src} 
+                  autoPlay
+                  controls
+                  playsInline
+                  loop
+                  className="w-full h-auto max-h-[74vh] object-contain rounded-2xl block mx-auto bg-black"
+                />
+              </div>
+              <div className="p-3 bg-zinc-950 border-t border-white/10 text-center shrink-0">
+                <p className="text-white text-xs sm:text-sm font-medium">
+                  {activeVideoModal.caption}
+                </p>
+                <p className="text-white/70 text-[11px] mt-0.5 font-mono">
+                  26 Oct 2026 • The Shameless Kiss Reel
                 </p>
               </div>
             </motion.div>

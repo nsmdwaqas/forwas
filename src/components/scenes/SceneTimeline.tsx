@@ -127,7 +127,7 @@ const timelineData: TimelineEvent[] = [
   {
     date: "26 Oct",
     title: "The Shameless (Could be us..?)",
-    description: "The first time talking intimate, unfiltered, and playfully shameless — exchanging kiss reels with teasing smiles. Shajer asked \"could be us..?\" and both whispered \"Ameen ❤️\"."
+    description: "The first time talking intimate, unfiltered, and playfully shameless — exchanging kiss reels with teasing smiles. Someone asked \"could be us..?\" and both whispered \"Ameen ❤️\"."
   },
   {
     date: "Today",
