@@ -125,6 +125,11 @@ const timelineData: TimelineEvent[] = [
     description: "At 11:00 PM, Shajer asked for a sacred promise: never to go to sleep with an argument, and never to stay angry without talking — in our story, ego will always bow down to love."
   },
   {
+    date: "26 Oct",
+    title: "The Shameless (Could be us..?)",
+    description: "The first time talking intimate, unfiltered, and playfully shameless — exchanging kiss reels with teasing smiles. Shajer asked \"could be us..?\" and both whispered \"Ameen ❤️\"."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",

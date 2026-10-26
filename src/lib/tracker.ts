@@ -100,6 +100,19 @@ export async function trackChapterVisit(chapterName: string): Promise<void> {
       }
     }
 
+    if (!data && (chapterName === 'Shameless' || chapterName === 'Shameless ')) {
+      const altChapter = chapterName === 'Shameless' ? 'Shameless ' : 'Shameless';
+      const altRes = await supabase
+        .from('WSStats')
+        .select('count, Count_Android, Count_ios, Count_win')
+        .eq('Chapter', altChapter)
+        .maybeSingle();
+      if (altRes.data) {
+        data = altRes.data;
+        targetChapter = altChapter;
+      }
+    }
+
     if (error && !data) {
       console.warn(`[Tracker] Error fetching stats for ${chapterName}:`, error.message);
       return;
