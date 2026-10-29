@@ -135,6 +135,11 @@ const timelineData: TimelineEvent[] = [
     description: "The very first time speaking on call — just a few precious seconds of \"Salaaam\" when waking each other for Fajr. 3 brief calls at dawn with nothing but the purest greeting."
   },
   {
+    date: "29 Oct | 11:00 AM",
+    title: "The Emoji (Kiss Across 190 KM)",
+    description: "At 11:00 AM, the first time exchanging blowing kiss emojis across the distance — bridging the kilometers with sweet intimacy and blushing hearts."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",

@@ -130,6 +130,23 @@ export async function trackChapterVisit(chapterName: string): Promise<void> {
       }
     }
 
+    if (!data && (chapterName.toLowerCase().trim() === 'emoji')) {
+      const candidates = ['emoji ', 'emoji', 'Emoji ', 'Emoji'];
+      for (const cand of candidates) {
+        if (cand === targetChapter) continue;
+        const altRes = await supabase
+          .from('WSStats')
+          .select('count, Count_Android, Count_ios, Count_win')
+          .eq('Chapter', cand)
+          .maybeSingle();
+        if (altRes.data) {
+          data = altRes.data;
+          targetChapter = cand;
+          break;
+        }
+      }
+    }
+
     if (error && !data) {
       console.warn(`[Tracker] Error fetching stats for ${chapterName}:`, error.message);
       return;

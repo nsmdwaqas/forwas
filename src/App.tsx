@@ -29,6 +29,7 @@ import { SceneApart } from './components/scenes/SceneApart';
 import { SceneEgo } from './components/scenes/SceneEgo';
 import { SceneShameless } from './components/scenes/SceneShameless';
 import { SceneTalk } from './components/scenes/SceneTalk';
+import { SceneEmoji } from './components/scenes/SceneEmoji';
 import { trackChapterVisit } from './lib/tracker';
 
 type SceneState = 
@@ -48,6 +49,7 @@ type SceneState =
   | 'ego'
   | 'shameless'
   | 'talk'
+  | 'emoji'
   | 'recurrence'
   | 'letter'
   | 'timeline'
@@ -79,6 +81,7 @@ export default function App() {
       ego: 'Ego',
       shameless: 'Shameless',
       talk: 'talk',
+      emoji: 'emoji',
       letter: 'Letter',
       answers: 'Answers',
       forever: 'Forever',
@@ -159,7 +162,14 @@ export default function App() {
               onEgo={() => setScene('ego')}
               onShameless={() => setScene('shameless')}
               onTalk={() => setScene('talk')}
+              onEmoji={() => setScene('emoji')}
             />
+          </PageWrapper>
+        )}
+
+        {scene === 'emoji' && (
+          <PageWrapper key="scene-emoji">
+            <SceneEmoji onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 
