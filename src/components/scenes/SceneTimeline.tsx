@@ -130,6 +130,11 @@ const timelineData: TimelineEvent[] = [
     description: "The first time talking intimate, unfiltered, and playfully shameless — exchanging kiss reels with teasing smiles. Someone asked \"could be us..?\" and both whispered \"Ameen ❤️\"."
   },
   {
+    date: "29 Oct | Fajr",
+    title: "The Talk (Dawn Salaam)",
+    description: "The very first time speaking on call — just a few precious seconds of \"Salaaam\" when waking each other for Fajr. 3 brief calls at dawn with nothing but the purest greeting."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",

@@ -45,6 +45,7 @@ interface SceneHubProps {
   onApart: () => void;
   onEgo: () => void;
   onShameless: () => void;
+  onTalk: () => void;
 }
 
 type CategoryType = 'story' | 'words' | 'promises' | 'extras' | null;
@@ -68,7 +69,8 @@ export function SceneHub({
   onRecurrence,
   onApart,
   onEgo,
-  onShameless
+  onShameless,
+  onTalk
 }: SceneHubProps) {
   const [activeCategory, setActiveCategory] = useState<CategoryType>(null);
   const [lockedShake, setLockedShake] = useState(false);
@@ -381,6 +383,20 @@ export function SceneHub({
                     >
                       <span>The Shameless</span>
                       <Flame className="w-5 h-5 text-rose-300 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
+                    </motion.button>
+
+                    {/* The Talk */}
+                    <motion.button
+                      onClick={() => {
+                        hapticTap();
+                        onTalk();
+                      }}
+                      className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+                      whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+                      whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+                    >
+                      <span>The Talk</span>
+                      <PhoneCall className="w-5 h-5 text-rose-300 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
                     </motion.button>
                   </>
                 )}

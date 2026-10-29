@@ -28,6 +28,7 @@ import { SceneRecurrence } from './components/scenes/SceneRecurrence';
 import { SceneApart } from './components/scenes/SceneApart';
 import { SceneEgo } from './components/scenes/SceneEgo';
 import { SceneShameless } from './components/scenes/SceneShameless';
+import { SceneTalk } from './components/scenes/SceneTalk';
 import { trackChapterVisit } from './lib/tracker';
 
 type SceneState = 
@@ -46,6 +47,7 @@ type SceneState =
   | 'apart'
   | 'ego'
   | 'shameless'
+  | 'talk'
   | 'recurrence'
   | 'letter'
   | 'timeline'
@@ -76,6 +78,7 @@ export default function App() {
       apart: 'Apart',
       ego: 'Ego',
       shameless: 'Shameless',
+      talk: 'talk',
       letter: 'Letter',
       answers: 'Answers',
       forever: 'Forever',
@@ -155,7 +158,14 @@ export default function App() {
               onApart={() => setScene('apart')}
               onEgo={() => setScene('ego')}
               onShameless={() => setScene('shameless')}
+              onTalk={() => setScene('talk')}
             />
+          </PageWrapper>
+        )}
+
+        {scene === 'talk' && (
+          <PageWrapper key="scene-talk">
+            <SceneTalk onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 
