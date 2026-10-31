@@ -140,6 +140,11 @@ const timelineData: TimelineEvent[] = [
     description: "At 11:00 AM, the first time exchanging blowing kiss emojis across the distance — bridging the kilometers with sweet intimacy and blushing hearts."
   },
   {
+    date: "31 Oct",
+    title: "The Commitment (First & Last Love)",
+    description: "After a day of trials turned to peace, a sacred pact was signed: never to bury pain in silence. One soul bound across all odds — each other's first and last love, where nothing in this world matters more than the person you love."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",
