@@ -31,6 +31,7 @@ import { SceneShameless } from './components/scenes/SceneShameless';
 import { SceneTalk } from './components/scenes/SceneTalk';
 import { SceneEmoji } from './components/scenes/SceneEmoji';
 import { SceneCommitment } from './components/scenes/SceneCommitment';
+import { SceneDirtyTalk } from './components/scenes/SceneDirtyTalk';
 import { trackChapterVisit } from './lib/tracker';
 
 type SceneState = 
@@ -52,6 +53,7 @@ type SceneState =
   | 'talk'
   | 'emoji'
   | 'commitment'
+  | 'dirty_talk'
   | 'recurrence'
   | 'letter'
   | 'timeline'
@@ -85,6 +87,7 @@ export default function App() {
       talk: 'talk',
       emoji: 'emoji',
       commitment: 'commitment ',
+      dirty_talk: 'DirtyTalk ',
       letter: 'Letter',
       answers: 'Answers',
       forever: 'Forever',
@@ -167,7 +170,14 @@ export default function App() {
               onTalk={() => setScene('talk')}
               onEmoji={() => setScene('emoji')}
               onCommitment={() => setScene('commitment')}
+              onDirtyTalk={() => setScene('dirty_talk')}
             />
+          </PageWrapper>
+        )}
+
+        {scene === 'dirty_talk' && (
+          <PageWrapper key="scene-dirty-talk">
+            <SceneDirtyTalk onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 

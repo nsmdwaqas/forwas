@@ -145,6 +145,11 @@ const timelineData: TimelineEvent[] = [
     description: "After a day of trials turned to peace, a sacred pact was signed: never to bury pain in silence. One soul bound across all odds — each other's first and last love, where nothing in this world matters more than the person you love."
   },
   {
+    date: "1 Nov | 00:00",
+    title: "The Dirty Talk (15 Mins to 38 Mins)",
+    description: "At midnight, asking for 'just 15 more minutes' before sleep — which blossomed into 38 minutes of sweet, shy whispers of kisses on forehead, lips, cheeks, eyebrows, nose, hand, and an unbroken virtual embrace. When asked if she felt something, her heart whispered: 'bohott kuch ❤️🤗'."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",
