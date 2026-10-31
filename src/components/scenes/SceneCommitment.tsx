@@ -27,7 +27,7 @@ interface SignatureRecord {
 export function SceneCommitment({ onNext }: SceneCommitmentProps) {
   const [signatures, setSignatures] = useState<SignatureRecord[]>([]);
   const [loadingSignatures, setLoadingSignatures] = useState(true);
-  const [signingName, setSigningName] = useState<'Waqas' | 'Shajer'>('Waqas');
+  const [signingName, setSigningName] = useState<'Waqas' | 'Shajer'>('Shajer');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [justSignedName, setJustSignedName] = useState<string | null>(null);
   const [liked, setLiked] = useState(false);
@@ -56,6 +56,14 @@ export function SceneCommitment({ onNext }: SceneCommitmentProps) {
 
       if (!error && data) {
         setSignatures(data as SignatureRecord[]);
+        // Shajer is default; if Shajer has already signed and Waqas has not, switch to Waqas
+        const hasShajer = data.some((s: any) => s.name?.toLowerCase().includes('shajer'));
+        const hasWaqas = data.some((s: any) => s.name?.toLowerCase().includes('waqas'));
+        if (hasShajer && !hasWaqas) {
+          setSigningName('Waqas');
+        } else {
+          setSigningName('Shajer');
+        }
       }
     } catch (err) {
       console.warn('Failed to fetch commitment signatures:', err);
@@ -70,6 +78,7 @@ export function SceneCommitment({ onNext }: SceneCommitmentProps) {
 
   const waqasSig = signatures.find(s => s.name?.toLowerCase().includes('waqas'));
   const shajerSig = signatures.find(s => s.name?.toLowerCase().includes('shajer'));
+  const isBothSigned = Boolean(waqasSig && shajerSig);
 
   const handleSign = async (nameToSign: 'Waqas' | 'Shajer') => {
     if (isSubmitting) return;
@@ -199,17 +208,13 @@ export function SceneCommitment({ onNext }: SceneCommitmentProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.6 }}
-            className="flex items-center justify-between border-b border-white/15 pb-2.5 flex-wrap gap-2 shrink-0"
+            className="flex items-center justify-start border-b border-white/15 pb-2.5 shrink-0"
           >
             <div className="inline-flex items-center gap-2 bg-rose-500/25 px-3 py-1.5 rounded-full border border-rose-400/50 shadow-sm">
               <ShieldCheck className="w-4 h-4 text-rose-300 shrink-0" />
               <span className="text-xs sm:text-sm font-semibold text-white tracking-wide drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                 Our Eternal Oath • 31 Oct 2026
               </span>
-            </div>
-
-            <div className="bg-black/50 px-3 py-1.5 rounded-full border border-white/20 text-xs text-white/95 font-mono drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-              First &amp; Last Love
             </div>
           </motion.div>
 
@@ -283,105 +288,96 @@ export function SceneCommitment({ onNext }: SceneCommitmentProps) {
                 </span>
               </div>
               <span className="text-[11px] text-white/70 font-mono">
-                {waqasSig && shajerSig ? "Both Sealed 💍" : "Touch to Sign"}
+                {isBothSigned ? "Both Sealed 💍" : "Touch to Sign"}
               </span>
             </div>
 
-            {/* Selector: Choose Who Is Signing */}
-            <div className="flex items-center justify-center gap-2 p-1 bg-black/40 rounded-xl border border-white/15">
-              <button
-                type="button"
-                onClick={() => {
-                  hapticTap('light');
-                  setSigningName('Waqas');
-                }}
-                className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                  signingName === 'Waqas'
-                    ? 'bg-rose-500/40 text-white shadow border border-rose-400/50'
-                    : 'text-white/70 hover:text-white'
-                }`}
-              >
-                <UserCheck className="w-3.5 h-3.5" />
-                <span>Waqas {waqasSig ? '✓' : ''}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  hapticTap('light');
-                  setSigningName('Shajer');
-                }}
-                className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                  signingName === 'Shajer'
-                    ? 'bg-rose-500/40 text-white shadow border border-rose-400/50'
-                    : 'text-white/70 hover:text-white'
-                }`}
-              >
-                <UserCheck className="w-3.5 h-3.5" />
-                <span>Shajer {shajerSig ? '✓' : ''}</span>
-              </button>
-            </div>
-
-            {/* Fingerprint Interactive Pad */}
-            <div className="flex flex-col items-center justify-center py-2 sm:py-3">
-              <motion.button
-                type="button"
-                onClick={() => handleSign(signingName)}
-                disabled={isSubmitting}
-                className="relative p-5 sm:p-6 rounded-full border-2 border-rose-400/50 bg-rose-500/10 hover:bg-rose-500/25 active:scale-95 transition-all shadow-[0_0_25px_rgba(244,63,94,0.3)] cursor-pointer group flex items-center justify-center"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                aria-label={`Place thumbprint to sign as ${signingName}`}
-              >
-                <Fingerprint className={`w-14 h-14 sm:w-16 sm:h-16 text-rose-300 drop-shadow-[0_0_12px_rgba(244,63,94,0.7)] group-hover:scale-110 transition-transform ${
-                  isSubmitting ? 'animate-pulse text-amber-300' : ''
-                }`} />
-
-                {/* Animated Scanner Ring */}
-                <motion.div 
-                  className="absolute inset-0 rounded-full border border-rose-300/60 pointer-events-none"
-                  animate={{ scale: [1, 1.25, 1], opacity: [0.8, 0, 0.8] }}
-                  transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-                />
-              </motion.button>
-
-              <span className="text-xs sm:text-sm font-medium text-white/90 mt-2.5">
-                {isSubmitting 
-                  ? `Sealing ${signingName}'s thumbprint...`
-                  : `Tap to Stamp & Sign as ${signingName}`
-                }
-              </span>
-              <span className="text-[11px] text-white/60 font-mono mt-0.5">
-                Saved permanently into our commitment registry
-              </span>
-            </div>
-
-            {/* Live Signatures Showcase Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-white/10">
-              {/* Waqas's Seal */}
-              <div className={`p-3.5 rounded-xl border flex flex-col gap-1 transition-all ${
-                waqasSig 
-                  ? 'bg-rose-950/30 border-rose-400/50 shadow-[0_0_15px_rgba(244,63,94,0.2)]'
-                  : 'bg-black/30 border-white/10 opacity-70'
-              }`}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 font-bold text-xs sm:text-sm text-white">
-                    <Fingerprint className={`w-4 h-4 ${waqasSig ? 'text-rose-400' : 'text-white/40'}`} />
-                    <span>Waqas</span>
-                  </div>
-                  {waqasSig ? (
-                    <span className="inline-flex items-center gap-1 text-[10px] text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-400/30 font-medium">
-                      <CheckCircle2 className="w-3 h-3" /> Sealed
-                    </span>
-                  ) : (
-                    <span className="text-[10px] text-white/50 font-mono">Awaiting Seal</span>
-                  )}
+            {/* When NOT both signed: show selector and stamp pad */}
+            {!isBothSigned ? (
+              <>
+                {/* Selector: Choose Who Is Signing (Shajer by default, then Waqas) */}
+                <div className="flex items-center justify-center gap-2 p-1 bg-black/40 rounded-xl border border-white/15">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      hapticTap('light');
+                      setSigningName('Shajer');
+                    }}
+                    className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                      signingName === 'Shajer'
+                        ? 'bg-rose-500/40 text-white shadow border border-rose-400/50'
+                        : 'text-white/70 hover:text-white'
+                    }`}
+                  >
+                    <UserCheck className="w-3.5 h-3.5" />
+                    <span>Shajer {shajerSig ? '✓' : ''}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      hapticTap('light');
+                      setSigningName('Waqas');
+                    }}
+                    className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                      signingName === 'Waqas'
+                        ? 'bg-rose-500/40 text-white shadow border border-rose-400/50'
+                        : 'text-white/70 hover:text-white'
+                    }`}
+                  >
+                    <UserCheck className="w-3.5 h-3.5" />
+                    <span>Waqas {waqasSig ? '✓' : ''}</span>
+                  </button>
                 </div>
-                <div className="text-[11px] text-white/80 font-mono flex items-center gap-1 mt-1">
-                  <Clock className="w-3 h-3 text-white/50 shrink-0" />
-                  <span>{formatTimestamp(waqasSig?.created_at)}</span>
+
+                {/* Fingerprint Interactive Pad */}
+                <div className="flex flex-col items-center justify-center py-2 sm:py-3">
+                  <motion.button
+                    type="button"
+                    onClick={() => handleSign(signingName)}
+                    disabled={isSubmitting}
+                    className="relative p-5 sm:p-6 rounded-full border-2 border-rose-400/50 bg-rose-500/10 hover:bg-rose-500/25 active:scale-95 transition-all shadow-[0_0_25px_rgba(244,63,94,0.3)] cursor-pointer group flex items-center justify-center"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    aria-label={`Place thumbprint to sign as ${signingName}`}
+                  >
+                    <Fingerprint className={`w-14 h-14 sm:w-16 sm:h-16 text-rose-300 drop-shadow-[0_0_12px_rgba(244,63,94,0.7)] group-hover:scale-110 transition-transform ${
+                      isSubmitting ? 'animate-pulse text-amber-300' : ''
+                    }`} />
+
+                    {/* Animated Scanner Ring */}
+                    <motion.div 
+                      className="absolute inset-0 rounded-full border border-rose-300/60 pointer-events-none"
+                      animate={{ scale: [1, 1.25, 1], opacity: [0.8, 0, 0.8] }}
+                      transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+                    />
+                  </motion.button>
+
+                  <span className="text-xs sm:text-sm font-medium text-white/90 mt-2.5">
+                    {isSubmitting 
+                      ? `Sealing ${signingName}'s thumbprint...`
+                      : `Tap to Stamp & Sign as ${signingName}`
+                    }
+                  </span>
+                  <span className="text-[11px] text-white/60 font-mono mt-0.5">
+                    Saved permanently into our commitment registry
+                  </span>
                 </div>
+              </>
+            ) : (
+              /* When both signed: Clean sealed confirmation banner (No Tap to Stamp) */
+              <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-400/35 text-center flex flex-col items-center gap-1 shadow-[0_0_20px_rgba(52,211,153,0.15)]">
+                <div className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-emerald-200">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+                  <span>Solemnly Signed &amp; Sealed by Both Souls 💍</span>
+                </div>
+                <p className="text-[11px] text-purple-100/90 font-serif italic">
+                  Two hearts bound in one eternal covenant — recorded forever.
+                </p>
               </div>
+            )}
 
+            {/* Live Signatures Showcase Cards (Shajer & Waqas with Name, Sealed status & Date/Time stamp) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-white/10">
               {/* Shajer's Seal */}
               <div className={`p-3.5 rounded-xl border flex flex-col gap-1 transition-all ${
                 shajerSig 
@@ -404,6 +400,31 @@ export function SceneCommitment({ onNext }: SceneCommitmentProps) {
                 <div className="text-[11px] text-white/80 font-mono flex items-center gap-1 mt-1">
                   <Clock className="w-3 h-3 text-white/50 shrink-0" />
                   <span>{formatTimestamp(shajerSig?.created_at)}</span>
+                </div>
+              </div>
+
+              {/* Waqas's Seal */}
+              <div className={`p-3.5 rounded-xl border flex flex-col gap-1 transition-all ${
+                waqasSig 
+                  ? 'bg-rose-950/30 border-rose-400/50 shadow-[0_0_15px_rgba(244,63,94,0.2)]'
+                  : 'bg-black/30 border-white/10 opacity-70'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 font-bold text-xs sm:text-sm text-white">
+                    <Fingerprint className={`w-4 h-4 ${waqasSig ? 'text-rose-400' : 'text-white/40'}`} />
+                    <span>Waqas</span>
+                  </div>
+                  {waqasSig ? (
+                    <span className="inline-flex items-center gap-1 text-[10px] text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-400/30 font-medium">
+                      <CheckCircle2 className="w-3 h-3" /> Sealed
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-white/50 font-mono">Awaiting Seal</span>
+                  )}
+                </div>
+                <div className="text-[11px] text-white/80 font-mono flex items-center gap-1 mt-1">
+                  <Clock className="w-3 h-3 text-white/50 shrink-0" />
+                  <span>{formatTimestamp(waqasSig?.created_at)}</span>
                 </div>
               </div>
             </div>
