@@ -51,6 +51,7 @@ interface SceneHubProps {
   onEmoji: () => void;
   onCommitment: () => void;
   onDirtyTalk: () => void;
+  onLoveU: () => void;
 }
 
 type CategoryType = 'story' | 'words' | 'promises' | 'extras' | null;
@@ -78,7 +79,8 @@ export function SceneHub({
   onTalk,
   onEmoji,
   onCommitment,
-  onDirtyTalk
+  onDirtyTalk,
+  onLoveU
 }: SceneHubProps) {
   const [activeCategory, setActiveCategory] = useState<CategoryType>(null);
   const [lockedShake, setLockedShake] = useState(false);
@@ -466,6 +468,20 @@ export function SceneHub({
                     >
                       <span>The Dirty Talk</span>
                       <Flame className="w-5 h-5 text-rose-300 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
+                    </motion.button>
+
+                    {/* The Love U */}
+                    <motion.button
+                      onClick={() => {
+                        hapticTap();
+                        onLoveU();
+                      }}
+                      className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+                      whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+                      whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+                    >
+                      <span>The Love U</span>
+                      <AudioLines className="w-5 h-5 text-rose-300 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
                     </motion.button>
                   </>
                 )}

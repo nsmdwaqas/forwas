@@ -32,6 +32,7 @@ import { SceneTalk } from './components/scenes/SceneTalk';
 import { SceneEmoji } from './components/scenes/SceneEmoji';
 import { SceneCommitment } from './components/scenes/SceneCommitment';
 import { SceneDirtyTalk } from './components/scenes/SceneDirtyTalk';
+import { SceneLoveU } from './components/scenes/SceneLoveU';
 import { trackChapterVisit } from './lib/tracker';
 
 type SceneState = 
@@ -54,6 +55,7 @@ type SceneState =
   | 'emoji'
   | 'commitment'
   | 'dirty_talk'
+  | 'love_u'
   | 'recurrence'
   | 'letter'
   | 'timeline'
@@ -88,6 +90,7 @@ export default function App() {
       emoji: 'emoji',
       commitment: 'commitment ',
       dirty_talk: 'DirtyTalk ',
+      love_u: 'LoveU ',
       letter: 'Letter',
       answers: 'Answers',
       forever: 'Forever',
@@ -171,7 +174,14 @@ export default function App() {
               onEmoji={() => setScene('emoji')}
               onCommitment={() => setScene('commitment')}
               onDirtyTalk={() => setScene('dirty_talk')}
+              onLoveU={() => setScene('love_u')}
             />
+          </PageWrapper>
+        )}
+
+        {scene === 'love_u' && (
+          <PageWrapper key="scene-love-u">
+            <SceneLoveU onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 

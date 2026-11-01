@@ -150,6 +150,11 @@ const timelineData: TimelineEvent[] = [
     description: "At midnight, asking for 'just 15 more minutes' before sleep — which blossomed into 38 minutes of sweet, shy whispers of kisses on forehead, lips, cheeks, eyebrows, nose, hand, and an unbroken virtual embrace. When asked if she felt something, her heart whispered: 'bohott kuch ❤️🤗'."
   },
   {
+    date: "1 Nov | 7:10 AM",
+    title: "The Love U (Her Voice Saying 'I Love You')",
+    description: "At 5:35 AM Fajr, Waqas whispered 'I LOVE U' on call. At 7:10 AM, she called back unexpectedly — gathering all her shy courage just to say: 'Assalamu alaikum... I Love You' before smiling and hanging up. A 14-second call that touched his soul and left both hearts blushing endlessly."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",
