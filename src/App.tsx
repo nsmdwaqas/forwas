@@ -33,6 +33,7 @@ import { SceneEmoji } from './components/scenes/SceneEmoji';
 import { SceneCommitment } from './components/scenes/SceneCommitment';
 import { SceneDirtyTalk } from './components/scenes/SceneDirtyTalk';
 import { SceneLoveU } from './components/scenes/SceneLoveU';
+import { SceneMissCounter } from './components/scenes/SceneMissCounter';
 import { trackChapterVisit } from './lib/tracker';
 
 type SceneState = 
@@ -56,6 +57,7 @@ type SceneState =
   | 'commitment'
   | 'dirty_talk'
   | 'love_u'
+  | 'miss_counter'
   | 'recurrence'
   | 'letter'
   | 'timeline'
@@ -91,6 +93,7 @@ export default function App() {
       commitment: 'commitment ',
       dirty_talk: 'DirtyTalk ',
       love_u: 'LoveU ',
+      miss_counter: 'MissCounter ',
       letter: 'Letter',
       answers: 'Answers',
       forever: 'Forever',
@@ -175,7 +178,14 @@ export default function App() {
               onCommitment={() => setScene('commitment')}
               onDirtyTalk={() => setScene('dirty_talk')}
               onLoveU={() => setScene('love_u')}
+              onMissCounter={() => setScene('miss_counter')}
             />
+          </PageWrapper>
+        )}
+
+        {scene === 'miss_counter' && (
+          <PageWrapper key="scene-miss-counter">
+            <SceneMissCounter onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 
