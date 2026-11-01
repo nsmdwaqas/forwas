@@ -131,7 +131,7 @@ export function SceneLoveU({ onNext }: SceneLoveUProps) {
             </div>
 
             <p className="text-xs sm:text-sm text-white/95 leading-relaxed font-sans">
-              Every morning, she wakes me for Fajr around 5:35 AM. For weeks, our calls were brief — a gentle &ldquo;Salaaam&rdquo; that ended in under 10 seconds. But this morning, after her 5:35 AM call, I added a few extra words in my own voice: <span className="text-rose-300 font-semibold">&ldquo;I LOVE U&rdquo;</span>.
+              Every morning, she wakes me for Fajr around 5:00 AM. For weeks, our calls were brief — a gentle &ldquo;Salaaam&rdquo; that ended in under 10 seconds. But this morning, after her 5:35 AM call, I added a few extra words in my own voice: <span className="text-rose-300 font-semibold">&ldquo;I LOVE U&rdquo;</span>.
             </p>
 
             <p className="text-xs sm:text-sm text-white/95 leading-relaxed font-sans">
