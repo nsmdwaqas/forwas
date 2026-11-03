@@ -5,8 +5,7 @@ import {
   HeartPulse, 
   Sparkles, 
   Clock, 
-  Heart, 
-  Infinity as InfinityIcon
+  Heart
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { triggerPartnerMissNotification } from '../../lib/pwaAndPush';
@@ -351,80 +350,356 @@ export function SceneMissCounter({ onNext }: SceneMissCounterProps) {
                 : 'bg-black/45 border-white/15'
             }`}
           >
-            {/* If Hearts Are Synced (within 5 mins) and not overridden: ROMANTIC SYNCHRONIZED HEARTS ANIMATION */}
+            {/* If Hearts Are Synced (within 5 mins) and not overridden: ILLUSTRATIVE TWO-HEART LIVE ECG RESONANCE */}
             {isHeartSyncedMode ? (
-              <div className="flex flex-col items-center text-center px-4 py-2 relative w-full">
+              <div className="flex flex-col items-center text-center px-3 sm:px-5 py-2 relative w-full">
                 {/* Ambient Radial Pulsing Glow */}
                 <motion.div 
-                  className="absolute inset-0 bg-radial from-rose-500/20 via-amber-500/10 to-transparent pointer-events-none rounded-3xl"
-                  animate={{ opacity: [0.6, 1, 0.6], scale: [0.95, 1.05, 0.95] }}
-                  transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+                  className="absolute inset-0 bg-radial from-rose-500/25 via-amber-500/10 to-transparent pointer-events-none rounded-3xl"
+                  animate={{ opacity: [0.55, 1, 0.55], scale: [0.96, 1.04, 0.96] }}
+                  transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
                 />
 
-                {/* Banner Badge */}
+                {/* Top Resonance Status Badge */}
                 <motion.div
-                  initial={{ scale: 0.85, opacity: 0 }}
-                  animate={{ scale: [1, 1.05, 1], opacity: 1 }}
-                  transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500/30 via-rose-500/40 to-amber-500/30 px-4 py-1.5 rounded-full border border-rose-300/60 shadow-[0_0_20px_rgba(244,63,94,0.4)] mb-3"
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: [1, 1.04, 1], opacity: 1 }}
+                  transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-500/35 via-purple-500/35 to-amber-500/35 px-4 py-1.5 rounded-full border border-rose-300/60 shadow-[0_0_22px_rgba(244,63,94,0.45)] mb-2"
                 >
-                  <Sparkles className="w-4 h-4 text-amber-300" />
-                  <span className="text-xs sm:text-sm font-bold tracking-widest text-amber-200 uppercase shimmer-text">
-                    ✨ YOUR HEARTS SYNCED! ✨
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                  <span className="text-xs sm:text-sm font-bold tracking-widest text-amber-100 uppercase shimmer-text">
+                    ✨ TWO HEARTS IN PERFECT SYNC ✨
                   </span>
-                  <Sparkles className="w-4 h-4 text-rose-300" />
+                  <Sparkles className="w-3.5 h-3.5 text-rose-300 shrink-0" />
                 </motion.div>
 
-                {/* The Synchronized Beating Hearts Animation */}
-                <div className="relative w-48 h-36 flex items-center justify-center my-1">
-                  {/* Left Heart (Shajer - Rose) */}
-                  <motion.div
-                    className="absolute left-8"
-                    animate={{ 
-                      scale: [1, 1.25, 1.1, 1.35, 1],
-                      x: [0, 8, 4, 8, 0],
-                      rotate: [-6, 0, -3, 0, -6]
-                    }}
-                    transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+                {/* Interactive SVG Illustration: Two Hearts Connected by a Live ECG Pulse Wave */}
+                <div
+                  role="button"
+                  tabIndex={0}
+                  title="Tap to feel your synchronized heartbeat"
+                  onClick={(e) => {
+                    hapticSynced();
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = e.clientX ? e.clientX - rect.left : rect.width / 2;
+                    const y = e.clientY ? e.clientY - rect.top : rect.height / 2;
+                    const burst = ['❤️', '💓', '✨', '🤍', '🥹'].map((emoji, idx) => ({
+                      id: Date.now() + idx,
+                      x: x + (Math.random() * 80 - 40),
+                      y: y + (Math.random() * 30 - 15),
+                      text: emoji
+                    }));
+                    setFloatingHearts((prev) => [...prev, ...burst]);
+                    setTimeout(() => {
+                      setFloatingHearts((prev) => prev.filter((item) => !burst.some((b) => b.id === item.id)));
+                    }, 1500);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      hapticSynced();
+                    }
+                  }}
+                  className="relative w-full max-w-[350px] sm:max-w-[390px] aspect-[360/176] flex items-center justify-center my-1 cursor-pointer select-none group"
+                >
+                  <svg
+                    viewBox="0 0 360 176"
+                    className="w-full h-full overflow-visible"
                   >
-                    <Heart className="w-16 h-16 text-rose-400 fill-rose-500/80 drop-shadow-[0_0_18px_rgba(244,63,94,0.9)]" />
-                    <span className="text-[10px] font-bold text-rose-200 uppercase tracking-widest block text-center mt-1">
-                      Shajer
-                    </span>
-                  </motion.div>
+                    <defs>
+                      {/* Shajer Rose Heart Gradient */}
+                      <linearGradient id="shajerHeartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#FFE4E6" />
+                        <stop offset="30%" stopColor="#FB7185" />
+                        <stop offset="75%" stopColor="#E11D48" />
+                        <stop offset="100%" stopColor="#9F1239" />
+                      </linearGradient>
 
-                  {/* Intertwined Connection Glow in Center */}
-                  <motion.div 
-                    className="z-10 bg-black/60 p-2 rounded-full border border-white/25 shadow-lg"
-                    animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
-                    transition={{ repeat: Infinity, duration: 6, ease: "linear" }}
-                  >
-                    <InfinityIcon className="w-6 h-6 text-amber-300 drop-shadow-[0_0_10px_rgba(251,191,36,0.9)]" />
-                  </motion.div>
+                      {/* Waqas Amber-Gold Heart Gradient */}
+                      <linearGradient id="waqasHeartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#FEF3C7" />
+                        <stop offset="30%" stopColor="#FBBF24" />
+                        <stop offset="75%" stopColor="#D97706" />
+                        <stop offset="100%" stopColor="#92400E" />
+                      </linearGradient>
 
-                  {/* Right Heart (Waqas - Amber/Gold) */}
-                  <motion.div
-                    className="absolute right-8"
-                    animate={{ 
-                      scale: [1, 1.25, 1.1, 1.35, 1],
-                      x: [0, -8, -4, -8, 0],
-                      rotate: [6, 0, 3, 0, 6]
-                    }}
-                    transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-                  >
-                    <Heart className="w-16 h-16 text-amber-400 fill-amber-500/80 drop-shadow-[0_0_18px_rgba(251,191,36,0.9)]" />
-                    <span className="text-[10px] font-bold text-amber-200 uppercase tracking-widest block text-center mt-1">
-                      Waqas
-                    </span>
-                  </motion.div>
+                      {/* Shared ECG Lifeline Gradient (Rose -> Champagne White -> Gold) */}
+                      <linearGradient id="ecgSyncGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#FB7185" />
+                        <stop offset="35%" stopColor="#FDA4AF" />
+                        <stop offset="50%" stopColor="#FFFBEB" />
+                        <stop offset="65%" stopColor="#FDE68A" />
+                        <stop offset="100%" stopColor="#F59E0B" />
+                      </linearGradient>
+
+                      {/* Luminous Glow Filter */}
+                      <filter id="syncGlow" x="-30%" y="-30%" width="160%" height="160%">
+                        <feGaussianBlur stdDeviation="3.5" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                      </filter>
+
+                      {/* Soft Aura Blur */}
+                      <filter id="softAura" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="10" />
+                      </filter>
+                    </defs>
+
+                    {/* 1. Ambient Glowing Auras Behind Both Hearts & Center */}
+                    <circle cx="62" cy="78" r="28" fill="#F43F5E" opacity="0.28" filter="url(#softAura)" />
+                    <circle cx="180" cy="78" r="24" fill="#FBBF24" opacity="0.22" filter="url(#softAura)" />
+                    <circle cx="298" cy="78" r="28" fill="#F59E0B" opacity="0.28" filter="url(#softAura)" />
+
+                    {/* 2. Concentric Sonar Ripples Emitting from Both Hearts */}
+                    <motion.circle
+                      cx="62"
+                      cy="78"
+                      r="24"
+                      fill="none"
+                      stroke="#FB7185"
+                      strokeWidth="1.5"
+                      animate={{ scale: [0.85, 1.9], opacity: [0.7, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.6, ease: "easeOut" }}
+                      style={{ transformOrigin: '62px 78px' }}
+                    />
+                    <motion.circle
+                      cx="298"
+                      cy="78"
+                      r="24"
+                      fill="none"
+                      stroke="#FBBF24"
+                      strokeWidth="1.5"
+                      animate={{ scale: [0.85, 1.9], opacity: [0.7, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.6, ease: "easeOut" }}
+                      style={{ transformOrigin: '298px 78px' }}
+                    />
+                    {/* Central Convergence Ripple */}
+                    <motion.circle
+                      cx="180"
+                      cy="78"
+                      r="16"
+                      fill="none"
+                      stroke="#FFFBEB"
+                      strokeWidth="1.5"
+                      animate={{ scale: [0.7, 2.2], opacity: [0.8, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.6, ease: "easeOut", delay: 0.2 }}
+                      style={{ transformOrigin: '180px 78px' }}
+                    />
+
+                    {/* 3. Delicate Upper & Lower Magnetic Soul Threads */}
+                    <path
+                      d="M 62 46 Q 180 10 298 46"
+                      fill="none"
+                      stroke="url(#ecgSyncGrad)"
+                      strokeWidth="1"
+                      strokeDasharray="3 5"
+                      opacity="0.4"
+                    />
+                    <path
+                      d="M 62 110 Q 180 144 298 110"
+                      fill="none"
+                      stroke="url(#ecgSyncGrad)"
+                      strokeWidth="1"
+                      strokeDasharray="3 5"
+                      opacity="0.4"
+                    />
+
+                    {/* 4. Live ECG Heartbeat Wave Connecting Shajer (Left) and Waqas (Right) */}
+                    {/* Faint Background ECG Track */}
+                    <path
+                      d="M 88 78 L 114 78 L 120 70 L 126 78 L 136 78 L 141 90 L 147 48 L 153 102 L 159 74 L 165 78 L 173 78 L 180 34 L 187 78 L 195 78 L 201 74 L 207 102 L 213 48 L 219 90 L 224 78 L 234 78 L 240 70 L 246 78 L 272 78"
+                      fill="none"
+                      stroke="url(#ecgSyncGrad)"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      opacity="0.32"
+                    />
+
+                    {/* Animated Glowing ECG Pulse Surge */}
+                    <motion.path
+                      d="M 88 78 L 114 78 L 120 70 L 126 78 L 136 78 L 141 90 L 147 48 L 153 102 L 159 74 L 165 78 L 173 78 L 180 34 L 187 78 L 195 78 L 201 74 L 207 102 L 213 48 L 219 90 L 224 78 L 234 78 L 240 70 L 246 78 L 272 78"
+                      fill="none"
+                      stroke="url(#ecgSyncGrad)"
+                      strokeWidth="3.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      filter="url(#syncGlow)"
+                      initial={{ pathLength: 0, opacity: 0.4 }}
+                      animate={{
+                        pathLength: [0.15, 1, 0.15],
+                        opacity: [0.6, 1, 0.6]
+                      }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1.6,
+                        ease: "easeInOut"
+                      }}
+                    />
+
+                    {/* Traveling Pulse Sparks Meeting in the Center */}
+                    <motion.circle
+                      r="3.5"
+                      fill="#FDA4AF"
+                      filter="url(#syncGlow)"
+                      animate={{
+                        cx: [90, 180],
+                        cy: [78, 78],
+                        opacity: [0, 1, 0]
+                      }}
+                      transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+                    />
+                    <motion.circle
+                      r="3.5"
+                      fill="#FDE68A"
+                      filter="url(#syncGlow)"
+                      animate={{
+                        cx: [270, 180],
+                        cy: [78, 78],
+                        opacity: [0, 1, 0]
+                      }}
+                      transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+                    />
+
+                    {/* 5. Center Convergence Node (Where Both Heartbeats Meet) */}
+                    <motion.g
+                      animate={{
+                        scale: [1, 1.28, 1.08, 1.34, 1]
+                      }}
+                      transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+                      style={{ transformOrigin: '180px 78px' }}
+                    >
+                      <circle
+                        cx="180"
+                        cy="78"
+                        r="13"
+                        fill="rgba(22, 5, 16, 0.85)"
+                        stroke="url(#ecgSyncGrad)"
+                        strokeWidth="1.8"
+                        filter="url(#syncGlow)"
+                      />
+                      {/* Mini Merged Heart Inside Center Node */}
+                      <path
+                        d="M 180 84 C 180 84 173 79 173 74.5 C 173 72 175 70.5 177 70.5 C 178.5 70.5 179.5 71.5 180 72.5 C 180.5 71.5 181.5 70.5 183 70.5 C 185 70.5 187 72 187 74.5 C 187 79 180 84 180 84 Z"
+                        fill="url(#ecgSyncGrad)"
+                      />
+                    </motion.g>
+
+                    {/* Center Label Pill */}
+                    <text
+                      x="180"
+                      y="19"
+                      textAnchor="middle"
+                      className="fill-amber-200/90 text-[9px] font-mono tracking-widest uppercase"
+                    >
+                      ONE SHARED RHYTHM
+                    </text>
+
+                    {/* 6. Left Sculpted Heart: SHAJER (Rose) */}
+                    <motion.g
+                      animate={{
+                        scale: [1, 1.2, 1.05, 1.26, 1],
+                        x: [0, 5, 2, 6, 0]
+                      }}
+                      transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+                      style={{ transformOrigin: '62px 78px' }}
+                    >
+                      <path
+                        d="M 62 103 C 62 103 34 85 34 65.5 C 34 54.5 42.5 47 52 47 C 57.5 47 60.5 50 62 53.5 C 63.5 50 66.5 47 72 47 C 81.5 47 90 54.5 90 65.5 C 90 85 62 103 62 103 Z"
+                        fill="url(#shajerHeartGrad)"
+                        stroke="#FFE4E6"
+                        strokeWidth="1.5"
+                        filter="url(#syncGlow)"
+                      />
+                      {/* Specular Inner Shine */}
+                      <path
+                        d="M 41 64 C 41 57 46 52 52 52"
+                        fill="none"
+                        stroke="rgba(255,255,255,0.65)"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                      />
+                    </motion.g>
+
+                    {/* Shajer Label Below Left Heart */}
+                    <text
+                      x="62"
+                      y="128"
+                      textAnchor="middle"
+                      className="fill-rose-200 text-[11px] font-bold tracking-widest uppercase"
+                    >
+                      SHAJER
+                    </text>
+                    <text
+                      x="62"
+                      y="141"
+                      textAnchor="middle"
+                      className="fill-rose-300/80 text-[9px] font-mono"
+                    >
+                      ♥ Beating Now
+                    </text>
+
+                    {/* 7. Right Sculpted Heart: WAQAS (Amber Gold) */}
+                    <motion.g
+                      animate={{
+                        scale: [1, 1.2, 1.05, 1.26, 1],
+                        x: [0, -5, -2, -6, 0]
+                      }}
+                      transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+                      style={{ transformOrigin: '298px 78px' }}
+                    >
+                      <path
+                        d="M 298 103 C 298 103 270 85 270 65.5 C 270 54.5 278.5 47 288 47 C 293.5 47 296.5 50 298 53.5 C 299.5 50 302.5 47 308 47 C 317.5 47 326 54.5 326 65.5 C 326 85 298 103 298 103 Z"
+                        fill="url(#waqasHeartGrad)"
+                        stroke="#FEF3C7"
+                        strokeWidth="1.5"
+                        filter="url(#syncGlow)"
+                      />
+                      {/* Specular Inner Shine */}
+                      <path
+                        d="M 277 64 C 277 57 282 52 288 52"
+                        fill="none"
+                        stroke="rgba(255,255,255,0.65)"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                      />
+                    </motion.g>
+
+                    {/* Waqas Label Below Right Heart */}
+                    <text
+                      x="298"
+                      y="128"
+                      textAnchor="middle"
+                      className="fill-amber-200 text-[11px] font-bold tracking-widest uppercase"
+                    >
+                      WAQAS
+                    </text>
+                    <text
+                      x="298"
+                      y="141"
+                      textAnchor="middle"
+                      className="fill-amber-300/80 text-[9px] font-mono"
+                    >
+                      ♥ Beating Now
+                    </text>
+
+                    {/* Bottom Sync Delta Caption Inside SVG */}
+                    <text
+                      x="180"
+                      y="164"
+                      textAnchor="middle"
+                      className="fill-white/75 text-[10px] font-mono"
+                    >
+                      {delta ? `Connected ${delta.formattedDiff}` : 'Connected in the same breath'} • Tap to feel pulse
+                    </text>
+                  </svg>
                 </div>
 
                 {/* Subtitle & Romantic Declaration */}
-                <h2 className="text-base sm:text-lg md:text-xl font-heading text-white font-bold drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] mt-2">
+                <h2 className="text-base sm:text-lg md:text-xl font-heading text-white font-bold drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] mt-1">
                   You both missed each other almost simultaneously. ❤️
                 </h2>
-                <p className="text-xs sm:text-sm text-purple-200 font-sans mt-0.5">
-                  Two souls across the distance, thinking of each other in the exact same breath.
+                <p className="text-xs sm:text-sm text-purple-200 font-sans mt-0.5 max-w-md">
+                  Two souls across the distance, sending a heartbeat on the exact same lifeline.
                 </p>
 
                 {/* Total Misses Counter In Synced Mode */}

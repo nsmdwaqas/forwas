@@ -1,121 +1,87 @@
-# Miss Counter Cross-Device Notifications & PWA Installability
+# Illustrative Synced Hearts & Live ECG Resonance Animation
 
-Transform "For Shajer 🤍" into an installable Progressive Web App (PWA) for both iOS and Android, and equip **The Miss Counter** with real-time cross-device push notifications, romantic heartbeat vibrations, 10-minute mutual-miss detection, and direct one-tap deep-linking into the Miss Counter scene.
+Upgrade the **Synced Hearts Animation** inside **The Miss Counter** (`SceneMissCounter.tsx`) into an expressive, romantic custom SVG illustration featuring Shajer's Rose Heart and Waqas's Golden Heart connected by a luminous, live-traveling ECG heartbeat waveform, concentric resonance ripples, and synchronized "lub-dub" cardiac motion.
 
 ## User Review & Critical Decisions
 
 > [!IMPORTANT]
-> The following product decisions were confirmed during clarification and govern this implementation:
+> The following decisions were confirmed during clarification and strictly govern this update:
 
-- **Confirmed Decision 1 — Direct Deep-Link on Notification Tap**: Tapping a Miss Counter notification opens the app directly into **The Miss Counter** (`/?scene=miss_counter`), bypassing the lockscreen PIN so your partner lands straight on the shared circle.
-- **Confirmed Decision 2 — Install & Notification Controls Placement**: A sleek, non-intrusive glassmorphic **Install App** & **Enable Alerts** bar will appear in **The Miss Counter** scene and as a subtle pill action in the **Chapter Hub** (`SceneHub`), automatically hiding once installed and subscribed.
+- **Confirmed Decision 1 — Live ECG Pulse Wave Connecting Two Hearts**: Replace the simple overlapping Lucide icons with a rich, custom SVG illustration where Shajer's Rose Heart (left) and Waqas's Amber-Gold Heart (right) are bridged by an animated glowing ECG lifeline that spikes in the center in time with both hearts beating together.
+- **Confirmed Decision 2 — Exclusive 5-Minute Sync Trigger**: The animation appears **only** when both souls record a miss within **5 minutes** of each other (`delta.isSynced === true`), keeping the moment rare, authentic, and deeply special. When synced, you can still toggle between the **Synced Hearts Illustration** and the **Ratio Circle Outline**.
+- **Confirmed Decision 3 — Strict Component Isolation**: All changes are strictly isolated to `SceneMissCounter.tsx`—zero changes to any other component, route, or backend file.
 
 ---
 
 ## 1. Overview & Core Concept
 
-- **What It Does**:
-  1. Allows both Waqas (iOS Chrome/Safari) and Shajer (Android Chrome) to install the web app to their home screens as a standalone full-screen sanctuary.
-  2. Sends an instant push notification with heartbeat vibration to all *other* registered devices whenever either partner presses **"I Miss You Right Now ❤️"** in The Miss Counter.
-  3. Detects when a partner responds with a miss back within **10 minutes** and upgrades the notification to a special mutual-heartbeat alert.
-  4. Redirects the recipient straight to **The Miss Counter** when they tap the notification.
-- **Target Audience / Persona**: Waqas and Shajer, staying connected across the distance on their mobile phones.
-- **Key Value**: Turns every tap of the Miss Counter into a tangible, real-time physical tap on the other person's phone—complete with vibration and instant navigation.
+- **What It Does**: When Waqas and Shajer miss each other within 5 minutes, **The Miss Counter** transforms its central showcase into a custom multi-layered SVG canvas illustrating two hearts beating in physiological and emotional unison across the distance.
+- **Target Audience / Persona**: Waqas and Shajer experiencing the serendipity of thinking of one another at the exact same moment.
+- **Key Value**: Makes the 5-minute sync state feel unmistakably romantic, intuitive, and visually self-explanatory at a glance—showing two distinct souls linked by one shared heartbeat rhythm.
 
 ---
 
 ## 2. User Experience & Visual Design
 
-### Key User Flows
+### Visual Anatomy of the New Synced Hearts Illustration
 
-1. **Installing the App on iOS & Android**:
-   - **Android (Chrome)**: Tapping **Install App** triggers the native browser `beforeinstallprompt` installation dialog.
-   - **iOS (Chrome / Safari)**: Tapping **Install on iPhone** opens a romantic glassmorphic guide sheet explaining how to tap the **Share** icon in Chrome/Safari and select **Add to Home Screen** (`standalone` mode with the custom `apple-touch-icon.png`).
-   - Once running as an installed home-screen app, the install button automatically hides.
+1. **Concentric Heartbeat Resonance Ripples**:
+   - Soft rose and warm gold sonar rings expand outward from behind both hearts and from the central convergence point on every "lub-dub" beat, visually expressing the physical vibration felt on the phone.
 
-2. **Enabling Partner Notifications**:
-   - Inside **The Miss Counter** (and optionally from the Chapter Hub), a compact glass button lets each partner tap **Enable Heartbeat Alerts 🔔**.
-   - Grants browser/OS `Notification` permission, registers the Service Worker push subscription with a unique per-device identifier (`deviceId`), and confirms with a gentle haptic pulse.
+2. **Two Custom Sculpted SVG Hearts (Shajer & Waqas)**:
+   - **Left Anchor — Shajer's Heart**: Rendered with a multi-stop crimson-to-rose gradient (`#F43F5E` → `#FDA4AF`), soft inner specular highlight, and a glowing rose aura.
+   - **Right Anchor — Waqas's Heart**: Rendered with a multi-stop amber-to-champagne gold gradient (`#D97706` → `#FDE68A`), soft inner specular highlight, and a glowing golden aura.
+   - **Synchronized "Lub-Dub" Cadence**: Both hearts pulse with a realistic double-beat cardiac rhythm (`scale: [1, 1.22, 1.06, 1.3, 1]`), leaning subtly toward one another at the peak of each beat.
 
-3. **Sending a Miss & Receiving the Notification**:
-   - **Standard Miss (> 10 mins since partner's last miss)**:
-     - **Title**: `Waqas Miss U` or `Shajer Miss U` (based on who pressed the button).
-     - **Body** (randomly shuffled 50/50 on each press):
-       - *"Someone just sent a little heartbeat your way."*
-       - *"Sending you a virtual hug."*
-   - **Mutual Miss Back (≤ 10 mins since partner's last miss)**:
-     - **Title**:
-       - `She misses you too!` (when Shajer misses back within 10 mins of Waqas)
-       - `He misses you too!` (when Waqas misses back within 10 mins of Shajer)
-     - **Body**: *"Two hearts. Almost the same moment. 🥹"*
-   - **Vibration**: Notifications include a custom heartbeat vibration array (`[200, 100, 200, 100, 400]`) so the phone physically pulses like a heartbeat.
+3. **Live Traveling ECG Heartbeat Wave Bridge**:
+   - Spanning the space between Shajer's heart and Waqas's heart is a glowing dual-gradient ECG waveform path (`P–Q–R–S–T` complex) that rises into a central heart-shaped peak where the two colors blend.
+   - A luminous energy pulse travels continuously from Shajer → Center Peak → Waqas and back, while a central glowing union heart (`❤️`) sparks at the exact moment the ECG wave peaks.
 
-4. **Tapping the Notification**:
-   - Tapping the system notification either focuses the already-open app window or launches `/?scene=miss_counter`, bypassing the lockscreen and opening **The Miss Counter** immediately.
-
-### Visual Identity & Theme
-- **Aesthetic Direction**: Preserves the existing intimate dark-velvet glassmorphism (`#160510` / `#0d0107`), `Cormorant Garamond` headings, and `Quicksand` body prose without altering any other chapter scenes.
-- **Touch Ergonomics**: All install and notification buttons maintain $\ge 44\text{px}$ touch targets (`min-h-[44px]`) and single-line label discipline (`whitespace-nowrap`).
+4. **Intuitive Sync Telemetry Pill & Poetic Caption**:
+   - Displays the exact time gap right beneath the illustration (e.g., `Synced within 42 seconds` or `Synced within 2 mins`) alongside the combined heartbeat counter (`totalMisses`), so it is immediately clear *why* the hearts are in sync.
 
 ---
 
 ## 3. Key Product Decisions & Trade-Offs
 
-- **Decision 1 — Dual-Channel Notification Delivery (Web Push + Real-Time Broadcast)**:
-  - *Chosen Approach*: Combine Service Worker **Web Push** (via VAPID keys on an Express server) with **Supabase Realtime Broadcast / Polling** fallback.
-  - *Why*: Service Worker Web Push delivers notifications when the app is backgrounded or closed on Android and iOS (16.4+ home-screen PWAs), while real-time broadcast + Service Worker `showNotification` guarantees instant delivery even if push services are restricted by network firewalls.
-- **Decision 2 — Device-Level Exclusion (`senderDeviceId`)**:
-  - *Chosen Approach*: Each browser/device generates a persistent UUID (`localStorage.getItem('love_device_id')`). When a miss is triggered, the payload includes `senderDeviceId`, and notifications are only shown on devices where `deviceId !== senderDeviceId`.
-  - *Why*: Ensures that the device pressing the button never receives its own notification, while all other devices (including a partner's phone or secondary tablet) receive it immediately.
+- **Decision 1 — Pure SVG + Compositor Motion Over Heavy Canvas**:
+  - *Chosen Approach*: Build the illustration using vector SVG gradients, glow filters, animated `strokeDashoffset` ECG paths, and Framer Motion `transform`/`opacity` keyframes.
+  - *Why*: Ensures razor-sharp rendering on both iPhone Retina and Android OLED screens at 60fps with zero layout shift or external asset loading delay.
+- **Decision 2 — Interactive Tap-to-Pulse Haptic Resonance**:
+  - *Chosen Approach*: Tapping directly on the Synced Hearts illustration replays the romantic double-heartbeat phone vibration (`hapticSynced()`) and sends a ripple of floating sparks across the ECG bridge.
+  - *Why*: Lets either partner physically "feel" the synced heartbeat again while looking at the screen.
 
 ---
 
 ## 4. Technical Architecture & Data Strategy
 
-### Architecture & Component Diagram
+### Component & Animation Hierarchy inside `SceneMissCounter`
 
 ```
-┌───────────────────────────────────────────────────────────────────────────┐
-│                         Client PWA (iOS & Android)                        │
-│                                                                           │
-│  ┌──────────────────────┐   Deep-Link (?scene=miss_counter)               │
-│  │   App Root Router    │◄─────────────────────────────────────────────┐  │
-│  └──────────┬───────────┘                                              │  │
-│             │                                                          │  │
-│             ▼                                                          │  │
-│  ┌──────────────────────┐        ┌──────────────────────────────────┐  │  │
-│  │  SceneMissCounter &  │───────►│ PWA Install & Push Subscription  │  │  │
-│  │      SceneHub        │        │ (usePWAInstall & pushManager)    │  │  │
-│  └──────────┬───────────┘        └─────────────────┬────────────────┘  │  │
-│             │                                      │                   │  │
-│             │ 1. Tap "I Miss You"                  │ Register SW       │  │
-│             │    (Compute <=10m delta)             ▼                   │  │
-│             │                            ┌──────────────────────────┐  │  │
-│             │                            │ Service Worker (/sw.js)  │──┘  │
-│             │                            │ • push event + vibrate   │     │
-│             │                            │ • notificationclick      │     │
-│             │                            └─────────────▲────────────┘     │
-└─────────────┼──────────────────────────────────────────┼──────────────────┘
-              │                                          │
-              ▼                                          │ 3. Deliver Push to
-┌────────────────────────────────────────────────────────┴──────────────────┐
-│            Express Server (/api/push/*) + Supabase Realtime               │
-│                                                                           │
-│  • Stores active Web Push subscriptions keyed by deviceId                 │
-│  • Filters out senderDeviceId so triggering device is excluded            │
-│  • Broadcasts notification payload (Title, Body, Vibration, Deep-Link)    │
-└───────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│                    SceneMissCounter (isHeartSyncedMode)                │
+│                                                                        │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │ 1. Synced Header Badge ("✨ YOUR HEARTS ARE IN SYNC ✨")         │  │
+│  └────────────────────────────────┬─────────────────────────────────┘  │
+│                                   ▼                                    │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │ 2. Interactive SVG Resonance Canvas (viewBox="0 0 360 175")      │  │
+│  │                                                                  │  │
+│  │   [Shajer Heart] ═══► ──/\──/\── (Live ECG Wave) ◄═══ [Waqas]    │  │
+│  │    (Rose Glow +         │                            (Gold Glow +│  │
+│  │     Sonar Rings)        ▼                             Sonar Rings│  │
+│  │                  [Central Union Pulse]                           │  │
+│  └────────────────────────────────┬─────────────────────────────────┘  │
+│                                   ▼                                    │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │ 3. Sync Delta Badge ("Missed each other within X mins")          │  │
+│  │    + Combined Heartbeat Pill + "View Ratio Circle Outline ⟳"     │  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Notification Decision Matrix
-
-| Scenario | Trigger Condition | Notification Title | Notification Body | Vibration Pattern |
-| :--- | :--- | :--- | :--- | :--- |
-| **Waqas Taps Miss** | Partner's last miss was $> 10\text{ mins}$ ago | `Waqas Miss U` | Randomly chosen:<br>1. *"Someone just sent a little heartbeat your way."*<br>2. *"Sending you a virtual hug."* | `[200, 100, 200, 100, 400]` |
-| **Shajer Taps Miss** | Partner's last miss was $> 10\text{ mins}$ ago | `Shajer Miss U` | Randomly chosen:<br>1. *"Someone just sent a little heartbeat your way."*<br>2. *"Sending you a virtual hug."* | `[200, 100, 200, 100, 400]` |
-| **Shajer Misses Back** | Waqas missed $\le 10\text{ mins}$ ago | `She misses you too!` | *"Two hearts. Almost the same moment. 🥹"* | `[200, 100, 200, 100, 400, 100, 300]` |
-| **Waqas Misses Back** | Shajer missed $\le 10\text{ mins}$ ago | `He misses you too!` | *"Two hearts. Almost the same moment. 🥹"* | `[200, 100, 200, 100, 400, 100, 300]` |
-
-### Interactive Component & State Mapping
-- **URL & Message Deep-Linking**: On initial load in `App.tsx`, inspect `window.location.search` for `scene=miss_counter`. If present, initialize `scene` state directly to `'miss_counter'` (bypassing `'lockscreen'`) and clean the URL query parameter via `window.history.replaceState`. Also listen for `navigator.serviceWorker` messages (`type: 'OPEN_MISS_COUNTER'`) when the app is already open in the background.
-- **PWA Manifest & Icons**: Update `public/site.webmanifest` to include `id: '/'`, `scope: '/'`, `start_url: '/'`, and separate `any` and `maskable` icon entries so Android Chrome and iOS Chrome/Safari pass all installability checks.
+### State & Interaction Mapping
+- **`delta.isSynced` ($\le 5\text{ mins}$)**: Controls entry into `isHeartSyncedMode` automatically when both timestamps are within 5 minutes.
+- **`showCircleOverride` Toggle**: Preserves the existing one-tap toggle (`View Ratio Circle Outline ⟳` ↔ `✨ Show Synced Hearts Animation`) when `delta.isSynced` is active.
+- **Tap on Illustration**: Triggers `hapticSynced()` and spawns celebratory heart/sparkle particles along the bridge.
