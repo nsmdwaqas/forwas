@@ -321,7 +321,69 @@ export async function triggerPartnerMissNotification(
   return payload;
 }
 
-export async function subscribeDeviceToPush(soul: 'Shajer' | 'Waqas'): Promise<{
+const PERMANENT_VAPID_PUBLIC_KEY =
+  'BBc9GWO0Kr03FybG8hIgHCplf05rH8_q5Jh-EA59REVXnyVftk_qZ-_RZ7nJJRRCQ5j9S-Mk6Z1lnWow64CDiGw';
+
+async function syncSubscriptionToSupabaseBackup(
+  deviceId: string,
+  soul: 'Shajer' | 'Waqas',
+  subscription: PushSubscription
+): Promise<void> {
+  try {
+    const subJson = subscription.toJSON();
+    if (!subJson || !subJson.endpoint) return;
+
+    const { data } = await supabase
+      .from('WSStats')
+      .select('Last_Device')
+      .eq('Chapter', '_PushSubs_')
+      .maybeSingle();
+
+    let existing: Array<{
+      deviceId: string;
+      soul: 'Shajer' | 'Waqas';
+      subscription: PushSubscriptionJSON;
+      updatedAt: string;
+    }> = [];
+
+    if (data && typeof data.Last_Device === 'string' && data.Last_Device.trim().startsWith('[')) {
+      try {
+        existing = JSON.parse(data.Last_Device);
+      } catch {
+        existing = [];
+      }
+    }
+
+    const filtered = existing.filter(
+      (item) => item.deviceId !== deviceId && item.subscription?.endpoint !== subJson.endpoint
+    );
+
+    filtered.push({
+      deviceId,
+      soul,
+      subscription: subJson,
+      updatedAt: new Date().toISOString()
+    });
+
+    const trimmed = filtered.slice(-30);
+    await supabase.from('WSStats').upsert(
+      {
+        Chapter: '_PushSubs_',
+        count: trimmed.length,
+        Last_Device: JSON.stringify(trimmed),
+        updated: new Date().toISOString()
+      },
+      { onConflict: 'Chapter' }
+    );
+  } catch (err) {
+    console.warn('[Push] Client Supabase backup sync warning:', err);
+  }
+}
+
+export async function subscribeDeviceToPush(
+  soul: 'Shajer' | 'Waqas',
+  silent = false
+): Promise<{
   granted: boolean;
   subscribed: boolean;
   error?: string;
@@ -335,7 +397,13 @@ export async function subscribeDeviceToPush(soul: 'Shajer' | 'Waqas'): Promise<{
   }
 
   try {
-    const permission = await Notification.requestPermission();
+    const permission =
+      Notification.permission === 'granted'
+        ? 'granted'
+        : silent
+        ? Notification.permission
+        : await Notification.requestPermission();
+
     if (permission !== 'granted') {
       return {
         granted: false,
@@ -350,29 +418,61 @@ export async function subscribeDeviceToPush(soul: 'Shajer' | 'Waqas'): Promise<{
       return { granted: true, subscribed: true };
     }
 
-    // Attempt Web Push subscription with server VAPID key
+    const activeReg = (await navigator.serviceWorker.ready) || reg;
+
+    // Subscribe to Web Push with permanent VAPID public key so background/closed notifications work
     try {
-      const vapidRes = await fetch('/api/push/vapid-public-key');
-      if (vapidRes.ok) {
-        const { publicKey } = await vapidRes.json();
-        if (publicKey && reg.pushManager) {
-          let sub = await reg.pushManager.getSubscription();
-          if (!sub) {
-            sub = await reg.pushManager.subscribe({
-              userVisibleOnly: true,
-              applicationServerKey: urlBase64ToUint8Array(publicKey)
-            });
+      let publicKey = PERMANENT_VAPID_PUBLIC_KEY;
+      try {
+        const vapidRes = await fetch('/api/push/vapid-public-key');
+        if (vapidRes.ok) {
+          const data = await vapidRes.json();
+          if (data?.publicKey) {
+            publicKey = data.publicKey;
           }
-          await fetch('/api/push/subscribe', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              deviceId: getDeviceId(),
-              soul,
-              subscription: sub
-            })
+        }
+      } catch {
+        // Use PERMANENT_VAPID_PUBLIC_KEY fallback
+      }
+
+      if (publicKey && activeReg.pushManager) {
+        const expectedKeyBytes = urlBase64ToUint8Array(publicKey);
+        let sub = await activeReg.pushManager.getSubscription();
+
+        // If an older subscription exists with a different VAPID key, unsubscribe and create a fresh one
+        if (sub && sub.options?.applicationServerKey) {
+          const existingBytes = new Uint8Array(sub.options.applicationServerKey);
+          const keysMatch =
+            existingBytes.length === expectedKeyBytes.length &&
+            existingBytes.every((val, i) => val === expectedKeyBytes[i]);
+          if (!keysMatch) {
+            await sub.unsubscribe().catch(() => {});
+            sub = null;
+          }
+        }
+
+        if (!sub) {
+          sub = await activeReg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: expectedKeyBytes
           });
         }
+
+        const deviceId = getDeviceId();
+
+        // 1. Save via backend / Netlify Function endpoint
+        await fetch('/api/push/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            deviceId,
+            soul,
+            subscription: sub
+          })
+        }).catch(() => {});
+
+        // 2. Also ensure it is persisted directly in Supabase WSStats '_PushSubs_'
+        await syncSubscriptionToSupabaseBackup(deviceId, soul, sub);
       }
     } catch (pushErr) {
       console.warn('[Push] PushManager subscription warning (falling back to live SW alerts):', pushErr);
@@ -380,8 +480,8 @@ export async function subscribeDeviceToPush(soul: 'Shajer' | 'Waqas'): Promise<{
 
     localStorage.setItem(SUBSCRIBED_SOUL_KEY, soul);
 
-    // Gentle confirmation vibration
-    if (navigator.vibrate) {
+    // Gentle confirmation vibration only on explicit user tap
+    if (!silent && navigator.vibrate) {
       navigator.vibrate([100, 50, 150]);
     }
 
@@ -424,11 +524,11 @@ export function usePWAInstallAndPush(currentSoul: 'Shajer' | 'Waqas' = 'Waqas') 
 
     if ('Notification' in window) {
       setNotifPermission(Notification.permission);
-      const savedSoul = localStorage.getItem(SUBSCRIBED_SOUL_KEY);
-      if (Notification.permission === 'granted' && savedSoul) {
+      const savedSoul = localStorage.getItem(SUBSCRIBED_SOUL_KEY) as 'Shajer' | 'Waqas' | null;
+      if (Notification.permission === 'granted') {
         setIsPushSubscribed(true);
-        // Silently refresh subscription in background
-        subscribeDeviceToPush(currentSoul).catch(() => {});
+        // Silently refresh and persist Web Push subscription in background
+        subscribeDeviceToPush(savedSoul || currentSoul, true).catch(() => {});
       }
     }
 

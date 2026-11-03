@@ -1,87 +1,103 @@
-# Illustrative Synced Hearts & Live ECG Resonance Animation
+# Background Web Push Notifications When Website Is Closed (Netlify + Supabase)
 
-Upgrade the **Synced Hearts Animation** inside **The Miss Counter** (`SceneMissCounter.tsx`) into an expressive, romantic custom SVG illustration featuring Shajer's Rose Heart and Waqas's Golden Heart connected by a luminous, live-traveling ECG heartbeat waveform, concentric resonance ripples, and synchronized "lub-dub" cardiac motion.
+Enable true OS-level Web Push notifications (like WhatsApp, Zomato, or Swiggy) so Waqas and Shajer receive instant Miss Counter notifications even when the website/app is **completely closed** or the phone is locked—while preserving 100% of the existing UI, Miss Counter logic, 50 random messages, 10-minute mutual sync, and Supabase/Netlify integrations.
+
+---
+
+## Why Notifications Previously Required the App to Be Open
+
+1. **Netlify Static Hosting vs. Express (`server.ts`)**:
+   - When deployed to Netlify, `vite build` serves static files from `dist/`, meaning the local Express server (`server.ts`) is not active on Netlify unless backed by **Netlify Serverless Functions**. Without serverless functions handling `/api/push/*`, the app fell back to Supabase Realtime Broadcast, which only works while the browser/app is open in memory.
+2. **Ephemeral Subscription Storage**:
+   - Storing push subscriptions in a local file (`.push-store.json`) does not persist across serverless invocations or redeployments. Subscriptions must be stored in **Supabase** alongside a fixed, permanent pair of **VAPID keys** so Google FCM (Android) and Apple APNs (iOS Home Screen PWA) can wake up the phone's Service Worker at the OS level when the app is completely closed.
+
+---
 
 ## User Review & Critical Decisions
 
 > [!IMPORTANT]
-> The following decisions were confirmed during clarification and strictly govern this update:
+> The following confirmed choices and non-breaking guarantees govern this update:
 
-- **Confirmed Decision 1 — Live ECG Pulse Wave Connecting Two Hearts**: Replace the simple overlapping Lucide icons with a rich, custom SVG illustration where Shajer's Rose Heart (left) and Waqas's Amber-Gold Heart (right) are bridged by an animated glowing ECG lifeline that spikes in the center in time with both hearts beating together.
-- **Confirmed Decision 2 — Exclusive 5-Minute Sync Trigger**: The animation appears **only** when both souls record a miss within **5 minutes** of each other (`delta.isSynced === true`), keeping the moment rare, authentic, and deeply special. When synced, you can still toggle between the **Synced Hearts Illustration** and the **Ratio Circle Outline**.
-- **Confirmed Decision 3 — Strict Component Isolation**: All changes are strictly isolated to `SceneMissCounter.tsx`—zero changes to any other component, route, or backend file.
+- **Confirmed Decision 1 — Netlify Serverless Functions + `netlify.toml`**: Add a unified Netlify Function handler (`netlify/functions/push.ts`) and `netlify.toml` redirect rule (`/api/push/*` → `/.netlify/functions/push/:splat`) so Web Push works out-of-the-box on Netlify deployments as well as in local/AI Studio preview.
+- **Confirmed Decision 2 — Supabase Push Subscription Persistence**: Store each device's Web Push `PushSubscription` in Supabase (`Push_Subscriptions` table, with an automatic zero-config fallback row inside `WSStats` so push subscriptions persist immediately even before you create a custom table).
+- **Zero UI or Feature Changes**: No changes to the visual design, Miss Counter circle/heart animations, counting logic, or the 50 shuffled messages.
 
 ---
 
 ## 1. Overview & Core Concept
 
-- **What It Does**: When Waqas and Shajer miss each other within 5 minutes, **The Miss Counter** transforms its central showcase into a custom multi-layered SVG canvas illustrating two hearts beating in physiological and emotional unison across the distance.
-- **Target Audience / Persona**: Waqas and Shajer experiencing the serendipity of thinking of one another at the exact same moment.
-- **Key Value**: Makes the 5-minute sync state feel unmistakably romantic, intuitive, and visually self-explanatory at a glance—showing two distinct souls linked by one shared heartbeat rhythm.
+- **What It Does**:
+  - Registers each partner's device with the operating system's push service (Google FCM on Android Chrome; Apple APNs on iOS 16.4+ installed Home Screen web apps) using a permanent VAPID public key.
+  - Saves the resulting encrypted `PushSubscription` endpoint and keys in **Supabase**.
+  - Whenever either partner taps **"I Miss You Right Now ❤️"**, the backend (Netlify Function in production / Express in dev) reads all partner subscriptions from Supabase (`deviceId !== senderDeviceId`) and dispatches a high-priority(`urgency: 'high'`) Web Push payload directly to the OS push servers.
+  - The phone's OS wakes up `/sw.js` in the background—even if Chrome or the PWA is completely swiped away/closed—displays the notification with vibration, and opens `/?scene=miss_counter` when tapped.
 
 ---
 
 ## 2. User Experience & Visual Design
 
-### Visual Anatomy of the New Synced Hearts Illustration
-
-1. **Concentric Heartbeat Resonance Ripples**:
-   - Soft rose and warm gold sonar rings expand outward from behind both hearts and from the central convergence point on every "lub-dub" beat, visually expressing the physical vibration felt on the phone.
-
-2. **Two Custom Sculpted SVG Hearts (Shajer & Waqas)**:
-   - **Left Anchor — Shajer's Heart**: Rendered with a multi-stop crimson-to-rose gradient (`#F43F5E` → `#FDA4AF`), soft inner specular highlight, and a glowing rose aura.
-   - **Right Anchor — Waqas's Heart**: Rendered with a multi-stop amber-to-champagne gold gradient (`#D97706` → `#FDE68A`), soft inner specular highlight, and a glowing golden aura.
-   - **Synchronized "Lub-Dub" Cadence**: Both hearts pulse with a realistic double-beat cardiac rhythm (`scale: [1, 1.22, 1.06, 1.3, 1]`), leaning subtly toward one another at the peak of each beat.
-
-3. **Live Traveling ECG Heartbeat Wave Bridge**:
-   - Spanning the space between Shajer's heart and Waqas's heart is a glowing dual-gradient ECG waveform path (`P–Q–R–S–T` complex) that rises into a central heart-shaped peak where the two colors blend.
-   - A luminous energy pulse travels continuously from Shajer → Center Peak → Waqas and back, while a central glowing union heart (`❤️`) sparks at the exact moment the ECG wave peaks.
-
-4. **Intuitive Sync Telemetry Pill & Poetic Caption**:
-   - Displays the exact time gap right beneath the illustration (e.g., `Synced within 42 seconds` or `Synced within 2 mins`) alongside the combined heartbeat counter (`totalMisses`), so it is immediately clear *why* the hearts are in sync.
+- **Zero Visual Disruption**: The existing UI, typography, colors, animations, and layout remain completely untouched.
+- **Automatic Background Subscription Refresh**: Whenever a user opens the app with notifications already granted, the app silently verifies that its `PushSubscription` is saved in Supabase so background delivery stays active across browser updates.
+- **OS-Level Notification Behavior**:
+  - **High-Priority Delivery**: Dispatched with `urgency: 'high'` and `TTL: 86400` (24 hours) so Android Doze mode and iOS lockscreens deliver the alert immediately.
+  - **Tapping the Notification When Closed**: Launches the PWA window directly to `/?scene=miss_counter` (bypassing the lockscreen PIN as configured).
 
 ---
 
 ## 3. Key Product Decisions & Trade-Offs
 
-- **Decision 1 — Pure SVG + Compositor Motion Over Heavy Canvas**:
-  - *Chosen Approach*: Build the illustration using vector SVG gradients, glow filters, animated `strokeDashoffset` ECG paths, and Framer Motion `transform`/`opacity` keyframes.
-  - *Why*: Ensures razor-sharp rendering on both iPhone Retina and Android OLED screens at 60fps with zero layout shift or external asset loading delay.
-- **Decision 2 — Interactive Tap-to-Pulse Haptic Resonance**:
-  - *Chosen Approach*: Tapping directly on the Synced Hearts illustration replays the romantic double-heartbeat phone vibration (`hapticSynced()`) and sends a ripple of floating sparks across the ECG bridge.
-  - *Why*: Lets either partner physically "feel" the synced heartbeat again while looking at the screen.
+- **Decision 1 — Dual Supabase Storage Strategy (`Push_Subscriptions` Table + Automatic `WSStats` Fallback)**:
+  - *Chosen Approach*: The backend first writes/reads subscriptions from a dedicated `Push_Subscriptions` table in Supabase (`device_id`, `soul`, `subscription`, `updated_at`). If that table hasn't been created yet in your Supabase dashboard, it automatically falls back to storing the JSON subscription list inside a reserved row in your existing `WSStats` table (`Chapter = 'PushSubs'`, stored in `Last_Device`).
+  - *Why*: Guarantees that closed-app push notifications work **immediately** with zero manual database setup required, while also supporting a clean dedicated `Push_Subscriptions` table whenever you run the optional SQL snippet.
+- **Decision 2 — Permanent VAPID Keys**:
+  - *Chosen Approach*: Lock in a fixed pair of VAPID keys across `server.ts`, Netlify Functions, and client fallback (with support for optional `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` environment variables).
+  - *Why*: Ensures push subscriptions never become invalidated when Netlify redeploys or serverless functions cold-start.
 
 ---
 
 ## 4. Technical Architecture & Data Strategy
 
-### Component & Animation Hierarchy inside `SceneMissCounter`
+### End-to-End Closed-App Push Architecture
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                    SceneMissCounter (isHeartSyncedMode)                │
-│                                                                        │
-│  ┌──────────────────────────────────────────────────────────────────┐  │
-│  │ 1. Synced Header Badge ("✨ YOUR HEARTS ARE IN SYNC ✨")         │  │
-│  └────────────────────────────────┬─────────────────────────────────┘  │
-│                                   ▼                                    │
-│  ┌──────────────────────────────────────────────────────────────────┐  │
-│  │ 2. Interactive SVG Resonance Canvas (viewBox="0 0 360 175")      │  │
-│  │                                                                  │  │
-│  │   [Shajer Heart] ═══► ──/\──/\── (Live ECG Wave) ◄═══ [Waqas]    │  │
-│  │    (Rose Glow +         │                            (Gold Glow +│  │
-│  │     Sonar Rings)        ▼                             Sonar Rings│  │
-│  │                  [Central Union Pulse]                           │  │
-│  └────────────────────────────────┬─────────────────────────────────┘  │
-│                                   ▼                                    │
-│  ┌──────────────────────────────────────────────────────────────────┐  │
-│  │ 3. Sync Delta Badge ("Missed each other within X mins")          │  │
-│  │    + Combined Heartbeat Pill + "View Ratio Circle Outline ⟳"     │  │
-│  └──────────────────────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────┐
+│ 1. Sender Phone (e.g. Waqas taps "I Miss You Right Now ❤️")                │
+└─────────────────────────────────────┬──────────────────────────────────────┘
+                                      │ POST /api/push/send
+                                      ▼
+┌────────────────────────────────────────────────────────────────────────────┐
+│ 2. Serverless Push Engine (Netlify Function / Express Server)              │
+│    • Queries Supabase for all PushSubscriptions where deviceId != sender   │
+│    • Signs RFC 8292 VAPID Web Push payload with urgency="high"             │
+└──────────────────┬──────────────────────────────────────┬──────────────────┘
+                   │                                      │
+                   ▼ (Android)                            ▼ (iOS 16.4+ PWA)
+     ┌───────────────────────────┐          ┌───────────────────────────┐
+     │ Google FCM Push Service   │          │ Apple APNs Web Push       │
+     └─────────────┬─────────────┘          └─────────────┬─────────────┘
+                   │                                      │
+                   └──────────────────┬───────────────────┘
+                                      │ Wakes up OS Service Worker
+                                      ▼ (Even when website/app is CLOSED)
+┌────────────────────────────────────────────────────────────────────────────┐
+│ 3. Recipient Phone OS -> Service Worker (/sw.js)                           │
+│    • Fires `push` event listener in background                             │
+│    • Calls `self.registration.showNotification(title, { body, vibrate })`  │
+│    • On tap (`notificationclick`): opens `/?scene=miss_counter`            │
+└────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### State & Interaction Mapping
-- **`delta.isSynced` ($\le 5\text{ mins}$)**: Controls entry into `isHeartSyncedMode` automatically when both timestamps are within 5 minutes.
-- **`showCircleOverride` Toggle**: Preserves the existing one-tap toggle (`View Ratio Circle Outline ⟳` ↔ `✨ Show Synced Hearts Animation`) when `delta.isSynced` is active.
-- **Tap on Illustration**: Triggers `hapticSynced()` and spawns celebratory heart/sparkle particles along the bridge.
+### Optional Supabase Table Schema (Plus Zero-Config Automatic Fallback)
+If you wish to view subscriptions in a dedicated table in Supabase, you can optionally run:
+```sql
+create table if not exists public."Push_Subscriptions" (
+  device_id text primary key,
+  soul text,
+  subscription jsonb not null,
+  updated_at timestamptz default now()
+);
+alter table public."Push_Subscriptions" enable row level security;
+create policy "Allow public push subscription access"
+  on public."Push_Subscriptions" for all using (true) with check (true);
+```
+*(Even before running this SQL, our backend will automatically persist subscriptions in your existing Supabase database so closed-app notifications work right away.)*

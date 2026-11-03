@@ -1,6 +1,6 @@
 {
-  "summary": "Implementation plan to upgrade the Synced Hearts animation in The Miss Counter with a romantic, illustrative two-heart SVG scene connected by a glowing live ECG heartbeat wave, concentric resonance ripples, and synchronized lub-dub motion (shown exclusively when misses occur within 5 minutes).",
-  "updatedAt": "2026-11-03T14:21:17.571678179Z",
+  "summary": "Implementation plan to enable true OS-level background Web Push notifications when the website is completely closed on Netlify and Supabase, without modifying the existing UI or breaking any functionality.",
+  "updatedAt": "2026-11-03T15:08:29.576650038Z",
   "requestFeedback": true,
   "userFacing": true
 }

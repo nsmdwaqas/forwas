@@ -1,5 +1,8 @@
 // Service Worker for "For Shajer 🤍" PWA & Miss Counter Notifications
-const CACHE_NAME = 'for-shajer-pwa-v2';
+const CACHE_NAME = 'for-shajer-pwa-v3';
+const PERMANENT_VAPID_PUBLIC_KEY =
+  'BBc9GWO0Kr03FybG8hIgHCplf05rH8_q5Jh-EA59REVXnyVftk_qZ-_RZ7nJJRRCQ5j9S-Mk6Z1lnWow64CDiGw';
+
 const PRECACHE_URLS = [
   '/',
   '/index.html',
@@ -9,6 +12,30 @@ const PRECACHE_URLS = [
   '/android-chrome-512x512.png',
   '/favicon-32x32.png'
 ];
+
+const seenEventIds = new Set();
+
+function markSwEventSeen(eventId) {
+  if (!eventId) return false;
+  if (seenEventIds.has(eventId)) return true;
+  seenEventIds.add(eventId);
+  if (seenEventIds.size > 50) {
+    const first = seenEventIds.values().next().value;
+    if (first) seenEventIds.delete(first);
+  }
+  return false;
+}
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const rawData = atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -43,7 +70,11 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
-  if (url.pathname.startsWith('/api/') || url.hostname.includes('supabase.co')) {
+  if (
+    url.pathname.startsWith('/api/') ||
+    url.pathname.startsWith('/.netlify/') ||
+    url.hostname.includes('supabase.co')
+  ) {
     return;
   }
 
@@ -70,11 +101,11 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Handle incoming Web Push notifications (even when app is closed or phone is locked)
+// Handle incoming Web Push notifications (wakes up Service Worker even when website is completely closed or phone is locked)
 self.addEventListener('push', (event) => {
   let payload = {
-    title: 'Someone Misses U ❤️',
-    body: 'Someone just sent a little heartbeat your way.',
+    title: 'Waqas Miss U 💗',
+    body: 'Someone just sent a little heartbeat your way 💓',
     url: '/?scene=miss_counter',
     vibrate: [200, 100, 200, 100, 400],
     eventId: String(Date.now())
@@ -87,6 +118,10 @@ self.addEventListener('push', (event) => {
     } catch {
       payload.body = event.data.text() || payload.body;
     }
+  }
+
+  if (payload.eventId && markSwEventSeen(payload.eventId)) {
+    return;
   }
 
   const options = {
@@ -109,14 +144,41 @@ self.addEventListener('push', (event) => {
   );
 });
 
+// Automatically renew Web Push subscription if OS rotates push endpoint while app is closed
+self.addEventListener('pushsubscriptionchange', (event) => {
+  event.waitUntil(
+    self.registration.pushManager
+      .subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(PERMANENT_VAPID_PUBLIC_KEY)
+      })
+      .then((newSub) => {
+        return fetch('/api/push/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            deviceId: `sw_renewed_${Date.now()}`,
+            soul: 'Waqas',
+            subscription: newSub
+          })
+        });
+      })
+      .catch(() => {})
+  );
+});
+
 // Allow client pages to trigger a native system notification with vibration via SW
 self.addEventListener('message', (event) => {
   if (!event.data) return;
 
   if (event.data.type === 'SHOW_MISS_NOTIFICATION') {
     const { title, body, vibrate, url, eventId } = event.data.payload || {};
+    if (eventId && markSwEventSeen(eventId)) {
+      return;
+    }
+
     const options = {
-      body: body || 'Someone just sent a little heartbeat your way.',
+      body: body || 'Someone just sent a little heartbeat your way 💓',
       icon: '/android-chrome-192x192.png',
       badge: '/favicon-32x32.png',
       vibrate: vibrate || [200, 100, 200, 100, 400],
@@ -131,7 +193,7 @@ self.addEventListener('message', (event) => {
     };
 
     event.waitUntil(
-      self.registration.showNotification(title || 'Someone Misses U', options)
+      self.registration.showNotification(title || 'Someone Misses U 💗', options)
     );
   }
 });
