@@ -9,6 +9,8 @@ import {
   Infinity as InfinityIcon
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { triggerPartnerMissNotification } from '../../lib/pwaAndPush';
+import { PWAAndNotifyBar } from '../PWAAndNotifyBar';
 
 interface SceneMissCounterProps {
   onNext: () => void;
@@ -193,14 +195,21 @@ export function SceneMissCounter({ onNext }: SceneMissCounterProps) {
     const currentCount = isShajer ? shajerCount : waqasCount;
     const updatedCount = currentCount + 1;
 
-    // Check if this tap will sync hearts within 5 mins of the other person's latest miss
+    // Check if this tap is within 5 mins (for in-app sync animation) or 10 mins (for mutual miss notification)
     const otherLatest = isShajer ? waqasRecord?.Latest_at : shajerRecord?.Latest_at;
+    let isMutualWithin10Mins = false;
     if (otherLatest) {
       const otherTime = new Date(otherLatest).getTime();
       const nowTime = new Date(nowIso).getTime();
-      if (!isNaN(otherTime) && Math.abs(nowTime - otherTime) <= 5 * 60 * 1000) {
-        hapticSynced();
-        hasVibratedForSyncRef.current = true;
+      if (!isNaN(otherTime)) {
+        const diffMs = Math.abs(nowTime - otherTime);
+        if (diffMs <= 5 * 60 * 1000) {
+          hapticSynced();
+          hasVibratedForSyncRef.current = true;
+        }
+        if (diffMs <= 10 * 60 * 1000) {
+          isMutualWithin10Mins = true;
+        }
       }
     }
 
@@ -216,6 +225,11 @@ export function SceneMissCounter({ onNext }: SceneMissCounterProps) {
         }
         return item;
       });
+    });
+
+    // Send notification to all partner devices (excluding this triggering device)
+    triggerPartnerMissNotification(currentUser, isMutualWithin10Mins).catch((err) => {
+      console.warn('Notification dispatch error:', err);
     });
 
     try {
@@ -652,6 +666,11 @@ export function SceneMissCounter({ onNext }: SceneMissCounterProps) {
             <span className="text-[11px] text-white/70 font-sans">
               Currently logging miss as <strong className="text-rose-300">{currentUser}</strong> • Synchronized live between both souls
             </span>
+
+            {/* Install App & Partner Notification Controls */}
+            <div className="w-full pt-2.5 mt-1 border-t border-white/15">
+              <PWAAndNotifyBar currentSoul={currentUser} />
+            </div>
           </motion.div>
 
           {/* Poetic Note Card */}

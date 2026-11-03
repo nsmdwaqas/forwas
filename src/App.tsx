@@ -35,6 +35,12 @@ import { SceneDirtyTalk } from './components/scenes/SceneDirtyTalk';
 import { SceneLoveU } from './components/scenes/SceneLoveU';
 import { SceneMissCounter } from './components/scenes/SceneMissCounter';
 import { trackChapterVisit } from './lib/tracker';
+import { supabase } from './lib/supabase';
+import {
+  registerServiceWorker,
+  showLocalPartnerNotification,
+  MissAlertPayload
+} from './lib/pwaAndPush';
 
 type SceneState = 
   | 'lockscreen' 
@@ -72,9 +78,78 @@ type SceneState =
   | 'notification'
   | 'finale';
 
+function getInitialScene(): SceneState {
+  if (typeof window !== 'undefined') {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('scene') === 'miss_counter') {
+      // Clean URL query param while opening directly into Miss Counter without lockscreen
+      window.history.replaceState({}, '', window.location.pathname);
+      return 'miss_counter';
+    }
+  }
+  return 'lockscreen';
+}
+
 export default function App() {
-  const [scene, setScene] = useState<SceneState>('lockscreen');
+  const [scene, setScene] = useState<SceneState>(getInitialScene);
   const visitedConfessionRef = useRef(false);
+
+  // Register Service Worker, handle notification click navigation, and listen for live partner misses
+  useEffect(() => {
+    registerServiceWorker();
+
+    const handleServiceWorkerMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'OPEN_MISS_COUNTER') {
+        setScene('miss_counter');
+      }
+    };
+
+    if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage);
+    }
+
+    // Listen to Supabase Realtime broadcast for instant partner miss notifications
+    const channel = supabase
+      .channel('miss-counter-live-alerts', {
+        config: { broadcast: { self: false } }
+      })
+      .on('broadcast', { event: 'miss-heartbeat' }, ({ payload }) => {
+        if (payload) {
+          showLocalPartnerNotification(payload as MissAlertPayload, () => {
+            setScene('miss_counter');
+          });
+        }
+      })
+      .subscribe();
+
+    // Poll /api/push/latest as a resilient fallback for open/background tabs
+    const pollInterval = setInterval(async () => {
+      try {
+        const res = await fetch('/api/push/latest');
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.latestAlert) {
+            const alertAgeMs = Date.now() - new Date(data.latestAlert.createdAt).getTime();
+            if (alertAgeMs >= 0 && alertAgeMs < 60 * 1000) {
+              showLocalPartnerNotification(data.latestAlert as MissAlertPayload, () => {
+                setScene('miss_counter');
+              });
+            }
+          }
+        }
+      } catch {
+        // ignore network errors during background poll
+      }
+    }, 5000);
+
+    return () => {
+      if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+        navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage);
+      }
+      supabase.removeChannel(channel);
+      clearInterval(pollInterval);
+    };
+  }, []);
 
   // Silent chapter visit tracking in Supabase WSStats (no UI display)
   useEffect(() => {

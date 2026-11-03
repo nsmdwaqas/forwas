@@ -26,6 +26,7 @@ import {
   Fingerprint,
   HeartPulse
 } from 'lucide-react';
+import { PWAAndNotifyBar } from '../PWAAndNotifyBar';
 
 interface SceneHubProps {
   onConfession: () => void;
@@ -256,6 +257,11 @@ export function SceneHub({
                   </motion.div>
                 </motion.button>
               </motion.div>
+
+              {/* Install App & Partner Notification Bar */}
+              <div className="pt-2 border-t border-white/10">
+                <PWAAndNotifyBar compact />
+              </div>
             </motion.div>
           ) : (
             /* ========================================================
