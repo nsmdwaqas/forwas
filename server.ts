@@ -83,8 +83,61 @@ webpush.setVapidDetails(
 );
 
 const RANDOM_BODIES = [
-  'Someone just sent a little heartbeat your way.',
-  'Sending you a virtual hug.'
+  // 🥺 Sweet & Missing You
+  'Someone is missing you right now 🥺❤️',
+  'Wish you were here for a little hug 🤗',
+  "You're on someone's mind. Again. 💭💕",
+  'Sending you a thousand invisible hugs 🫂',
+  'Someone wishes they could see your smile right now 🥹',
+  'A little heart is looking for you 💗',
+  'If only teleportation existed! 🛸❤️',
+  "Someone's day would be better with you in it 🌷",
+  'Missing your hugs a little extra today 🫂',
+  "You're someone's favourite thought today 💞",
+  // 😘 Flirty & Romantic
+  'Someone wants a kiss from you 😘',
+  "Stop being so adorable, it's distracting 🙈💕",
+  'Someone wants to steal a moment with you 💋',
+  "Guess who's craving your attention? 😏",
+  "Your smile is living rent-free in someone's head 🥰",
+  'Someone wants you. Just you. ❤️',
+  'Sending one tiny kiss through the screen 😚',
+  'Someone wishes they could hold you closer 🫶',
+  "You're dangerously lovable, you know? 😍",
+  "Someone's heart just did a little dance thinking of you 💓",
+  // 😂 Cute & Funny
+  "Breaking news! You're being missed 🚨😂",
+  'Someone needs their daily dose of YOU 💊❤️',
+  'Distance, please stop being so dramatic 🙄',
+  'Your absence has been reported to management 📢🤣',
+  'Someone is requesting an emergency hug 🚑🫂',
+  "You're officially too far away. Come back! 😤💕",
+  'Missing you is becoming a full-time job 💼😂',
+  'Someone wants to annoy you in person 😈',
+  'A hug has been ordered. Delivery pending 📦🤗',
+  'Warning: Someone is suffering from a YOU deficiency ⚠️🥺',
+  // 🌙 Deep & Emotional
+  'Some hearts miss quietly, but deeply 🌙❤️',
+  "Even the stars know someone's missing you ✨",
+  "You're closer to someone's heart than you think 🫀",
+  'If thoughts could travel, someone would be beside you 🕊️',
+  "A little piece of someone's heart is with you 💝",
+  'Some people are worth every mile between them 🌍💕',
+  'Someone wishes this moment had you in it 🥹',
+  "Distance can't stop a heart from reaching out 💗",
+  "You're someone's favourite kind of happiness 🌸",
+  'One heart. One thought. You. ❤️',
+  // 💌 Little Surprises
+  'Psst... someone is thinking about you 🤫💕',
+  "Guess what? YOU. That's the notification 😌",
+  "Here's your random dose of affection 🥰",
+  'Someone just sent a little heartbeat your way 💓',
+  'Consider yourself virtually hugged! 🫂',
+  "A tiny reminder: you're special 🌷",
+  'Someone wishes they could pause time with you ⏳❤️',
+  "Just dropping by to say you're missed 💌",
+  "Someone's heart said hello! 👋💗",
+  'This notification comes with unlimited love 🎁❤️'
 ];
 
 export function buildNotificationPayload(
@@ -114,7 +167,7 @@ export function buildNotificationPayload(
     };
   }
 
-  const title = `${senderSoul} Miss U`;
+  const title = `${senderSoul} Miss U 💗`;
   const idx =
     typeof customBodyIndex === 'number'
       ? Math.abs(customBodyIndex) % RANDOM_BODIES.length
