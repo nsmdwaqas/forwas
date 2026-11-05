@@ -155,6 +155,11 @@ const timelineData: TimelineEvent[] = [
     description: "At 5:35 AM Fajr, Waqas whispered 'I LOVE U' on call. At 7:10 AM, she called back unexpectedly — gathering all her shy courage just to say: 'Assalamu alaikum... I Love You' before smiling and hanging up. A 14-second call that touched his soul and left both hearts blushing endlessly."
   },
   {
+    date: "5 Nov | Morning",
+    title: "Wake Up Jaana (Our First Real Words)",
+    description: "Beyond the sacred 'Assalamu alaikum' and whispers of 'Love you', today was the day we truly spoke for the very first time. Drifting in half-sleep, I softly whispered 'miss you'... and across the morning, your sweet voice gently melted my heart: 'Wake up Jaana.' A moment so tender it felt like time itself paused to listen."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",
