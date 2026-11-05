@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, useAnimation, AnimatePresence } from 'motion/react';
 import { 
   Heart, 
   Lock, 
+  Gift,
   Infinity as InfinityIcon, 
   PenTool, 
   Feather, 
@@ -88,7 +89,35 @@ export function SceneHub({
 }: SceneHubProps) {
   const [activeCategory, setActiveCategory] = useState<CategoryType>(null);
   const [lockedShake, setLockedShake] = useState(false);
+  const [giftLockedShake, setGiftLockedShake] = useState(false);
+  const [showGiftLockedHint, setShowGiftLockedHint] = useState(false);
+  const [giftTimeLeft, setGiftTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const controls = useAnimation();
+  const giftControls = useAnimation();
+
+  // Live countdown to Monday 9th (2026-11-09T00:00:00+05:30)
+  useEffect(() => {
+    const unlockDate = new Date('2026-11-09T00:00:00+05:30');
+
+    const updateGiftTimer = () => {
+      const now = new Date();
+      const diff = unlockDate.getTime() - now.getTime();
+      if (diff <= 0) {
+        setGiftTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+      setGiftTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / 1000 / 60) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      });
+    };
+
+    updateGiftTimer();
+    const timer = setInterval(updateGiftTimer, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const hapticTap = (type: 'default' | 'locked' = 'default') => {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
@@ -110,6 +139,25 @@ export function SceneHub({
     });
     setLockedShake(false);
   };
+
+  const handleGiftLockedClick = async () => {
+    hapticTap('locked');
+    setGiftLockedShake(true);
+    setShowGiftLockedHint(true);
+
+    await giftControls.start({
+      x: [-8, 8, -6, 6, -3, 3, 0],
+      rotate: [-4, 4, -3, 3, 0],
+      transition: { duration: 0.45, ease: "easeInOut" }
+    });
+    setGiftLockedShake(false);
+  };
+
+  useEffect(() => {
+    if (!showGiftLockedHint) return;
+    const timeout = setTimeout(() => setShowGiftLockedHint(false), 3200);
+    return () => clearTimeout(timeout);
+  }, [showGiftLockedHint]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-sm sm:max-w-md mx-auto text-center px-4 my-auto">
@@ -664,6 +712,88 @@ export function SceneHub({
           )}
         </AnimatePresence>
       </motion.div>
+
+      {/* Floating Locked Gift Button — shown ONLY on the main 4-button hub page */}
+      <AnimatePresence>
+        {activeCategory === null && (
+          <motion.div
+            key="floating-locked-gift"
+            initial={{ opacity: 0, y: 24, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2"
+          >
+            {/* Subtle Locked Message Popover on Click */}
+            <AnimatePresence>
+              {showGiftLockedHint && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.92 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                  transition={{ duration: 0.25 }}
+                  className="px-3.5 py-2 rounded-2xl bg-black/65 backdrop-blur-md border border-rose-300/40 text-white shadow-[0_8px_28px_rgba(244,63,94,0.35)] text-right max-w-[230px]"
+                >
+                  <div className="flex items-center justify-end gap-1.5 text-rose-200 text-xs font-medium">
+                    <Lock className="w-3.5 h-3.5 text-rose-300 animate-pulse" />
+                    <span>Surprise Gift Locked</span>
+                  </div>
+                  <p className="text-[11px] text-white/85 mt-0.5 leading-snug">
+                    Unlocks on <span className="text-gold-light font-semibold">Monday, 9th</span> ✨
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Floating Gift Pill Button */}
+            <motion.button
+              type="button"
+              onClick={handleGiftLockedClick}
+              animate={giftControls}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.95 }}
+              className={`group relative flex items-center gap-2.5 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl backdrop-blur-xl transition-all cursor-pointer select-none ${
+                giftLockedShake
+                  ? 'bg-rose-500/30 border border-rose-300/80 shadow-[0_0_25px_rgba(244,63,94,0.5)]'
+                  : 'bg-white/15 hover:bg-white/20 border border-white/25 shadow-[0_8px_30px_rgba(0,0,0,0.28)]'
+              }`}
+            >
+              {/* Ambient Gentle Float Wrapper */}
+              <motion.div
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+                className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-rose-400/30 to-amber-200/20 border border-white/25 shrink-0"
+              >
+                <Gift className="w-4 h-4 sm:w-5 sm:h-5 text-gold-light drop-shadow-[0_0_8px_rgba(232,180,200,0.8)]" />
+                <motion.span
+                  animate={
+                    giftLockedShake
+                      ? { rotate: [-20, 20, -15, 15, 0], scale: [1, 1.25, 1] }
+                      : { scale: [1, 1.08, 1] }
+                  }
+                  transition={{ duration: giftLockedShake ? 0.4 : 2, repeat: giftLockedShake ? 0 : Infinity }}
+                  className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-rose-600/90 border border-white/40 flex items-center justify-center shadow-md"
+                >
+                  <Lock className="w-2.5 h-2.5 text-white" />
+                </motion.span>
+              </motion.div>
+
+              {/* Countdown & Label */}
+              <div className="flex flex-col items-start text-left pr-0.5">
+                <div className="flex items-center gap-1">
+                  <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gold-light">
+                    Locked Gift
+                  </span>
+                  <span className="text-[9px] text-white/60">• Mon 9</span>
+                </div>
+                <div className="font-mono text-xs sm:text-sm font-semibold text-white tracking-tight tabular-nums drop-shadow-sm">
+                  {String(giftTimeLeft.days).padStart(2, '0')}d : {String(giftTimeLeft.hours).padStart(2, '0')}h : {String(giftTimeLeft.minutes).padStart(2, '0')}m : {String(giftTimeLeft.seconds).padStart(2, '0')}s
+                </div>
+              </div>
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
