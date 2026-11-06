@@ -34,6 +34,7 @@ import { SceneCommitment } from './components/scenes/SceneCommitment';
 import { SceneDirtyTalk } from './components/scenes/SceneDirtyTalk';
 import { SceneLoveU } from './components/scenes/SceneLoveU';
 import { SceneMissCounter } from './components/scenes/SceneMissCounter';
+import { SceneConversation } from './components/scenes/SceneConversation';
 import { trackChapterVisit } from './lib/tracker';
 import { supabase } from './lib/supabase';
 import {
@@ -59,6 +60,7 @@ type SceneState =
   | 'ego'
   | 'shameless'
   | 'talk'
+  | 'conversation'
   | 'emoji'
   | 'commitment'
   | 'dirty_talk'
@@ -164,6 +166,7 @@ export default function App() {
       ego: 'Ego',
       shameless: 'Shameless',
       talk: 'talk',
+      conversation: 'Conversation ',
       emoji: 'emoji',
       commitment: 'commitment ',
       dirty_talk: 'DirtyTalk ',
@@ -249,12 +252,19 @@ export default function App() {
               onEgo={() => setScene('ego')}
               onShameless={() => setScene('shameless')}
               onTalk={() => setScene('talk')}
+              onConversation={() => setScene('conversation')}
               onEmoji={() => setScene('emoji')}
               onCommitment={() => setScene('commitment')}
               onDirtyTalk={() => setScene('dirty_talk')}
               onLoveU={() => setScene('love_u')}
               onMissCounter={() => setScene('miss_counter')}
             />
+          </PageWrapper>
+        )}
+
+        {scene === 'conversation' && (
+          <PageWrapper key="scene-conversation">
+            <SceneConversation onNext={() => setScene('finale')} />
           </PageWrapper>
         )}
 

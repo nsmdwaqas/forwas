@@ -160,6 +160,11 @@ const timelineData: TimelineEvent[] = [
     description: "Beyond the sacred 'Assalamu alaikum' and whispers of 'Love you', today was the day we truly spoke for the very first time. Drifting in half-sleep, I softly whispered 'miss you'... and across the morning, your sweet voice gently melted my heart: 'Wake up Jaana.' A moment so tender it felt like time itself paused to listen."
   },
   {
+    date: "06 Nov | Friday | 9:22 AM",
+    title: "The Conversation (1 Hour 6 Minutes)",
+    description: "For months, we avoided talking before marriage — living only on missed rings and calls of seconds. But this Friday morning at 9:22 AM, the silence dissolved into our very first long conversation. She is the shyest person in the world, yet for 1 hour and 6 minutes, time melted away effortlessly as her voice filled my entire morning with warmth and comfort."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",
