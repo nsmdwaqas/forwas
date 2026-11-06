@@ -729,9 +729,10 @@ export function SceneHub({
         </AnimatePresence>
       </motion.div>
 
-      {/* Floating Locked Gift Button — shown ONLY on the main 4-button hub page */}
+      {/* Floating Locked Gift Button — hidden for now as requested */}
       <AnimatePresence>
-        {activeCategory === null && (
+        {/* Toggle to false to hide floating button with timer */}
+        {false && activeCategory === null && (
           <motion.div
             key="floating-locked-gift"
             initial={{ opacity: 0, y: 24, scale: 0.9 }}
