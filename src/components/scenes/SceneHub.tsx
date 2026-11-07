@@ -97,9 +97,9 @@ export function SceneHub({
   const controls = useAnimation();
   const giftControls = useAnimation();
 
-  // Live countdown to Monday 9th (2026-11-09T00:00:00+05:30)
+  // Live countdown to Monday 9 November 11:45 AM (2026-11-09T11:45:00+05:30)
   useEffect(() => {
-    const unlockDate = new Date('2026-11-09T00:00:00+05:30');
+    const unlockDate = new Date('2026-11-09T11:45:00+05:30');
 
     const updateGiftTimer = () => {
       const now = new Date();
@@ -729,10 +729,9 @@ export function SceneHub({
         </AnimatePresence>
       </motion.div>
 
-      {/* Floating Locked Gift Button — hidden for now as requested */}
+      {/* Floating Locked Gift Button — shown ONLY on the main 4-button hub page */}
       <AnimatePresence>
-        {/* Toggle to false to hide floating button with timer */}
-        {false && activeCategory === null && (
+        {activeCategory === null && (
           <motion.div
             key="floating-locked-gift"
             initial={{ opacity: 0, y: 24, scale: 0.9 }}
@@ -749,14 +748,14 @@ export function SceneHub({
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.95 }}
                   transition={{ duration: 0.25 }}
-                  className="px-3.5 py-2 rounded-2xl bg-black/65 backdrop-blur-md border border-rose-300/40 text-white shadow-[0_8px_28px_rgba(244,63,94,0.35)] text-right max-w-[230px]"
+                  className="px-3.5 py-2 rounded-2xl bg-black/65 backdrop-blur-md border border-rose-300/40 text-white shadow-[0_8px_28px_rgba(244,63,94,0.35)] text-right max-w-[240px]"
                 >
                   <div className="flex items-center justify-end gap-1.5 text-rose-200 text-xs font-medium">
                     <Lock className="w-3.5 h-3.5 text-rose-300 animate-pulse" />
                     <span>Surprise Gift Locked</span>
                   </div>
                   <p className="text-[11px] text-white/85 mt-0.5 leading-snug">
-                    Unlocks on <span className="text-gold-light font-semibold">Monday, 9th</span> ✨
+                    Unlocks on <span className="text-gold-light font-semibold">Monday, 9 Nov at 11:45 AM</span> ✨
                   </p>
                 </motion.div>
               )}
@@ -801,7 +800,7 @@ export function SceneHub({
                   <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gold-light">
                     Locked Gift
                   </span>
-                  <span className="text-[9px] text-white/60">• Mon 9</span>
+                  <span className="text-[9px] text-white/60">• Mon 9 Nov, 11:45 AM</span>
                 </div>
                 <div className="font-mono text-xs sm:text-sm font-semibold text-white tracking-tight tabular-nums drop-shadow-sm">
                   {String(giftTimeLeft.days).padStart(2, '0')}d : {String(giftTimeLeft.hours).padStart(2, '0')}h : {String(giftTimeLeft.minutes).padStart(2, '0')}m : {String(giftTimeLeft.seconds).padStart(2, '0')}s
