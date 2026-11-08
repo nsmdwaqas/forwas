@@ -57,6 +57,7 @@ interface SceneHubProps {
   onLoveU: () => void;
   onMissCounter: () => void;
   onConversation: () => void;
+  onOpenGiftBook?: () => void;
 }
 
 type CategoryType = 'story' | 'words' | 'promises' | 'extras' | null;
@@ -87,27 +88,33 @@ export function SceneHub({
   onDirtyTalk,
   onLoveU,
   onMissCounter,
-  onConversation
+  onConversation,
+  onOpenGiftBook
 }: SceneHubProps) {
   const [activeCategory, setActiveCategory] = useState<CategoryType>(null);
   const [lockedShake, setLockedShake] = useState(false);
   const [giftLockedShake, setGiftLockedShake] = useState(false);
   const [showGiftLockedHint, setShowGiftLockedHint] = useState(false);
+  const [isGiftUnlocked, setIsGiftUnlocked] = useState(() => {
+    return Date.now() >= new Date('2026-11-09T11:30:00+05:30').getTime();
+  });
   const [giftTimeLeft, setGiftTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const controls = useAnimation();
   const giftControls = useAnimation();
 
-  // Live countdown to Monday 9 November 11:45 AM (2026-11-09T11:45:00+05:30)
+  // Live countdown to 9 November 2026, 11:30 AM IST (2026-11-09T11:30:00+05:30)
   useEffect(() => {
-    const unlockDate = new Date('2026-11-09T11:45:00+05:30');
+    const unlockDate = new Date('2026-11-09T11:30:00+05:30');
 
     const updateGiftTimer = () => {
       const now = new Date();
       const diff = unlockDate.getTime() - now.getTime();
       if (diff <= 0) {
+        setIsGiftUnlocked(true);
         setGiftTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         return;
       }
+      setIsGiftUnlocked(false);
       setGiftTimeLeft({
         days: Math.floor(diff / (1000 * 60 * 60 * 24)),
         hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
@@ -729,84 +736,124 @@ export function SceneHub({
         </AnimatePresence>
       </motion.div>
 
-      {/* Floating Locked Gift Button — shown ONLY on the main 4-button hub page */}
+      {/* Floating Gift Button — Locked until 9 Nov 11:30 AM IST, then unlocks automatically */}
       <AnimatePresence>
         {activeCategory === null && (
           <motion.div
-            key="floating-locked-gift"
+            key="floating-gift-container"
             initial={{ opacity: 0, y: 24, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             transition={{ duration: 0.45, ease: "easeOut" }}
             className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2"
           >
-            {/* Subtle Locked Message Popover on Click */}
+            {/* Subtle Locked Message Popover on Click (when locked) */}
             <AnimatePresence>
-              {showGiftLockedHint && (
+              {!isGiftUnlocked && showGiftLockedHint && (
                 <motion.div
                   initial={{ opacity: 0, y: 8, scale: 0.92 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.95 }}
                   transition={{ duration: 0.25 }}
-                  className="px-3.5 py-2 rounded-2xl bg-black/65 backdrop-blur-md border border-rose-300/40 text-white shadow-[0_8px_28px_rgba(244,63,94,0.35)] text-right max-w-[240px]"
+                  className="px-3.5 py-2 rounded-2xl bg-black/65 backdrop-blur-md border border-rose-300/40 text-white shadow-[0_8px_28px_rgba(244,63,94,0.35)] text-right max-w-[245px]"
                 >
                   <div className="flex items-center justify-end gap-1.5 text-rose-200 text-xs font-medium">
                     <Lock className="w-3.5 h-3.5 text-rose-300 animate-pulse" />
                     <span>Surprise Gift Locked</span>
                   </div>
                   <p className="text-[11px] text-white/85 mt-0.5 leading-snug">
-                    Unlocks on <span className="text-gold-light font-semibold">Monday, 9 Nov at 11:45 AM</span> ✨
+                    Unlocks on <span className="text-gold-light font-semibold">9 Nov at 11:30 AM</span> ✨
                   </p>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Floating Gift Pill Button */}
-            <motion.button
-              type="button"
-              onClick={handleGiftLockedClick}
-              animate={giftControls}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.95 }}
-              className={`group relative flex items-center gap-2.5 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl backdrop-blur-xl transition-all cursor-pointer select-none ${
-                giftLockedShake
-                  ? 'bg-rose-500/30 border border-rose-300/80 shadow-[0_0_25px_rgba(244,63,94,0.5)]'
-                  : 'bg-white/15 hover:bg-white/20 border border-white/25 shadow-[0_8px_30px_rgba(0,0,0,0.28)]'
-              }`}
-            >
-              {/* Ambient Gentle Float Wrapper */}
-              <motion.div
-                animate={{ y: [0, -3, 0] }}
-                transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-                className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-rose-400/30 to-amber-200/20 border border-white/25 shrink-0"
+            {isGiftUnlocked ? (
+              /* UNLOCKED STATE: Opens More Than Salaam Book Reader */
+              <motion.button
+                type="button"
+                onClick={() => {
+                  hapticTap();
+                  if (onOpenGiftBook) onOpenGiftBook();
+                }}
+                whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(232,180,200,0.55)" }}
+                whileTap={{ scale: 0.95 }}
+                className="group relative flex items-center gap-3 px-4 py-2.5 sm:px-4.5 sm:py-3 rounded-2xl backdrop-blur-xl transition-all cursor-pointer select-none bg-gradient-to-r from-rose-500/35 via-pink-500/25 to-amber-400/25 hover:from-rose-500/45 hover:to-amber-400/35 border border-gold-light/60 shadow-[0_8px_32px_rgba(244,63,94,0.38)]"
               >
-                <Gift className="w-4 h-4 sm:w-5 sm:h-5 text-gold-light drop-shadow-[0_0_8px_rgba(232,180,200,0.8)]" />
-                <motion.span
-                  animate={
-                    giftLockedShake
-                      ? { rotate: [-20, 20, -15, 15, 0], scale: [1, 1.25, 1] }
-                      : { scale: [1, 1.08, 1] }
-                  }
-                  transition={{ duration: giftLockedShake ? 0.4 : 2, repeat: giftLockedShake ? 0 : Infinity }}
-                  className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-rose-600/90 border border-white/40 flex items-center justify-center shadow-md"
+                <motion.div
+                  animate={{ y: [0, -3, 0] }}
+                  transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-rose-400/40 to-amber-300/30 border border-gold-light/50 shrink-0 shadow-inner"
                 >
-                  <Lock className="w-2.5 h-2.5 text-white" />
-                </motion.span>
-              </motion.div>
+                  <Gift className="w-4 h-4 sm:w-5 sm:h-5 text-gold-light drop-shadow-[0_0_10px_rgba(232,180,200,0.95)]" />
+                  <motion.span
+                    animate={{ scale: [1, 1.18, 1], rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2.4, repeat: Infinity }}
+                    className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-emerald-500 border border-white/60 flex items-center justify-center shadow-md"
+                  >
+                    <BookOpen className="w-2.5 h-2.5 text-white" />
+                  </motion.span>
+                </motion.div>
 
-              {/* Countdown & Label */}
-              <div className="flex flex-col items-start text-left pr-0.5">
-                <div className="flex items-center gap-1">
-                  <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gold-light">
-                    Locked Gift
-                  </span>
-                  <span className="text-[9px] text-white/60">• Mon 9 Nov, 11:45 AM</span>
+                <div className="flex flex-col items-start text-left pr-0.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gold-light flex items-center gap-1">
+                      Gift Unlocked
+                      <Sparkles className="w-3 h-3 text-amber-200 animate-pulse" />
+                    </span>
+                  </div>
+                  <div className="font-heading text-xs sm:text-sm font-semibold text-white tracking-wide drop-shadow-sm flex items-center gap-1.5">
+                    <span>More Than Salaam</span>
+                    <span className="text-[11px] font-sans font-normal text-rose-100/90">• Read 📖</span>
+                  </div>
                 </div>
-                <div className="font-mono text-xs sm:text-sm font-semibold text-white tracking-tight tabular-nums drop-shadow-sm">
-                  {String(giftTimeLeft.days).padStart(2, '0')}d : {String(giftTimeLeft.hours).padStart(2, '0')}h : {String(giftTimeLeft.minutes).padStart(2, '0')}m : {String(giftTimeLeft.seconds).padStart(2, '0')}s
+              </motion.button>
+            ) : (
+              /* LOCKED STATE: Live Countdown to 9 Nov 11:30 AM IST */
+              <motion.button
+                type="button"
+                onClick={handleGiftLockedClick}
+                animate={giftControls}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.95 }}
+                className={`group relative flex items-center gap-2.5 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl backdrop-blur-xl transition-all cursor-pointer select-none ${
+                  giftLockedShake
+                    ? 'bg-rose-500/30 border border-rose-300/80 shadow-[0_0_25px_rgba(244,63,94,0.5)]'
+                    : 'bg-white/15 hover:bg-white/20 border border-white/25 shadow-[0_8px_30px_rgba(0,0,0,0.28)]'
+                }`}
+              >
+                <motion.div
+                  animate={{ y: [0, -3, 0] }}
+                  transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-rose-400/30 to-amber-200/20 border border-white/25 shrink-0"
+                >
+                  <Gift className="w-4 h-4 sm:w-5 sm:h-5 text-gold-light drop-shadow-[0_0_8px_rgba(232,180,200,0.8)]" />
+                  <motion.span
+                    animate={
+                      giftLockedShake
+                        ? { rotate: [-20, 20, -15, 15, 0], scale: [1, 1.25, 1] }
+                        : { scale: [1, 1.08, 1] }
+                    }
+                    transition={{ duration: giftLockedShake ? 0.4 : 2, repeat: giftLockedShake ? 0 : Infinity }}
+                    className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-rose-600/90 border border-white/40 flex items-center justify-center shadow-md"
+                  >
+                    <Lock className="w-2.5 h-2.5 text-white" />
+                  </motion.span>
+                </motion.div>
+
+                <div className="flex flex-col items-start text-left pr-0.5">
+                  <div className="flex items-center gap-1">
+                    <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold text-gold-light">
+                      Locked Gift
+                    </span>
+                    <span className="text-[9px] text-white/60">• 9 Nov, 11:30 AM</span>
+                  </div>
+                  <div className="font-mono text-xs sm:text-sm font-semibold text-white tracking-tight tabular-nums drop-shadow-sm">
+                    {String(giftTimeLeft.days).padStart(2, '0')}d : {String(giftTimeLeft.hours).padStart(2, '0')}h : {String(giftTimeLeft.minutes).padStart(2, '0')}m : {String(giftTimeLeft.seconds).padStart(2, '0')}s
+                  </div>
                 </div>
-              </div>
-            </motion.button>
+              </motion.button>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

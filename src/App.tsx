@@ -35,6 +35,7 @@ import { SceneDirtyTalk } from './components/scenes/SceneDirtyTalk';
 import { SceneLoveU } from './components/scenes/SceneLoveU';
 import { SceneMissCounter } from './components/scenes/SceneMissCounter';
 import { SceneConversation } from './components/scenes/SceneConversation';
+import { SceneBookReader } from './components/scenes/SceneBookReader';
 import { trackChapterVisit } from './lib/tracker';
 import { supabase } from './lib/supabase';
 import {
@@ -61,6 +62,7 @@ type SceneState =
   | 'shameless'
   | 'talk'
   | 'conversation'
+  | 'book_reader'
   | 'emoji'
   | 'commitment'
   | 'dirty_talk'
@@ -258,7 +260,14 @@ export default function App() {
               onDirtyTalk={() => setScene('dirty_talk')}
               onLoveU={() => setScene('love_u')}
               onMissCounter={() => setScene('miss_counter')}
+              onOpenGiftBook={() => setScene('book_reader')}
             />
+          </PageWrapper>
+        )}
+
+        {scene === 'book_reader' && (
+          <PageWrapper key="scene-book-reader">
+            <SceneBookReader onBack={() => setScene('hub')} />
           </PageWrapper>
         )}
 
