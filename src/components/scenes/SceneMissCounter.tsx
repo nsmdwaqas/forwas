@@ -730,12 +730,7 @@ export function SceneMissCounter({ onNext, onBack }: SceneMissCounterProps) {
                 >
                   {/* SVG Definitions for Gradients and Glows */}
                   <defs>
-                    <linearGradient id="waqasGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#F59E0B" />
-                      <stop offset="100%" stopColor="#FBBF24" />
-                    </linearGradient>
-
-                    <linearGradient id="shajerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient id="unifiedCircleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#F43F5E" />
                       <stop offset="100%" stopColor="#FB7185" />
                     </linearGradient>
@@ -756,40 +751,20 @@ export function SceneMissCounter({ onNext, onBack }: SceneMissCounterProps) {
                     strokeWidth="13"
                   />
 
-                  {/* Waqas Segment Arc */}
+                  {/* Unified Full Circle Arc */}
                   <motion.circle
                     cx="100"
                     cy="100"
                     r={radius}
                     fill="transparent"
-                    stroke="url(#waqasGrad)"
+                    stroke="url(#unifiedCircleGrad)"
                     strokeWidth="13"
-                    strokeDasharray={`${waqasArc} ${circumference}`}
+                    strokeDasharray={`${circumference} ${circumference}`}
                     strokeDashoffset="0"
                     strokeLinecap="round"
                     filter="url(#circleGlow)"
                     initial={{ strokeDasharray: `0 ${circumference}` }}
-                    animate={{ strokeDasharray: `${waqasArc} ${circumference}` }}
-                    transition={{ duration: 1, ease: "easeOut" }}
-                  />
-
-                  {/* Shajer Segment Arc */}
-                  <motion.circle
-                    cx="100"
-                    cy="100"
-                    r={radius}
-                    fill="transparent"
-                    stroke="url(#shajerGrad)"
-                    strokeWidth="13"
-                    strokeDasharray={`${shajerArc} ${circumference}`}
-                    strokeDashoffset={-waqasArc}
-                    strokeLinecap="round"
-                    filter="url(#circleGlow)"
-                    initial={{ strokeDasharray: `0 ${circumference}` }}
-                    animate={{ 
-                      strokeDasharray: `${shajerArc} ${circumference}`,
-                      strokeDashoffset: -waqasArc
-                    }}
+                    animate={{ strokeDasharray: `${circumference} ${circumference}` }}
                     transition={{ duration: 1, ease: "easeOut" }}
                   />
                 </svg>
@@ -812,17 +787,6 @@ export function SceneMissCounter({ onNext, onBack }: SceneMissCounterProps) {
                   <span className="text-[11px] text-white/80 font-sans tracking-wide uppercase mt-0.5">
                     times missed
                   </span>
-
-                  {/* Romantic Share Pill */}
-                  <div className="mt-1 flex items-center gap-1.5 text-[10px] font-mono px-2 py-0.5 rounded-full bg-black/60 border border-white/15">
-                    <span className="text-amber-300 font-semibold">
-                      Waqas {Math.round(waqasRatio * 100)}%
-                    </span>
-                    <span className="text-white/40">•</span>
-                    <span className="text-rose-300 font-semibold">
-                      Shajer {Math.round(shajerRatio * 100)}%
-                    </span>
-                  </div>
                 </div>
               </div>
             )}
