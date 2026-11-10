@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, MessageCircleHeart, Sparkles, Image as ImageIcon, Upload } from 'lucide-react';
+import { BackButton } from '../BackButton';
 
 interface SceneMessageProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneMessage({ onNext }: SceneMessageProps) {
+export function SceneMessage({ onNext, onBack }: SceneMessageProps) {
   const [uploadedImage, setUploadedImage] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('lovenama_message_screenshot');
@@ -44,6 +46,7 @@ export function SceneMessage({ onNext }: SceneMessageProps) {
         whileHover={{ rotateX: 1, rotateY: -1 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
+        <BackButton onBack={onBack} />
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}

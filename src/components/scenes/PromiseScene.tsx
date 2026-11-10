@@ -1,15 +1,17 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Heart } from 'lucide-react';
+import { BackButton } from '../BackButton';
 
 interface PromiseSceneProps {
   onNext: () => void;
+  onBack?: () => void;
   title: string;
   lines: string[];
   timestamp?: string;
 }
 
-export function PromiseScene({ onNext, title, lines, timestamp }: PromiseSceneProps) {
+export function PromiseScene({ onNext, onBack, title, lines, timestamp }: PromiseSceneProps) {
   const hapticTap = () => {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       navigator.vibrate([15, 30, 15]);
@@ -23,6 +25,7 @@ export function PromiseScene({ onNext, title, lines, timestamp }: PromiseScenePr
         whileHover={{ rotateX: 1, rotateY: -1 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
+        <BackButton onBack={onBack} inline />
         {/* Subtle glowing heartbeat behind text */}
         <motion.div 
           className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none"

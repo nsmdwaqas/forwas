@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Sparkles, Heart } from 'lucide-react';
+import { BackButton } from '../BackButton';
 
 interface SceneTimelineProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
 interface TimelineEvent {
@@ -165,6 +167,16 @@ const timelineData: TimelineEvent[] = [
     description: "For months, we avoided talking before marriage — living only on missed rings and calls of seconds. But this Friday morning at 9:22 AM, the silence dissolved into our very first long conversation. She is the shyest person in the world, yet for 1 hour and 6 minutes, time melted away effortlessly as her voice filled my entire morning with warmth and comfort."
   },
   {
+    date: "08 Nov | Midnight",
+    title: "The Midnight Call (More Than 3 Hours)",
+    description: "For the first time in our history, we had a late-night midnight conversation that lasted more than 3 hours — from 10:20 PM past 1:27 AM. Having intentionally avoided talking before marriage, going from missed calls and seconds-long rings to her calling back at 12:06 AM for another 1 hour 21 minutes felt like a miracle. She is the shyest person in the world, yet in the quiet of midnight, her voice found its safest home with me."
+  },
+  {
+    date: "09 Nov | Monday",
+    title: "More Than Salaam (Our Story in Pages)",
+    description: "The locked gift finally opened, and 'More Than Salaam' went live — our entire journey written and illustrated as a book just for you. Every chapter from the August afternoon that almost wasn't, to the green dress before Maghrib, the 190 kilometers of longing, the Fajr rings, and our shyest whispers was turned into pages you could hold and read — proof that what began with a simple 'Assalamu alaikum' was always destined to become our forever."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",
@@ -172,7 +184,7 @@ const timelineData: TimelineEvent[] = [
   }
 ];
 
-export function SceneTimeline({ onNext }: SceneTimelineProps) {
+export function SceneTimeline({ onNext, onBack }: SceneTimelineProps) {
   const hapticTap = () => {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       navigator.vibrate([15, 30, 15]);
@@ -186,6 +198,7 @@ export function SceneTimeline({ onNext }: SceneTimelineProps) {
         whileHover={{ rotateX: 1, rotateY: -1 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
+        <BackButton onBack={onBack} />
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}

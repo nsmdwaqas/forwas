@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { RotateCcw } from 'lucide-react';
+import { BackButton } from '../BackButton';
 
-export function Scene7Finale({ onRestart }: { onRestart: () => void }) {
+export function Scene7Finale({ onRestart, onBack }: { onRestart: () => void; onBack?: () => void }) {
   const hapticTap = () => {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       navigator.vibrate([10, 20, 10]);
@@ -13,11 +14,12 @@ export function Scene7Finale({ onRestart }: { onRestart: () => void }) {
     <div className="flex flex-col items-center justify-center w-full h-full text-center px-4 relative">
       
       <motion.div 
-        className="glass-panel p-10 md:p-16 flex flex-col items-center justify-center w-full max-w-lg"
+        className="glass-panel p-10 md:p-16 flex flex-col items-center justify-center w-full max-w-lg relative"
         initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
         animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
         transition={{ duration: 1.5, ease: "easeOut" }}
       >
+        <BackButton onBack={onBack} />
         {/* Central merging hearts animation */}
         <div className="relative w-48 h-48 mb-12">
           <motion.div

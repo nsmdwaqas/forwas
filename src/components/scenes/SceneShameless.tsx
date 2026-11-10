@@ -18,11 +18,14 @@ import shScreenshot from '../../assets/SH.jpeg';
 import sh1Video from '../../assets/SH1.mp4';
 import sh2Video from '../../assets/SH2.mp4';
 
+import { BackButton } from '../BackButton';
+
 interface SceneShamelessProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneShameless({ onNext }: SceneShamelessProps) {
+export function SceneShameless({ onNext, onBack }: SceneShamelessProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeVideoModal, setActiveVideoModal] = useState<{ src: string; caption: string } | null>(null);
   const [liked, setLiked] = useState(false);
@@ -134,6 +137,7 @@ export function SceneShameless({ onNext }: SceneShamelessProps) {
       <div 
         className="glass-panel w-full p-3.5 sm:p-5 md:p-8 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden"
       >
+        <BackButton onBack={onBack} />
         {/* Subtle Watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
           <Flame className="w-80 h-80 text-rose-400" />

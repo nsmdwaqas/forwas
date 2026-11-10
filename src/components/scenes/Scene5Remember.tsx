@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { BackButton } from '../BackButton';
 
-export function Scene5Remember({ onNext }: { onNext: () => void }) {
+export function Scene5Remember({ onNext, onBack }: { onNext: () => void; onBack?: () => void }) {
   const hapticTap = () => {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       navigator.vibrate([15, 30, 15]);
@@ -11,10 +12,11 @@ export function Scene5Remember({ onNext }: { onNext: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto text-center">
       <motion.div 
-        className="glass-panel w-full p-10 md:p-14"
+        className="glass-panel w-full p-10 md:p-14 relative"
         whileHover={{ rotateX: 2, rotateY: -2 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
       >
+        <BackButton onBack={onBack} inline />
         <motion.p 
           className="text-2xl md:text-3xl font-heading text-white mb-12 text-shadow-elegant leading-snug"
           initial={{ opacity: 0, scale: 0.9, filter: 'blur(8px)' }}

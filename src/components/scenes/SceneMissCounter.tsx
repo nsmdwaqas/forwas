@@ -10,9 +10,11 @@ import {
 import { supabase } from '../../lib/supabase';
 import { triggerPartnerMissNotification } from '../../lib/pwaAndPush';
 import { PWAAndNotifyBar } from '../PWAAndNotifyBar';
+import { BackButton } from '../BackButton';
 
 interface SceneMissCounterProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
 interface MissRecord {
@@ -22,7 +24,7 @@ interface MissRecord {
   Latest_at: string | null;
 }
 
-export function SceneMissCounter({ onNext }: SceneMissCounterProps) {
+export function SceneMissCounter({ onNext, onBack }: SceneMissCounterProps) {
   const [records, setRecords] = useState<MissRecord[]>([]);
   const [currentUser, setCurrentUser] = useState<'Shajer' | 'Waqas'>('Shajer');
   const [deviceDetected, setDeviceDetected] = useState<string>('');
@@ -282,6 +284,7 @@ export function SceneMissCounter({ onNext }: SceneMissCounterProps) {
       <div 
         className="glass-panel w-full p-3.5 sm:p-5 md:p-8 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden"
       >
+        <BackButton onBack={onBack} />
         {/* Subtle Watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
           <HeartPulse className="w-80 h-80 text-rose-400" />

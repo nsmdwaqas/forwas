@@ -13,8 +13,11 @@ import {
   Heart
 } from 'lucide-react';
 
+import { BackButton } from '../BackButton';
+
 interface SceneAnswersProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
 interface QAItem {
@@ -105,7 +108,7 @@ const qaList: QAItem[] = [
   }
 ];
 
-export function SceneAnswers({ onNext }: SceneAnswersProps) {
+export function SceneAnswers({ onNext, onBack }: SceneAnswersProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<'left' | 'right'>('right');
   const [viewMode, setViewMode] = useState<'card' | 'list'>('card');
@@ -163,6 +166,7 @@ export function SceneAnswers({ onNext }: SceneAnswersProps) {
         whileHover={{ rotateX: 1, rotateY: -1 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
+        <BackButton onBack={onBack} />
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}

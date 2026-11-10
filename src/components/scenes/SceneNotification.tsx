@@ -13,11 +13,14 @@ import {
 } from 'lucide-react';
 import notiImg from '../../assets/noti.jpeg';
 
+import { BackButton } from '../BackButton';
+
 interface SceneNotificationProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneNotification({ onNext }: SceneNotificationProps) {
+export function SceneNotification({ onNext, onBack }: SceneNotificationProps) {
   const [liked, setLiked] = useState(false);
   const [floatingHeart, setFloatingHeart] = useState<{ id: number; x: number; y: number } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,6 +63,7 @@ export function SceneNotification({ onNext }: SceneNotificationProps) {
       <div 
         className="glass-panel w-full p-3 sm:p-5 md:p-8 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden"
       >
+        <BackButton onBack={onBack} />
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}

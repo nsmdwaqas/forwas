@@ -13,8 +13,11 @@ import {
 import wAudio from '../../audio/W.mp3';
 import mAudio from '../../audio/M.mp3';
 
+import { BackButton } from '../BackButton';
+
 interface SceneVoicesProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
 interface VoiceTrack {
@@ -54,7 +57,7 @@ const tracks: VoiceTrack[] = [
   }
 ];
 
-export function SceneVoices({ onNext }: SceneVoicesProps) {
+export function SceneVoices({ onNext, onBack }: SceneVoicesProps) {
   const [playingId, setPlayingId] = useState<'shajer' | 'waqas' | null>(null);
   const [currentTime, setCurrentTime] = useState<{ shajer: number; waqas: number }>({
     shajer: 0,
@@ -153,6 +156,7 @@ export function SceneVoices({ onNext }: SceneVoicesProps) {
         whileHover={{ rotateX: 1, rotateY: -1 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
+        <BackButton onBack={onBack} />
         {/* Hidden Audio Elements */}
         <audio
           ref={shajerAudioRef}

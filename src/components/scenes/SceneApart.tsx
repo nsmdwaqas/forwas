@@ -15,11 +15,14 @@ import {
 import shajerImg from '../../assets/apart_shajer.jpeg';
 import waqasImg from '../../assets/apart_waqas.jpeg';
 
+import { BackButton } from '../BackButton';
+
 interface SceneApartProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneApart({ onNext }: SceneApartProps) {
+export function SceneApart({ onNext, onBack }: SceneApartProps) {
   const [liked, setLiked] = useState(false);
   const [floatingHeart, setFloatingHeart] = useState<{ id: number; x: number; y: number } | null>(null);
   const [activeModalImg, setActiveModalImg] = useState<{ src: string; caption: string } | null>(null);
@@ -62,6 +65,7 @@ export function SceneApart({ onNext }: SceneApartProps) {
       <div 
         className="glass-panel w-full p-3 sm:p-5 md:p-8 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden"
       >
+        <BackButton onBack={onBack} />
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}

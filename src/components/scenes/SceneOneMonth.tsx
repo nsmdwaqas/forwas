@@ -1,12 +1,14 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Sparkles, Heart, Calendar, Clock, Milestone } from 'lucide-react';
+import { BackButton } from '../BackButton';
 
 interface SceneOneMonthProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneOneMonth({ onNext }: SceneOneMonthProps) {
+export function SceneOneMonth({ onNext, onBack }: SceneOneMonthProps) {
   const hapticTap = () => {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       navigator.vibrate([15, 30, 15]);
@@ -20,6 +22,7 @@ export function SceneOneMonth({ onNext }: SceneOneMonthProps) {
         whileHover={{ rotateX: 1, rotateY: -1 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
+        <BackButton onBack={onBack} />
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}

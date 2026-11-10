@@ -35,6 +35,7 @@ import { SceneDirtyTalk } from './components/scenes/SceneDirtyTalk';
 import { SceneLoveU } from './components/scenes/SceneLoveU';
 import { SceneMissCounter } from './components/scenes/SceneMissCounter';
 import { SceneConversation } from './components/scenes/SceneConversation';
+import { SceneMidnightCall } from './components/scenes/SceneMidnightCall';
 import { SceneBookReader } from './components/scenes/SceneBookReader';
 import { trackChapterVisit } from './lib/tracker';
 import { supabase } from './lib/supabase';
@@ -62,6 +63,7 @@ type SceneState =
   | 'shameless'
   | 'talk'
   | 'conversation'
+  | 'midnight_call'
   | 'book_reader'
   | 'emoji'
   | 'commitment'
@@ -96,7 +98,32 @@ function getInitialScene(): SceneState {
 
 export default function App() {
   const [scene, setScene] = useState<SceneState>(getInitialScene);
+  const [sceneHistory, setSceneHistory] = useState<SceneState[]>([]);
   const visitedConfessionRef = useRef(false);
+
+  const navigateTo = (nextScene: SceneState) => {
+    setScene((currentScene) => {
+      if (currentScene !== nextScene) {
+        // Don't push transient loading screen into back history
+        const historyEntry = currentScene === 'loading' ? 'lockscreen' : currentScene;
+        setSceneHistory((prev) => [...prev, historyEntry]);
+      }
+      return nextScene;
+    });
+  };
+
+  const handleGoBack = () => {
+    setSceneHistory((prev) => {
+      if (prev.length === 0) {
+        setScene('hub');
+        return prev;
+      }
+      const nextHistory = [...prev];
+      const previousScene = nextHistory.pop()!;
+      setScene(previousScene);
+      return nextHistory;
+    });
+  };
 
   // Register Service Worker, handle notification click navigation, and listen for live partner misses
   useEffect(() => {
@@ -104,7 +131,7 @@ export default function App() {
 
     const handleServiceWorkerMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'OPEN_MISS_COUNTER') {
-        setScene('miss_counter');
+        navigateTo('miss_counter');
       }
     };
 
@@ -120,7 +147,7 @@ export default function App() {
       .on('broadcast', { event: 'miss-heartbeat' }, ({ payload }) => {
         if (payload) {
           showLocalPartnerNotification(payload as MissAlertPayload, () => {
-            setScene('miss_counter');
+            navigateTo('miss_counter');
           });
         }
       })
@@ -136,7 +163,7 @@ export default function App() {
             const alertAgeMs = Date.now() - new Date(data.latestAlert.createdAt).getTime();
             if (alertAgeMs >= 0 && alertAgeMs < 60 * 1000) {
               showLocalPartnerNotification(data.latestAlert as MissAlertPayload, () => {
-                setScene('miss_counter');
+                navigateTo('miss_counter');
               });
             }
           }
@@ -169,6 +196,7 @@ export default function App() {
       shameless: 'Shameless',
       talk: 'talk',
       conversation: 'Conversation ',
+      midnight_call: 'MidnightCall ',
       emoji: 'emoji',
       commitment: 'commitment ',
       dirty_talk: 'DirtyTalk ',
@@ -209,7 +237,7 @@ export default function App() {
       <AnimatePresence mode="wait">
         {scene === 'lockscreen' && (
           <PageWrapper key="scene0">
-            <Scene0Lockscreen onNext={() => setScene('loading')} />
+            <Scene0Lockscreen onNext={() => navigateTo('loading')} />
           </PageWrapper>
         )}
 
@@ -222,7 +250,12 @@ export default function App() {
         {scene === 'question1' && (
           <PageWrapper key="scene2">
             <QuestionScene 
-              onNext={() => setScene('hub')}
+              onNext={() => {
+                if (typeof window !== 'undefined') {
+                  sessionStorage.removeItem('ws_hub_category');
+                }
+                navigateTo('hub');
+              }}
               title="Hi Shajer 👋"
               subtitle="I have something to ask you..."
               question="Do you like me?"
@@ -233,204 +266,212 @@ export default function App() {
         {scene === 'hub' && (
           <PageWrapper key="scene-hub">
             <SceneHub 
-              onConfession={() => setScene('confession_prompt')}
-              onCountdown={() => setScene('countdown')}
-              onForever={() => setScene('forever')}
-              onLetter={() => setScene('letter')}
-              onTimeline={() => setScene('timeline')}
-              onMessage={() => setScene('message')}
-              onProposal={() => setScene('proposal')}
-              onSong={() => setScene('song')}
-              onCall={() => setScene('call')}
-              onOneMonth={() => setScene('one_month')}
-              onAnswers={() => setScene('answers')}
-              onVoices={() => setScene('voices')}
-              onLovenama={() => setScene('lovenama')}
-              onNotification={() => setScene('notification')}
-              onThePromise={() => setScene('the_promise')}
-              onFacetime={() => setScene('facetime')}
-              onRecurrence={() => setScene('recurrence')}
-              onApart={() => setScene('apart')}
-              onEgo={() => setScene('ego')}
-              onShameless={() => setScene('shameless')}
-              onTalk={() => setScene('talk')}
-              onConversation={() => setScene('conversation')}
-              onEmoji={() => setScene('emoji')}
-              onCommitment={() => setScene('commitment')}
-              onDirtyTalk={() => setScene('dirty_talk')}
-              onLoveU={() => setScene('love_u')}
-              onMissCounter={() => setScene('miss_counter')}
-              onOpenGiftBook={() => setScene('book_reader')}
+              onConfession={() => navigateTo('confession_prompt')}
+              onCountdown={() => navigateTo('countdown')}
+              onForever={() => navigateTo('forever')}
+              onLetter={() => navigateTo('letter')}
+              onTimeline={() => navigateTo('timeline')}
+              onMessage={() => navigateTo('message')}
+              onProposal={() => navigateTo('proposal')}
+              onSong={() => navigateTo('song')}
+              onCall={() => navigateTo('call')}
+              onOneMonth={() => navigateTo('one_month')}
+              onAnswers={() => navigateTo('answers')}
+              onVoices={() => navigateTo('voices')}
+              onLovenama={() => navigateTo('lovenama')}
+              onNotification={() => navigateTo('notification')}
+              onThePromise={() => navigateTo('the_promise')}
+              onFacetime={() => navigateTo('facetime')}
+              onRecurrence={() => navigateTo('recurrence')}
+              onApart={() => navigateTo('apart')}
+              onEgo={() => navigateTo('ego')}
+              onShameless={() => navigateTo('shameless')}
+              onTalk={() => navigateTo('talk')}
+              onConversation={() => navigateTo('conversation')}
+              onMidnightCall={() => navigateTo('midnight_call')}
+              onEmoji={() => navigateTo('emoji')}
+              onCommitment={() => navigateTo('commitment')}
+              onDirtyTalk={() => navigateTo('dirty_talk')}
+              onLoveU={() => navigateTo('love_u')}
+              onMissCounter={() => navigateTo('miss_counter')}
+              onOpenGiftBook={() => navigateTo('book_reader')}
             />
           </PageWrapper>
         )}
 
         {scene === 'book_reader' && (
           <PageWrapper key="scene-book-reader">
-            <SceneBookReader onBack={() => setScene('hub')} />
+            <SceneBookReader onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'conversation' && (
           <PageWrapper key="scene-conversation">
-            <SceneConversation onNext={() => setScene('finale')} />
+            <SceneConversation onNext={() => navigateTo('finale')} onBack={handleGoBack} />
+          </PageWrapper>
+        )}
+
+        {scene === 'midnight_call' && (
+          <PageWrapper key="scene-midnight-call">
+            <SceneMidnightCall onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'miss_counter' && (
           <PageWrapper key="scene-miss-counter">
-            <SceneMissCounter onNext={() => setScene('finale')} />
+            <SceneMissCounter onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'love_u' && (
           <PageWrapper key="scene-love-u">
-            <SceneLoveU onNext={() => setScene('finale')} />
+            <SceneLoveU onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'dirty_talk' && (
           <PageWrapper key="scene-dirty-talk">
-            <SceneDirtyTalk onNext={() => setScene('finale')} />
+            <SceneDirtyTalk onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'commitment' && (
           <PageWrapper key="scene-commitment">
-            <SceneCommitment onNext={() => setScene('finale')} />
+            <SceneCommitment onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'emoji' && (
           <PageWrapper key="scene-emoji">
-            <SceneEmoji onNext={() => setScene('finale')} />
+            <SceneEmoji onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'talk' && (
           <PageWrapper key="scene-talk">
-            <SceneTalk onNext={() => setScene('finale')} />
+            <SceneTalk onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'shameless' && (
           <PageWrapper key="scene-shameless">
-            <SceneShameless onNext={() => setScene('finale')} />
+            <SceneShameless onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'ego' && (
           <PageWrapper key="scene-ego">
-            <SceneEgo onNext={() => setScene('finale')} />
+            <SceneEgo onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'apart' && (
           <PageWrapper key="scene-apart">
-            <SceneApart onNext={() => setScene('finale')} />
+            <SceneApart onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'recurrence' && (
           <PageWrapper key="scene-recurrence">
-            <SceneRecurrence onNext={() => setScene('finale')} />
+            <SceneRecurrence onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'facetime' && (
           <PageWrapper key="scene-facetime">
-            <SceneFacetime onNext={() => setScene('finale')} />
+            <SceneFacetime onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'the_promise' && (
           <PageWrapper key="scene-the-promise">
-            <SceneThePromise onNext={() => setScene('finale')} />
+            <SceneThePromise onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'notification' && (
           <PageWrapper key="scene-notification">
-            <SceneNotification onNext={() => setScene('finale')} />
+            <SceneNotification onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'countdown' && (
           <PageWrapper key="scene-countdown">
-            <SceneCountdown onNext={() => setScene('finale')} />
+            <SceneCountdown onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'forever' && (
           <PageWrapper key="scene-forever">
-            <SceneForever onNext={() => setScene('finale')} />
+            <SceneForever onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
         
         {scene === 'letter' && (
           <PageWrapper key="scene-letter">
-            <SceneLetter onNext={() => setScene('finale')} />
+            <SceneLetter onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'timeline' && (
           <PageWrapper key="scene-timeline">
-            <SceneTimeline onNext={() => setScene('finale')} />
+            <SceneTimeline onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'message' && (
           <PageWrapper key="scene-message">
-            <SceneMessage onNext={() => setScene('finale')} />
+            <SceneMessage onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'proposal' && (
           <PageWrapper key="scene-proposal">
-            <SceneProposal onNext={() => setScene('finale')} />
+            <SceneProposal onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'song' && (
           <PageWrapper key="scene-song">
-            <SceneSong onNext={() => setScene('finale')} />
+            <SceneSong onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'call' && (
           <PageWrapper key="scene-call">
-            <SceneCall onNext={() => setScene('finale')} />
+            <SceneCall onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'one_month' && (
           <PageWrapper key="scene-one-month">
-            <SceneOneMonth onNext={() => setScene('finale')} />
+            <SceneOneMonth onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'answers' && (
           <PageWrapper key="scene-answers">
-            <SceneAnswers onNext={() => setScene('finale')} />
+            <SceneAnswers onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'voices' && (
           <PageWrapper key="scene-voices">
-            <SceneVoices onNext={() => setScene('finale')} />
+            <SceneVoices onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'lovenama' && (
           <PageWrapper key="scene-lovenama">
-            <SceneLovenama onNext={() => setScene('finale')} />
+            <SceneLovenama onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'confession_prompt' && (
           <PageWrapper key="scene3">
             <QuestionScene 
-              onNext={() => setScene('promise1')}
+              onNext={() => navigateTo('promise1')}
+              onBack={handleGoBack}
               subtitle="Before I say something else..."
               question="Would you like to hear my confession?"
             />
@@ -440,7 +481,8 @@ export default function App() {
         {scene === 'promise1' && (
           <PageWrapper key="scene4">
             <PromiseScene 
-              onNext={() => setScene('remember')}
+              onNext={() => navigateTo('remember')}
+              onBack={handleGoBack}
               title="My Promise to You"
               timestamp="I said at 8 Sept 2026, 00:00"
               lines={[
@@ -457,14 +499,15 @@ export default function App() {
 
         {scene === 'remember' && (
           <PageWrapper key="scene5">
-            <Scene5Remember onNext={() => setScene('promise2')} />
+            <Scene5Remember onNext={() => navigateTo('promise2')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
         {scene === 'promise2' && (
           <PageWrapper key="scene6">
             <PromiseScene 
-              onNext={() => setScene('finale')}
+              onNext={() => navigateTo('finale')}
+              onBack={handleGoBack}
               title="Your Promise to Me"
               timestamp="She said on 7 Sept 2026, 17:00"
               lines={[
@@ -480,7 +523,16 @@ export default function App() {
 
         {scene === 'finale' && (
           <PageWrapper key="scene7">
-            <Scene7Finale onRestart={() => setScene('lockscreen')} />
+            <Scene7Finale
+              onRestart={() => {
+                if (typeof window !== 'undefined') {
+                  sessionStorage.removeItem('ws_hub_category');
+                }
+                setSceneHistory([]);
+                setScene('lockscreen');
+              }}
+              onBack={handleGoBack}
+            />
           </PageWrapper>
         )}
       </AnimatePresence>

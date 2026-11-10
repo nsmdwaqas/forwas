@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Feather, Edit3, CheckCircle2, AlertCircle } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { BackButton } from '../BackButton';
 
 interface SceneLovenamaProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
 const SignatureBlock = ({ title, role }: { title: string; role: 'me' | 'you' }) => {
@@ -292,7 +294,7 @@ const SignatureBlock = ({ title, role }: { title: string; role: 'me' | 'you' }) 
 };
 
 
-export function SceneLovenama({ onNext }: SceneLovenamaProps) {
+export function SceneLovenama({ onNext, onBack }: SceneLovenamaProps) {
   const hapticTap = () => {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       navigator.vibrate([15, 30, 15]);
@@ -306,6 +308,7 @@ export function SceneLovenama({ onNext }: SceneLovenamaProps) {
         whileHover={{ rotateX: 1, rotateY: -1 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
+        <BackButton onBack={onBack} />
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}

@@ -13,9 +13,11 @@ import {
   UserCheck
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { BackButton } from '../BackButton';
 
 interface SceneCommitmentProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
 interface SignatureRecord {
@@ -24,7 +26,7 @@ interface SignatureRecord {
   created_at: string;
 }
 
-export function SceneCommitment({ onNext }: SceneCommitmentProps) {
+export function SceneCommitment({ onNext, onBack }: SceneCommitmentProps) {
   const [signatures, setSignatures] = useState<SignatureRecord[]>([]);
   const [loadingSignatures, setLoadingSignatures] = useState(true);
   const [signingName, setSigningName] = useState<'Waqas' | 'Shajer'>('Shajer');
@@ -166,6 +168,7 @@ export function SceneCommitment({ onNext }: SceneCommitmentProps) {
       <div 
         className="glass-panel w-full p-3.5 sm:p-5 md:p-8 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden"
       >
+        <BackButton onBack={onBack} />
         {/* Subtle Watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
           <Fingerprint className="w-80 h-80 text-rose-400" />

@@ -13,11 +13,14 @@ import {
 } from 'lucide-react';
 import egoScreenshot from '../../assets/the_ego.jpeg';
 
+import { BackButton } from '../BackButton';
+
 interface SceneEgoProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneEgo({ onNext }: SceneEgoProps) {
+export function SceneEgo({ onNext, onBack }: SceneEgoProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [floatingHeart, setFloatingHeart] = useState<{ id: number; x: number; y: number } | null>(null);
@@ -50,6 +53,7 @@ export function SceneEgo({ onNext }: SceneEgoProps) {
       <div 
         className="glass-panel w-full p-3.5 sm:p-5 md:p-8 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden"
       >
+        <BackButton onBack={onBack} />
         {/* Subtle Heart Watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
           <HeartHandshake className="w-80 h-80 text-white" />

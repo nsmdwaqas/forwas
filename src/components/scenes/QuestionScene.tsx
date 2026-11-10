@@ -1,15 +1,17 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'motion/react';
 import { Heart } from 'lucide-react';
+import { BackButton } from '../BackButton';
 
 interface SceneProps {
   onNext: () => void;
+  onBack?: () => void;
   title?: string;
   subtitle?: string;
   question: string;
 }
 
-export function QuestionScene({ onNext, title, subtitle, question }: SceneProps) {
+export function QuestionScene({ onNext, onBack, title, subtitle, question }: SceneProps) {
   const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -58,6 +60,7 @@ export function QuestionScene({ onNext, title, subtitle, question }: SceneProps)
         whileHover={{ rotateX: 2, rotateY: -2 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
       >
+        <BackButton onBack={onBack} inline />
         {title && (
           <motion.h1 
             className="text-4xl md:text-5xl font-heading mb-4 text-white text-shadow-elegant tracking-wide shimmer-text"

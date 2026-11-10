@@ -12,11 +12,14 @@ import {
 } from 'lucide-react';
 import emojiScreenshot from '../../assets/k.jpeg';
 
+import { BackButton } from '../BackButton';
+
 interface SceneEmojiProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneEmoji({ onNext }: SceneEmojiProps) {
+export function SceneEmoji({ onNext, onBack }: SceneEmojiProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [floatingEmojis, setFloatingEmojis] = useState<{ id: number; x: number; y: number }[]>([]);
@@ -56,6 +59,7 @@ export function SceneEmoji({ onNext }: SceneEmojiProps) {
       <div 
         className="glass-panel w-full p-3.5 sm:p-5 md:p-8 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden"
       >
+        <BackButton onBack={onBack} />
         {/* Subtle Watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
           <Smile className="w-80 h-80 text-rose-400" />

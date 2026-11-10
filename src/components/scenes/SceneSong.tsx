@@ -16,11 +16,14 @@ import {
 } from 'lucide-react';
 import wsAudio from '../../audio/WS.mp3';
 
+import { BackButton } from '../BackButton';
+
 interface SceneSongProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneSong({ onNext }: SceneSongProps) {
+export function SceneSong({ onNext, onBack }: SceneSongProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -121,6 +124,7 @@ export function SceneSong({ onNext }: SceneSongProps) {
       <div 
         className="glass-panel w-full p-3 sm:p-5 md:p-8 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden"
       >
+        <BackButton onBack={onBack} />
         {/* Audio Element with Fallback Sources */}
         <audio
           ref={audioRef}

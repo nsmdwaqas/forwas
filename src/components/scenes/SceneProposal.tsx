@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, HeartHandshake, Sparkles, Heart, Calendar, Clock, Quote } from 'lucide-react';
+import { BackButton } from '../BackButton';
 
 interface SceneProposalProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneProposal({ onNext }: SceneProposalProps) {
+export function SceneProposal({ onNext, onBack }: SceneProposalProps) {
   const [waqasLiked, setWaqasLiked] = useState(false);
   const [shajerLiked, setShajerLiked] = useState(false);
   const [floatingHeart, setFloatingHeart] = useState<{ id: number; x: number; y: number } | null>(null);
@@ -46,6 +48,7 @@ export function SceneProposal({ onNext }: SceneProposalProps) {
         whileHover={{ rotateX: 1, rotateY: -1 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
+        <BackButton onBack={onBack} />
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}

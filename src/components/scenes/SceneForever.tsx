@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Infinity as InfinityIcon } from 'lucide-react';
+import { BackButton } from '../BackButton';
 
 interface SceneForeverProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
 const TimeUnit = ({ value, label, delay }: { value: number; label: string; delay: number }) => (
@@ -22,7 +24,7 @@ const TimeUnit = ({ value, label, delay }: { value: number; label: string; delay
   </motion.div>
 );
 
-export function SceneForever({ onNext }: SceneForeverProps) {
+export function SceneForever({ onNext, onBack }: SceneForeverProps) {
   const [timeElapsed, setTimeElapsed] = useState({ years: 0, months: 0, days: 0 });
 
   useEffect(() => {
@@ -78,6 +80,7 @@ export function SceneForever({ onNext }: SceneForeverProps) {
         whileHover={{ rotateX: 2, rotateY: -2 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
+        <BackButton onBack={onBack} />
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}

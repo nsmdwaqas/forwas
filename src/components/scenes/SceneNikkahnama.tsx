@@ -14,9 +14,11 @@ import {
   Feather
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { BackButton } from '../BackButton';
 
 interface SceneNikkahnamaProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
 type UserRole = 'groom' | 'bride';
@@ -26,7 +28,7 @@ interface SignatureRecord {
   'Both Online'?: boolean | null;
 }
 
-export function SceneNikkahnama({ onNext }: SceneNikkahnamaProps) {
+export function SceneNikkahnama({ onNext, onBack }: SceneNikkahnamaProps) {
   // Role selection: groom (Waqas) or bride (Shajer)
   const [myRole, setMyRole] = useState<UserRole>(() => {
     if (typeof window !== 'undefined') {
@@ -275,6 +277,7 @@ export function SceneNikkahnama({ onNext }: SceneNikkahnamaProps) {
       <div 
         className="glass-panel w-full p-3.5 sm:p-5 md:p-7 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden"
       >
+        <BackButton onBack={onBack} />
         {/* Subtle Watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
           <ScrollText className="w-96 h-96 text-white" />

@@ -1,12 +1,14 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, PenTool } from 'lucide-react';
+import { BackButton } from '../BackButton';
 
 interface SceneLetterProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneLetter({ onNext }: SceneLetterProps) {
+export function SceneLetter({ onNext, onBack }: SceneLetterProps) {
   const hapticTap = () => {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       navigator.vibrate([15, 30, 15]);
@@ -38,6 +40,7 @@ export function SceneLetter({ onNext }: SceneLetterProps) {
         whileHover={{ rotateX: 1, rotateY: -1 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
+        <BackButton onBack={onBack} />
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}

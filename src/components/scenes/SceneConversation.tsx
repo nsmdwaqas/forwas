@@ -17,11 +17,14 @@ import {
   MessageCircleHeart
 } from 'lucide-react';
 
+import { BackButton } from '../BackButton';
+
 interface SceneConversationProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneConversation({ onNext }: SceneConversationProps) {
+export function SceneConversation({ onNext, onBack }: SceneConversationProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [floatingHeart, setFloatingHeart] = useState<{ id: number; x: number; y: number } | null>(null);
@@ -52,7 +55,7 @@ export function SceneConversation({ onNext }: SceneConversationProps) {
   return (
     <div className="flex flex-col items-center justify-start md:justify-center w-full max-w-3xl mx-auto text-center px-2 sm:px-4 md:px-8 py-2 sm:py-3 md:py-4 h-full my-auto">
       <div className="glass-panel w-full p-3.5 sm:p-5 md:p-8 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden">
-        
+        <BackButton onBack={onBack} />
         {/* Subtle Watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
           <PhoneCall className="w-80 h-80 text-rose-400" />

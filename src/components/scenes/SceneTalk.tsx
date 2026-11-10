@@ -15,11 +15,14 @@ import {
 } from 'lucide-react';
 import talkScreenshot from '../../assets/talk.jpeg';
 
+import { BackButton } from '../BackButton';
+
 interface SceneTalkProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneTalk({ onNext }: SceneTalkProps) {
+export function SceneTalk({ onNext, onBack }: SceneTalkProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [floatingHeart, setFloatingHeart] = useState<{ id: number; x: number; y: number } | null>(null);
@@ -52,6 +55,7 @@ export function SceneTalk({ onNext }: SceneTalkProps) {
       <div 
         className="glass-panel w-full p-3.5 sm:p-5 md:p-8 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden"
       >
+        <BackButton onBack={onBack} />
         {/* Subtle Watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
           <PhoneCall className="w-80 h-80 text-rose-400" />

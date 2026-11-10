@@ -15,8 +15,11 @@ import {
   Infinity as InfinityIcon
 } from 'lucide-react';
 
+import { BackButton } from '../BackButton';
+
 interface SceneRecurrenceProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
 interface RecurrenceEvent {
@@ -112,7 +115,7 @@ function getOrdinal(n: number): string {
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
-export function SceneRecurrence({ onNext }: SceneRecurrenceProps) {
+export function SceneRecurrence({ onNext, onBack }: SceneRecurrenceProps) {
   const [now, setNow] = useState(() => Date.now());
   const [isMemoriesOpen, setIsMemoriesOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -230,6 +233,7 @@ export function SceneRecurrence({ onNext }: SceneRecurrenceProps) {
       <div 
         className="glass-panel w-full p-4 sm:p-6 md:p-8 relative flex flex-col h-[90vh] sm:h-[86vh] max-h-[92vh] overflow-hidden"
       >
+        <BackButton onBack={onBack} />
         {/* Subtle Heart Background Watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
           <Heart className="w-80 h-80 text-white" fill="currentColor" />

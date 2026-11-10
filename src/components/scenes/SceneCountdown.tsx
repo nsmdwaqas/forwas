@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
+import { BackButton } from '../BackButton';
 
 interface SceneCountdownProps {
   onNext: () => void;
+  onBack?: () => void;
 }
 
-export function SceneCountdown({ onNext }: SceneCountdownProps) {
+export function SceneCountdown({ onNext, onBack }: SceneCountdownProps) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [progress, setProgress] = useState(0);
 
@@ -77,6 +79,7 @@ export function SceneCountdown({ onNext }: SceneCountdownProps) {
         whileHover={{ rotateX: 2, rotateY: -2 }}
         transition={{ type: "spring", stiffness: 100, damping: 30 }}
       >
+        <BackButton onBack={onBack} inline />
         <motion.h1 
           className="text-2xl sm:text-3xl md:text-4xl font-heading mb-3 sm:mb-5 text-white text-shadow-elegant shimmer-text shrink-0"
           initial={{ opacity: 0, y: -20, filter: 'blur(5px)' }}
