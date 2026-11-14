@@ -36,6 +36,7 @@ import { SceneLoveU } from './components/scenes/SceneLoveU';
 import { SceneMissCounter } from './components/scenes/SceneMissCounter';
 import { SceneConversation } from './components/scenes/SceneConversation';
 import { SceneMidnightCall } from './components/scenes/SceneMidnightCall';
+import { SceneOfficeVisit } from './components/scenes/SceneOfficeVisit';
 import { SceneBookReader } from './components/scenes/SceneBookReader';
 import { trackChapterVisit } from './lib/tracker';
 import { supabase } from './lib/supabase';
@@ -64,6 +65,7 @@ type SceneState =
   | 'talk'
   | 'conversation'
   | 'midnight_call'
+  | 'office_visit'
   | 'book_reader'
   | 'emoji'
   | 'commitment'
@@ -197,6 +199,7 @@ export default function App() {
       talk: 'talk',
       conversation: 'Conversation ',
       midnight_call: 'MidnightCall ',
+      office_visit: 'theOfficeVisit',
       emoji: 'emoji',
       commitment: 'commitment ',
       dirty_talk: 'DirtyTalk ',
@@ -289,6 +292,7 @@ export default function App() {
               onTalk={() => navigateTo('talk')}
               onConversation={() => navigateTo('conversation')}
               onMidnightCall={() => navigateTo('midnight_call')}
+              onOfficeVisit={() => navigateTo('office_visit')}
               onEmoji={() => navigateTo('emoji')}
               onCommitment={() => navigateTo('commitment')}
               onDirtyTalk={() => navigateTo('dirty_talk')}
@@ -314,6 +318,12 @@ export default function App() {
         {scene === 'midnight_call' && (
           <PageWrapper key="scene-midnight-call">
             <SceneMidnightCall onNext={() => navigateTo('finale')} onBack={handleGoBack} />
+          </PageWrapper>
+        )}
+
+        {scene === 'office_visit' && (
+          <PageWrapper key="scene-office-visit">
+            <SceneOfficeVisit onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 

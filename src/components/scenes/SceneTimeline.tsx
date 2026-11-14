@@ -177,6 +177,11 @@ const timelineData: TimelineEvent[] = [
     description: "The locked gift finally opened, and 'More Than Salaam' went live — our entire journey written and illustrated as a book just for you. Every chapter from the August afternoon that almost wasn't, to the green dress before Maghrib, the 190 kilometers of longing, the Fajr rings, and our shyest whispers was turned into pages you could hold and read — proof that what began with a simple 'Assalamu alaikum' was always destined to become our forever."
   },
   {
+    date: "11 Nov – 14 Nov",
+    title: "The Office Visit (From 190 KM to 620 KM)",
+    description: "My first office trip to Hyderabad since we became each other's — stretching the distance between us from 190 KM to 620 KM before returning to Chennai on 14 Nov. Even with a busy schedule and zero network inside the office, I kept hopping around outside just to catch a bar of signal for a glimpse of you. Every morning you woke me up for office, worried if I ate on time, and stayed restless until I reached safely — caring for me just like my Ammi. Though our talks were shorter, our love grew deeper than ever."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",
