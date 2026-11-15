@@ -38,6 +38,7 @@ import { SceneMissCounter } from './components/scenes/SceneMissCounter';
 import { SceneConversation } from './components/scenes/SceneConversation';
 import { SceneMidnightCall } from './components/scenes/SceneMidnightCall';
 import { SceneOfficeVisit } from './components/scenes/SceneOfficeVisit';
+import { SceneMoon } from './components/scenes/SceneMoon';
 import { SceneBookReader } from './components/scenes/SceneBookReader';
 import { trackChapterVisit } from './lib/tracker';
 import { supabase } from './lib/supabase';
@@ -74,6 +75,7 @@ type SceneState =
   | 'dirty_talk'
   | 'love_u'
   | 'miss_counter'
+  | 'moon'
   | 'recurrence'
   | 'letter'
   | 'timeline'
@@ -208,6 +210,7 @@ export default function App() {
       dirty_talk: 'DirtyTalk ',
       love_u: 'LoveU ',
       miss_counter: 'MissCounter ',
+      moon: 'Moon ',
       letter: 'Letter',
       answers: 'Answers',
       forever: 'Forever',
@@ -302,6 +305,7 @@ export default function App() {
               onDirtyTalk={() => navigateTo('dirty_talk')}
               onLoveU={() => navigateTo('love_u')}
               onMissCounter={() => navigateTo('miss_counter')}
+              onMoon={() => navigateTo('moon')}
               onOpenGiftBook={() => navigateTo('book_reader')}
             />
           </PageWrapper>
@@ -334,6 +338,12 @@ export default function App() {
         {scene === 'miss_counter' && (
           <PageWrapper key="scene-miss-counter">
             <SceneMissCounter onNext={() => navigateTo('finale')} onBack={handleGoBack} />
+          </PageWrapper>
+        )}
+
+        {scene === 'moon' && (
+          <PageWrapper key="scene-moon">
+            <SceneMoon onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 

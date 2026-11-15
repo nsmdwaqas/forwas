@@ -426,17 +426,23 @@ export function SceneContract({ onNext, onBack }: SceneContractProps) {
           >
             <div className="flex items-center justify-between border-b border-white/15 pb-2.5">
               <div className="flex items-center gap-2">
-                <Fingerprint className="w-5 h-5 text-rose-300" />
+                {isBothSigned ? (
+                  <CheckCircle2 className="w-5 h-5 text-emerald-300" />
+                ) : (
+                  <Fingerprint className="w-5 h-5 text-rose-300" />
+                )}
                 <span className="text-xs sm:text-sm text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Sign The Contract • Never Give Up On Each Other
+                  {isBothSigned
+                    ? 'The Contract • Signed by Both Souls'
+                    : 'Sign The Contract • Never Give Up On Each Other'}
                 </span>
               </div>
               <span className="text-[11px] text-white/75 font-mono">
-                {isBothSigned ? 'Contract Sealed Forever 💍' : 'One-Time Finger Seal'}
+                {isBothSigned ? 'Sealed Forever 💍' : 'One-Time Finger Seal'}
               </span>
             </div>
 
-            {/* Selector & Finger Scanner when at least one person hasn't signed */}
+            {/* Selector & Finger Scanner ONLY when at least one person hasn't signed */}
             {!isBothSigned ? (
               <>
                 {/* Choose Who Is Placing Their Finger */}
@@ -478,7 +484,7 @@ export function SceneContract({ onNext, onBack }: SceneContractProps) {
                   <div className="p-4 rounded-xl bg-emerald-500/15 border border-emerald-400/35 text-center flex flex-col items-center gap-1.5">
                     <div className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-emerald-200">
                       <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-                      <span>{signingName}&apos;s Fingerprint Is Permanently Sealed</span>
+                      <span>{signingName} Has Signed The Contract</span>
                     </div>
                     <p className="text-[11px] sm:text-xs text-white/90 font-mono flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-emerald-300" />
@@ -557,14 +563,14 @@ export function SceneContract({ onNext, onBack }: SceneContractProps) {
                 )}
               </>
             ) : (
-              /* Both Signed Banner: One-Time Activity Complete */
+              /* Both Signed Banner: No Fingerprint Shown — Just Sealed Confirmation */
               <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-400/35 text-center flex flex-col items-center gap-1 shadow-[0_0_20px_rgba(52,211,153,0.15)]">
                 <div className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-emerald-200">
                   <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-                  <span>Contract Irrevocably Signed &amp; Sealed by Both Souls 💍</span>
+                  <span>Contract Irrevocably Signed by Both Souls 💍</span>
                 </div>
                 <p className="text-[11px] text-purple-100/90 font-serif italic">
-                  We have promised never to give up on each other — etched forever with our fingerprints.
+                  We have promised never to give up on each other — recorded forever below.
                 </p>
               </div>
             )}
@@ -581,9 +587,11 @@ export function SceneContract({ onNext, onBack }: SceneContractProps) {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 font-bold text-xs sm:text-sm text-white">
-                    <Fingerprint
-                      className={`w-4 h-4 ${shajerSig ? 'text-rose-400' : 'text-white/40'}`}
-                    />
+                    {!isBothSigned && (
+                      <Fingerprint
+                        className={`w-4 h-4 ${shajerSig ? 'text-rose-400' : 'text-white/40'}`}
+                      />
+                    )}
                     <span>Shajer</span>
                   </div>
                   {shajerSig ? (
@@ -596,7 +604,9 @@ export function SceneContract({ onNext, onBack }: SceneContractProps) {
                 </div>
                 <div className="text-[11px] text-white/85 font-mono flex items-center gap-1.5 mt-0.5">
                   <Clock className="w-3.5 h-3.5 text-rose-300/80 shrink-0" />
-                  <span>{formatTimestamp(shajerSig?.created_at)}</span>
+                  <span>
+                    {shajerSig ? `Signed: ${formatTimestamp(shajerSig.created_at)}` : 'Awaiting Signature'}
+                  </span>
                 </div>
               </div>
 
@@ -610,9 +620,11 @@ export function SceneContract({ onNext, onBack }: SceneContractProps) {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 font-bold text-xs sm:text-sm text-white">
-                    <Fingerprint
-                      className={`w-4 h-4 ${waqasSig ? 'text-rose-400' : 'text-white/40'}`}
-                    />
+                    {!isBothSigned && (
+                      <Fingerprint
+                        className={`w-4 h-4 ${waqasSig ? 'text-rose-400' : 'text-white/40'}`}
+                      />
+                    )}
                     <span>Waqas</span>
                   </div>
                   {waqasSig ? (
@@ -625,7 +637,9 @@ export function SceneContract({ onNext, onBack }: SceneContractProps) {
                 </div>
                 <div className="text-[11px] text-white/85 font-mono flex items-center gap-1.5 mt-0.5">
                   <Clock className="w-3.5 h-3.5 text-rose-300/80 shrink-0" />
-                  <span>{formatTimestamp(waqasSig?.created_at)}</span>
+                  <span>
+                    {waqasSig ? `Signed: ${formatTimestamp(waqasSig.created_at)}` : 'Awaiting Signature'}
+                  </span>
                 </div>
               </div>
             </div>
