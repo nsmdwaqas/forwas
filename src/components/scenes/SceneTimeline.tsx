@@ -182,6 +182,11 @@ const timelineData: TimelineEvent[] = [
     description: "My first office trip to Hyderabad since we became each other's — stretching the distance between us from 190 KM to 620 KM before returning to Chennai on 14 Nov. Even with a busy schedule and zero network inside the office, I kept hopping around outside just to catch a bar of signal for a glimpse of you. Every morning you woke me up for office, worried if I ate on time, and stayed restless until I reached safely — caring for me just like my Ammi. Though our talks were shorter, our love grew deeper than ever."
   },
   {
+    date: "15 Nov | 11:00 AM",
+    title: "The Contract (Never Give Up On Each Other)",
+    description: "During a morning conversation about guarding the sacred privacy of our talks even from parents, Waqas named the one heavy, unthinkable fear of parting ways — not realizing how deeply that single dreaded word would pierce her heart. Tears welled up in Shajer's eyes at the mere thought of how he could utter such a heavy word over something so small, while Waqas only spoke out of fear of even a 0.00001% risk to what they share. From those tears, we sealed our Forever Contract with our fingerprints — vowing never to give up on each other."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",

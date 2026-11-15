@@ -31,6 +31,7 @@ import { SceneShameless } from './components/scenes/SceneShameless';
 import { SceneTalk } from './components/scenes/SceneTalk';
 import { SceneEmoji } from './components/scenes/SceneEmoji';
 import { SceneCommitment } from './components/scenes/SceneCommitment';
+import { SceneContract } from './components/scenes/SceneContract';
 import { SceneDirtyTalk } from './components/scenes/SceneDirtyTalk';
 import { SceneLoveU } from './components/scenes/SceneLoveU';
 import { SceneMissCounter } from './components/scenes/SceneMissCounter';
@@ -69,6 +70,7 @@ type SceneState =
   | 'book_reader'
   | 'emoji'
   | 'commitment'
+  | 'contract'
   | 'dirty_talk'
   | 'love_u'
   | 'miss_counter'
@@ -202,6 +204,7 @@ export default function App() {
       office_visit: 'theOfficeVisit',
       emoji: 'emoji',
       commitment: 'commitment ',
+      contract: 'Contract ',
       dirty_talk: 'DirtyTalk ',
       love_u: 'LoveU ',
       miss_counter: 'MissCounter ',
@@ -295,6 +298,7 @@ export default function App() {
               onOfficeVisit={() => navigateTo('office_visit')}
               onEmoji={() => navigateTo('emoji')}
               onCommitment={() => navigateTo('commitment')}
+              onContract={() => navigateTo('contract')}
               onDirtyTalk={() => navigateTo('dirty_talk')}
               onLoveU={() => navigateTo('love_u')}
               onMissCounter={() => navigateTo('miss_counter')}
@@ -348,6 +352,12 @@ export default function App() {
         {scene === 'commitment' && (
           <PageWrapper key="scene-commitment">
             <SceneCommitment onNext={() => navigateTo('finale')} onBack={handleGoBack} />
+          </PageWrapper>
+        )}
+
+        {scene === 'contract' && (
+          <PageWrapper key="scene-contract">
+            <SceneContract onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 

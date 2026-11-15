@@ -26,7 +26,8 @@ import {
   Smile,
   Fingerprint,
   HeartPulse,
-  Briefcase
+  Briefcase,
+  FileSignature
 } from 'lucide-react';
 import { PWAAndNotifyBar } from '../PWAAndNotifyBar';
 
@@ -54,6 +55,7 @@ interface SceneHubProps {
   onTalk: () => void;
   onEmoji: () => void;
   onCommitment: () => void;
+  onContract: () => void;
   onDirtyTalk: () => void;
   onLoveU: () => void;
   onMissCounter: () => void;
@@ -88,6 +90,7 @@ export function SceneHub({
   onTalk,
   onEmoji,
   onCommitment,
+  onContract,
   onDirtyTalk,
   onLoveU,
   onMissCounter,
@@ -675,6 +678,20 @@ export function SceneHub({
                     >
                       <span>The Proposal</span>
                       <HeartHandshake className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+                    </motion.button>
+
+                    {/* The Contract */}
+                    <motion.button
+                      onClick={() => {
+                        hapticTap();
+                        onContract();
+                      }}
+                      className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+                      whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+                      whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+                    >
+                      <span>The Contract</span>
+                      <FileSignature className="w-5 h-5 text-rose-300 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
                     </motion.button>
                   </>
                 )}
