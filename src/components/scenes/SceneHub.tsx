@@ -64,6 +64,7 @@ interface SceneHubProps {
   onMidnightCall: () => void;
   onOfficeVisit: () => void;
   onMoon: () => void;
+  onSabKuch: () => void;
   onOpenGiftBook?: () => void;
 }
 
@@ -100,6 +101,7 @@ export function SceneHub({
   onMidnightCall,
   onOfficeVisit,
   onMoon,
+  onSabKuch,
   onOpenGiftBook
 }: SceneHubProps) {
   const [activeCategory, setActiveCategoryState] = useState<CategoryType>(() => {
@@ -592,6 +594,20 @@ export function SceneHub({
                     >
                       <span>The Conversation</span>
                       <PhoneCall className="w-5 h-5 text-gold-light group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(232,180,200,0.8)]" />
+                    </motion.button>
+
+                    {/* the SAB KUCH */}
+                    <motion.button
+                      onClick={() => {
+                        hapticTap();
+                        onSabKuch();
+                      }}
+                      className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+                      whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+                      whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+                    >
+                      <span>the SAB KUCH</span>
+                      <BookOpen className="w-5 h-5 text-gold-light group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(232,180,200,0.8)]" />
                     </motion.button>
                   </>
                 )}
