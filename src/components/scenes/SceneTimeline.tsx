@@ -192,6 +192,11 @@ const timelineData: TimelineEvent[] = [
     description: "At 11:00 PM, I told you that I love you so much that if you ever asked me for the moon, I would bring even that down for you. Jokingly, you replied 'YES' — and so I built a little universe where your own moon carries 'SHAJER' engraved across its surface, filled with love notes, our special dates, and eternal promises hidden inside its craters."
   },
   {
+    date: "21 Nov | 1:00 AM",
+    title: "The Intense (1:00 AM Whispers)",
+    description: "In the quiet stillness of 1:00 AM on a phone call, our usually gentle and modest conversation softened into something deeply intimate for the very first time. Closing my eyes, I voiced over every tender kiss across the line — over your eyes, nose, cheeks, neck, back, stomach, and quiet moments beyond words — while you listened deeply and shyly in breathless silence, turning simple words into an unforgettable closeness."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",

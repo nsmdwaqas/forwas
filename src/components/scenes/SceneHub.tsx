@@ -66,6 +66,7 @@ interface SceneHubProps {
   onMoon: () => void;
   onSabKuch: () => void;
   onOne: () => void;
+  onIntense: () => void;
   onOpenGiftBook?: () => void;
 }
 
@@ -104,6 +105,7 @@ export function SceneHub({
   onMoon,
   onSabKuch,
   onOne,
+  onIntense,
   onOpenGiftBook
 }: SceneHubProps) {
   const [activeCategory, setActiveCategoryState] = useState<CategoryType>(() => {
@@ -572,6 +574,20 @@ export function SceneHub({
                     >
                       <span>The Office Visit</span>
                       <Briefcase className="w-5 h-5 text-gold-light group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(232,180,200,0.8)]" />
+                    </motion.button>
+
+                    {/* the Intense */}
+                    <motion.button
+                      onClick={() => {
+                        hapticTap();
+                        onIntense();
+                      }}
+                      className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+                      whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+                      whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+                    >
+                      <span>the Intense</span>
+                      <Flame className="w-5 h-5 text-rose-300 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(244,63,94,0.7)]" />
                     </motion.button>
                   </>
                 )}

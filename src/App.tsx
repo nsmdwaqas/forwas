@@ -41,6 +41,7 @@ import { SceneOfficeVisit } from './components/scenes/SceneOfficeVisit';
 import { SceneMoon } from './components/scenes/SceneMoon';
 import { SceneSabKuch } from './components/scenes/SceneSabKuch';
 import { SceneOne } from './components/scenes/SceneOne';
+import { SceneIntense } from './components/scenes/SceneIntense';
 import { SceneBookReader } from './components/scenes/SceneBookReader';
 import { trackChapterVisit } from './lib/tracker';
 import { supabase } from './lib/supabase';
@@ -78,6 +79,7 @@ type SceneState =
   | 'love_u'
   | 'sab_kuch'
   | 'the_one'
+  | 'intense'
   | 'miss_counter'
   | 'moon'
   | 'recurrence'
@@ -215,6 +217,7 @@ export default function App() {
       love_u: 'LoveU ',
       sab_kuch: 'SABKUCH',
       the_one: 'One ',
+      intense: 'theIntense',
       miss_counter: 'MissCounter ',
       moon: 'Moon ',
       letter: 'Letter',
@@ -312,6 +315,7 @@ export default function App() {
               onLoveU={() => navigateTo('love_u')}
               onSabKuch={() => navigateTo('sab_kuch')}
               onOne={() => navigateTo('the_one')}
+              onIntense={() => navigateTo('intense')}
               onMissCounter={() => navigateTo('miss_counter')}
               onMoon={() => navigateTo('moon')}
               onOpenGiftBook={() => navigateTo('book_reader')}
@@ -370,6 +374,12 @@ export default function App() {
         {scene === 'the_one' && (
           <PageWrapper key="scene-the-one">
             <SceneOne onNext={() => navigateTo('finale')} onBack={handleGoBack} />
+          </PageWrapper>
+        )}
+
+        {scene === 'intense' && (
+          <PageWrapper key="scene-intense">
+            <SceneIntense onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
