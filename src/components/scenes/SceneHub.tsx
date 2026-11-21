@@ -65,6 +65,7 @@ interface SceneHubProps {
   onOfficeVisit: () => void;
   onMoon: () => void;
   onSabKuch: () => void;
+  onOne: () => void;
   onOpenGiftBook?: () => void;
 }
 
@@ -102,6 +103,7 @@ export function SceneHub({
   onOfficeVisit,
   onMoon,
   onSabKuch,
+  onOne,
   onOpenGiftBook
 }: SceneHubProps) {
   const [activeCategory, setActiveCategoryState] = useState<CategoryType>(() => {
@@ -129,6 +131,28 @@ export function SceneHub({
   const [showGiftLockedHint, setShowGiftLockedHint] = useState(false);
   const [isGiftUnlocked] = useState(true);
   const [giftTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  // Live countdown to 6 Dec 2026, 4:30 PM IST (UTC+05:30)
+  const getLockedTimeRemaining = () => {
+    const targetMs = new Date('2026-12-06T16:30:00+05:30').getTime();
+    const diff = Math.max(0, targetMs - Date.now());
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+    return { days, hours, minutes, seconds, isComplete: diff === 0 };
+  };
+
+  const [lockedCountdown, setLockedCountdown] = useState(getLockedTimeRemaining);
+
+  useEffect(() => {
+    setLockedCountdown(getLockedTimeRemaining());
+    const timer = setInterval(() => {
+      setLockedCountdown(getLockedTimeRemaining());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const controls = useAnimation();
   const giftControls = useAnimation();
 
@@ -293,30 +317,73 @@ export function SceneHub({
                 </motion.button>
               </div>
 
-              {/* 4. BOTTOM ROW: Locked (1 Row) */}
+              {/* 4. BOTTOM ROW: Locked Countdown -> Unlocks into "The One" at 6 Dec 2026, 4:30 PM IST */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.75, duration: 0.8 }}
               >
-                <motion.button
-                  onClick={handleLockedClick}
-                  animate={controls}
-                  className={`w-full px-5 py-3.5 sm:px-6 sm:py-4 rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between min-h-[44px] cursor-pointer ${
-                    lockedShake 
-                      ? 'bg-rose-500/20 border border-rose-400/80 text-rose-200 shadow-[0_0_20px_rgba(244,63,94,0.3)]' 
-                      : 'bg-white/5 border border-white/10 text-white/50 hover:bg-white/10 hover:text-white/80'
-                  }`}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span>Locked</span>
-                  <motion.div
-                    animate={lockedShake ? { rotate: [-15, 15, -10, 10, 0] } : {}}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <Lock className="w-5 h-5 text-white/60" />
-                  </motion.div>
-                </motion.button>
+                <AnimatePresence mode="wait">
+                  {lockedCountdown.isComplete ? (
+                    <motion.button
+                      key="unlocked-the-one"
+                      initial={{ opacity: 0, scale: 0.94 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.94 }}
+                      transition={{ duration: 0.5, ease: 'easeOut' }}
+                      onClick={() => {
+                        hapticTap();
+                        onOne();
+                      }}
+                      className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px] cursor-pointer shadow-[0_0_25px_rgba(244,63,94,0.3)] border border-rose-300/50"
+                      whileHover={{ scale: 1.02, boxShadow: "0 0 28px rgba(244,63,94,0.55)" }}
+                      whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span>The One</span>
+                        <Sparkles className="w-4 h-4 text-rose-200 animate-pulse" />
+                      </span>
+                      <Feather className="w-5 h-5 text-rose-200 group-hover:-rotate-12 transition-transform drop-shadow-[0_0_8px_rgba(244,63,94,0.7)]" />
+                    </motion.button>
+                  ) : (
+                    <motion.div
+                      key="locked-countdown"
+                      initial={{ opacity: 0, scale: 0.96 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.96 }}
+                      transition={{ duration: 0.35 }}
+                      className="w-full"
+                    >
+                      <motion.button
+                        animate={controls}
+                        onClick={handleLockedClick}
+                        className={`w-full px-5 py-3.5 sm:px-6 sm:py-4 rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between gap-2 min-h-[44px] cursor-pointer ${
+                          lockedShake 
+                            ? 'bg-rose-500/20 border border-rose-400/80 text-rose-200 shadow-[0_0_20px_rgba(244,63,94,0.3)]' 
+                            : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white/90'
+                        }`}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <span className="shrink-0">Locked</span>
+                        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                          <span className="font-mono tabular-nums text-[11px] sm:text-xs text-rose-200/90 tracking-tight whitespace-nowrap px-2 py-0.5 rounded-lg bg-black/25 border border-white/10">
+                            {String(lockedCountdown.days).padStart(2, '0')}d{' '}
+                            {String(lockedCountdown.hours).padStart(2, '0')}h{' '}
+                            {String(lockedCountdown.minutes).padStart(2, '0')}m{' '}
+                            {String(lockedCountdown.seconds).padStart(2, '0')}s
+                          </span>
+                          <motion.div
+                            animate={lockedShake ? { rotate: [-15, 15, -10, 10, 0] } : {}}
+                            transition={{ duration: 0.4 }}
+                            className="shrink-0"
+                          >
+                            <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-white/60" />
+                          </motion.div>
+                        </div>
+                      </motion.button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
 
               {/* Install App & Partner Notification Bar */}

@@ -40,6 +40,7 @@ import { SceneMidnightCall } from './components/scenes/SceneMidnightCall';
 import { SceneOfficeVisit } from './components/scenes/SceneOfficeVisit';
 import { SceneMoon } from './components/scenes/SceneMoon';
 import { SceneSabKuch } from './components/scenes/SceneSabKuch';
+import { SceneOne } from './components/scenes/SceneOne';
 import { SceneBookReader } from './components/scenes/SceneBookReader';
 import { trackChapterVisit } from './lib/tracker';
 import { supabase } from './lib/supabase';
@@ -76,6 +77,7 @@ type SceneState =
   | 'dirty_talk'
   | 'love_u'
   | 'sab_kuch'
+  | 'the_one'
   | 'miss_counter'
   | 'moon'
   | 'recurrence'
@@ -212,6 +214,7 @@ export default function App() {
       dirty_talk: 'DirtyTalk ',
       love_u: 'LoveU ',
       sab_kuch: 'SABKUCH',
+      the_one: 'One ',
       miss_counter: 'MissCounter ',
       moon: 'Moon ',
       letter: 'Letter',
@@ -308,6 +311,7 @@ export default function App() {
               onDirtyTalk={() => navigateTo('dirty_talk')}
               onLoveU={() => navigateTo('love_u')}
               onSabKuch={() => navigateTo('sab_kuch')}
+              onOne={() => navigateTo('the_one')}
               onMissCounter={() => navigateTo('miss_counter')}
               onMoon={() => navigateTo('moon')}
               onOpenGiftBook={() => navigateTo('book_reader')}
@@ -360,6 +364,12 @@ export default function App() {
         {scene === 'sab_kuch' && (
           <PageWrapper key="scene-sab-kuch">
             <SceneSabKuch onNext={() => navigateTo('finale')} onBack={handleGoBack} />
+          </PageWrapper>
+        )}
+
+        {scene === 'the_one' && (
+          <PageWrapper key="scene-the-one">
+            <SceneOne onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
