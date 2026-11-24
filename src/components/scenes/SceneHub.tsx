@@ -28,8 +28,7 @@ import {
   HeartPulse,
   Briefcase,
   FileSignature,
-  Moon,
-  Pause
+  Moon
 } from 'lucide-react';
 import { PWAAndNotifyBar } from '../PWAAndNotifyBar';
 
@@ -72,11 +71,6 @@ interface SceneHubProps {
 }
 
 type CategoryType = 'story' | 'words' | 'promises' | 'extras' | null;
-
-// Countdown is intentionally frozen at the value shown in the supplied screenshot.
-// Change COUNTDOWN_PAUSED to false when you want the countdown to resume.
-const COUNTDOWN_PAUSED = true;
-const COUNTDOWN_PAUSED_AT = new Date('2026-11-23T22:10:33+05:30').getTime();
 
 export function SceneHub({ 
   onConfession, 
@@ -143,8 +137,7 @@ export function SceneHub({
   // Live countdown to 6 Dec 2026, 4:30 PM IST (UTC+05:30)
   const getLockedTimeRemaining = () => {
     const targetMs = new Date('2026-12-06T16:30:00+05:30').getTime();
-    const referenceTime = COUNTDOWN_PAUSED ? COUNTDOWN_PAUSED_AT : Date.now();
-    const diff = Math.max(0, targetMs - referenceTime);
+    const diff = Math.max(0, targetMs - Date.now());
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
@@ -156,13 +149,9 @@ export function SceneHub({
 
   useEffect(() => {
     setLockedCountdown(getLockedTimeRemaining());
-
-    if (COUNTDOWN_PAUSED) return;
-
     const timer = setInterval(() => {
       setLockedCountdown(getLockedTimeRemaining());
     }, 1000);
-
     return () => clearInterval(timer);
   }, []);
 
@@ -337,7 +326,7 @@ export function SceneHub({
                 transition={{ delay: 0.75, duration: 0.8 }}
               >
                 <AnimatePresence mode="wait">
-                  {!COUNTDOWN_PAUSED && lockedCountdown.isComplete ? (
+                  {lockedCountdown.isComplete ? (
                     <motion.button
                       key="unlocked-the-one"
                       initial={{ opacity: 0, scale: 0.94 }}
@@ -385,12 +374,6 @@ export function SceneHub({
                             {String(lockedCountdown.minutes).padStart(2, '0')}m{' '}
                             {String(lockedCountdown.seconds).padStart(2, '0')}s
                           </span>
-                          {COUNTDOWN_PAUSED && (
-                            <Pause
-                              className="w-3.5 h-3.5 text-white/80 shrink-0"
-                              aria-label="Countdown paused"
-                            />
-                          )}
                           <motion.div
                             animate={lockedShake ? { rotate: [-15, 15, -10, 10, 0] } : {}}
                             transition={{ duration: 0.4 }}
