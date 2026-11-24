@@ -90,6 +90,7 @@ type SceneState =
   | 'proposal'
   | 'song'
   | 'call'
+  | 'the_video_call'
   | 'one_month'
   | 'answers'
   | 'voices'
