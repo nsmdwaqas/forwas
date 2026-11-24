@@ -44,6 +44,7 @@ interface SceneHubProps {
   onVoices: () => void;
   onSong: () => void;
   onCall: () => void;
+  onVideoCall: () => void;
   onLovenama: () => void;
   onOneMonth?: () => void;
   onNotification?: () => void;
@@ -84,6 +85,7 @@ export function SceneHub({
   onVoices, 
   onSong, 
   onCall,
+  onVideoCall,
   onLovenama,
   onNotification,
   onThePromise,
@@ -490,6 +492,20 @@ export function SceneHub({
                     >
                       <span>The Call</span>
                       <PhoneCall className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+                    </motion.button>
+
+                    {/* The Video Call */}
+                    <motion.button
+                      onClick={() => {
+                        hapticTap();
+                        onVideoCall();
+                      }}
+                      className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+                      whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+                      whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+                    >
+                      <span>The Video Call</span>
+                      <Video className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
                     </motion.button>
 
                     {/* The Facetime */}
