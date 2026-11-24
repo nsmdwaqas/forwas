@@ -24,6 +24,7 @@ import { SceneCall } from './components/scenes/SceneCall';
 import { SceneNotification } from './components/scenes/SceneNotification';
 import { SceneThePromise } from './components/scenes/SceneThePromise';
 import { SceneFacetime } from './components/scenes/SceneFacetime';
+import { SceneVideoCall } from './components/scenes/SceneVideoCall';
 import { SceneRecurrence } from './components/scenes/SceneRecurrence';
 import { SceneApart } from './components/scenes/SceneApart';
 import { SceneEgo } from './components/scenes/SceneEgo';
@@ -64,6 +65,7 @@ type SceneState =
   | 'forever'
   | 'the_promise'
   | 'facetime'
+  | 'video_call'
   | 'apart'
   | 'ego'
   | 'shameless'
@@ -203,6 +205,7 @@ export default function App() {
       voices: 'Voices',
       call: 'Call',
       facetime: 'Facetime',
+      video_call: 'theVideoCall',
       apart: 'Apart',
       ego: 'Ego',
       shameless: 'Shameless',
@@ -300,6 +303,7 @@ export default function App() {
               onNotification={() => navigateTo('notification')}
               onThePromise={() => navigateTo('the_promise')}
               onFacetime={() => navigateTo('facetime')}
+              onVideoCall={() => navigateTo('video_call')}
               onRecurrence={() => navigateTo('recurrence')}
               onApart={() => navigateTo('apart')}
               onEgo={() => navigateTo('ego')}
@@ -440,6 +444,12 @@ export default function App() {
         {scene === 'facetime' && (
           <PageWrapper key="scene-facetime">
             <SceneFacetime onNext={() => navigateTo('finale')} onBack={handleGoBack} />
+          </PageWrapper>
+        )}
+
+        {scene === 'video_call' && (
+          <PageWrapper key="scene-video-call">
+            <SceneVideoCall onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 

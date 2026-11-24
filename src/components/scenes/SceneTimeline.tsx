@@ -197,6 +197,11 @@ const timelineData: TimelineEvent[] = [
     description: "In the quiet stillness of 1:00 AM on a phone call, our usually gentle and modest conversation softened into something deeply intimate for the very first time. Closing my eyes, I voiced over every tender kiss across the line — over your eyes, nose, cheeks, neck, back, stomach, and quiet moments beyond words — while you listened deeply and shyly in breathless silence, turning simple words into an unforgettable closeness."
   },
   {
+    date: "24 Nov | Evening",
+    title: "The Video Call (The First Time Our Eyes Met)",
+    description: "We called on WhatsApp three times within minutes because neither heart was ready to let the moment end. After a nervous Salaam and two accidental goodbyes, we called back for screenshots and one more look at each other. On the third call, looking into each other's eyes, we said I love you for the first time. You blushed, and I pretended not to hear you so you would say it again — and you did, twice."
+  },
+  {
     date: "Today",
     title: "Still Writing",
     description: "One month in, and it already feels bigger than that. More memories coming — starting with 31st December.",

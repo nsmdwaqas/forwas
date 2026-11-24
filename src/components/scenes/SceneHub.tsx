@@ -49,6 +49,7 @@ interface SceneHubProps {
   onNotification?: () => void;
   onThePromise: () => void;
   onFacetime: () => void;
+  onVideoCall: () => void;
   onRecurrence: () => void;
   onApart: () => void;
   onEgo: () => void;
@@ -88,6 +89,7 @@ export function SceneHub({
   onNotification,
   onThePromise,
   onFacetime,
+  onVideoCall,
   onRecurrence,
   onApart,
   onEgo,
@@ -504,6 +506,20 @@ export function SceneHub({
                     >
                       <span>The Facetime</span>
                       <Video className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+                    </motion.button>
+
+                    {/* The Video Call */}
+                    <motion.button
+                      onClick={() => {
+                        hapticTap();
+                        onVideoCall();
+                      }}
+                      className="w-full px-5 py-3.5 sm:px-6 sm:py-4 glass-button text-white rounded-2xl font-medium text-base sm:text-lg transition-all flex items-center justify-between group min-h-[44px]"
+                      whileHover={{ scale: 1.02, boxShadow: "0 0 25px rgba(255,255,255,0.4)" }}
+                      whileTap={{ scale: 0.98, boxShadow: "0 0 40px rgba(255,255,255,0.8)" }}
+                    >
+                      <span>The Video Call</span>
+                      <Video className="w-5 h-5 text-rose-200 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
                     </motion.button>
 
                     {/* The Apart */}
