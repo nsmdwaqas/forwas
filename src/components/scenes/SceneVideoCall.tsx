@@ -47,11 +47,13 @@ export function SceneVideoCall({ onNext, onBack }: SceneVideoCallProps) {
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.35, duration: 0.7 }} className="w-full rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black shrink-0">
-            <img src="/assets/video-call-log.jpg" alt="Original WhatsApp video and phone call log from 24 November 2026" className="block w-full h-auto object-contain" loading="lazy" />
-            <div className="px-3 py-2.5 text-center bg-black/70"><p className="text-xs sm:text-sm text-white/85 italic">Three video calls. One ordinary call. A whole world inside a few minutes.</p></div>
-          </motion.div>
-          <a href="https://drive.google.com/drive/folders/1zoKvEWVvr3jpErzSjI2q-vURzDzSvTz0?usp=sharing" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm text-gold-light underline underline-offset-4 py-1"><Camera className="w-4 h-4" /> Open the original memory folder</a>
+          <motion.a href="https://drive.google.com/drive/folders/1zoKvEWVvr3jpErzSjI2q-vURzDzSvTz0?usp=sharing" target="_blank" rel="noreferrer" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.35, duration: 0.7 }} className="w-full rounded-2xl border border-white/20 bg-black/35 p-5 sm:p-7 flex flex-col items-center justify-center gap-3 text-center shadow-2xl shrink-0 hover:bg-white/10 transition-colors">
+            <Camera className="w-9 h-9 sm:w-11 sm:h-11 text-gold-light" />
+            <span className="font-heading text-base sm:text-lg text-white font-semibold">The original call-log memory</span>
+            <span className="text-xs sm:text-sm text-white/75 leading-relaxed">Open the shared folder to see the real screenshot and keep this moment just as it happened.</span>
+            <span className="inline-flex items-center gap-2 text-xs sm:text-sm text-gold-light underline underline-offset-4">View the memory folder <ArrowRight className="w-4 h-4" /></span>
+          </motion.a>
+          <p className="text-[11px] sm:text-xs text-white/60 text-center italic">Three video calls. One ordinary call. A whole world inside a few minutes.</p>
 
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45, duration: 0.7 }} className="w-full bg-gradient-to-br from-rose-500/15 to-white/5 border border-gold-light/25 rounded-2xl p-4 sm:p-5 text-center shrink-0">
             <HeartHandshake className="w-6 h-6 text-gold-light mx-auto mb-2" />
