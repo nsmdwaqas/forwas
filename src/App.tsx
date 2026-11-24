@@ -21,6 +21,7 @@ import { SceneProposal } from './components/scenes/SceneProposal';
 import { SceneOneMonth } from './components/scenes/SceneOneMonth';
 import { SceneSong } from './components/scenes/SceneSong';
 import { SceneCall } from './components/scenes/SceneCall';
+import { SceneVideoCall } from './components/scenes/SceneVideoCall';
 import { SceneNotification } from './components/scenes/SceneNotification';
 import { SceneThePromise } from './components/scenes/SceneThePromise';
 import { SceneFacetime } from './components/scenes/SceneFacetime';
@@ -89,6 +90,7 @@ type SceneState =
   | 'proposal'
   | 'song'
   | 'call'
+  | 'the_video_call'
   | 'one_month'
   | 'answers'
   | 'voices'
@@ -202,6 +204,7 @@ export default function App() {
       message: 'Message',
       voices: 'Voices',
       call: 'Call',
+      the_video_call: 'theVideoCall',
       facetime: 'Facetime',
       apart: 'Apart',
       ego: 'Ego',
@@ -293,6 +296,7 @@ export default function App() {
               onProposal={() => navigateTo('proposal')}
               onSong={() => navigateTo('song')}
               onCall={() => navigateTo('call')}
+              onVideoCall={() => navigateTo('the_video_call')}
               onOneMonth={() => navigateTo('one_month')}
               onAnswers={() => navigateTo('answers')}
               onVoices={() => navigateTo('voices')}
@@ -500,6 +504,12 @@ export default function App() {
         {scene === 'call' && (
           <PageWrapper key="scene-call">
             <SceneCall onNext={() => navigateTo('finale')} onBack={handleGoBack} />
+          </PageWrapper>
+        )}
+
+        {scene === 'the_video_call' && (
+          <PageWrapper key="scene-video-call">
+            <SceneVideoCall onNext={() => navigateTo('finale')} onBack={handleGoBack} />
           </PageWrapper>
         )}
 
